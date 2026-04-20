@@ -64,6 +64,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::get('', 'index')->name('index');
         });
      });
+
 });
 
 
