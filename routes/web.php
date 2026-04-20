@@ -37,33 +37,34 @@ Route::get('helloworld', [HelloWorldController::class, 'index']);
 Route::get('ambilfile', [HelloWorldController::class, 'ambilFile']); 
 Route::resource('anggota', AnggotaController::class); 
 
+Route::prefix('v1')->name('v1.')->group(function () { 
+    Route::prefix('backend')->name('backend.')->group(function () {
+        Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () {
+            Route::get('/login', [LoginController::class, 'loginBackend'])->name('index');
+            Route::post('/login', [LoginController::class, 'authenticateBackend'])->name('process');
+            Route::get('/register', [LoginController::class, 'registerBackend'])->name('register');
+            Route::post('/register', [LoginController::class, 'storeRegister'])->name('register.process');
+            Route::post('/logout', [LoginController::class, 'logoutBackend'])->name('logout');
+        });
+    });
+});
+
+Route::prefix('v1')->name('v1')->group(function () { 
+    Route::prefix('frontend')->name('frontend.')->group(function () { 
+        Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
+            Route::get('/login', [LoginController::class, 'loginFrontend'])->name('index'); 
+            Route::post('/login', [LoginController::class, 'authenticateFrontend'])->name('process'); 
+            Route::get('/register', [LoginController::class, 'registerFrontend'])->name('register'); 
+            Route::post('/register', [LoginController::class, 'storeRegister'])->name('register.process'); 
+            Route::post('/logout', [LoginController::class, 'logoutFrontend'])->name('logout'); 
+        });
+    }); 
+});
+
 Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])->name('backend.beranda')->middleware('auth'); 
 Route::get('/admin/dashboard', [BerandaController::class, 'berandaBackend'])->name('backend.admin.dashboard'    );
 Route::get('/staff/dashboard', fn() => view('backend.v_beranda.staff'))->name('backend.staff.dashboard');
 Route::get('/finance/dashboard', fn() => view('backend.v_beranda.finance'))->name('backend.finance.dashboard');
-// login backend
-Route::get('/backend/login', [LoginController::class, 'loginBackend'])
-    ->name('backend.login');
-Route::post('/backend/login', [LoginController::class, 'authenticateBackend'])
-    ->name('backend.login.process');
-Route::get('/backend/register', [LoginController::class, 'registerBackend'])
-    ->name('backend.register');
-Route::post('/backend/register', [LoginController::class, 'storeRegister'])
-    ->name('backend.register.process');
-Route::post('/backend/logout', [LoginController::class, 'logoutBackend'])
-    ->name('backend.logout');
-
-// login frontend
-Route::get('/frontend/login', [LoginController::class, 'loginFrontend'])
-    ->name('frontend.login');
-Route::post('/frontend/login', [LoginController::class, 'authenticateFrontend'])
-    ->name('frontend.login.process');
-Route::get('/frontend/register', [LoginController::class, 'registerFrontend'])
-    ->name('frontend.register');
-Route::post('/frontend/register', [LoginController::class, 'storeRegister'])
-    ->name('frontend.register.process');
-Route::post('/frontend/logout', [LoginController::class, 'logoutFrontend'])
-    ->name('frontend.logout');
 
 // Route::resource('backend/user', UserController::class)->middleware('auth'); 
 Route::resource('backend/user', UserController::class, ['as' => 'backend'])->middleware('auth'); 
