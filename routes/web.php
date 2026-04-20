@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloWorldController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\HotelController;
@@ -39,21 +40,21 @@ Route::resource('anggota', AnggotaController::class);
 Route::prefix('v1')->name('v1.')->group(function () { 
     Route::prefix('backend')->name('backend.')->group(function () {
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () {
-            Route::get('/login', [LoginController::class, 'loginBackend'])->name('index');
-            Route::post('/login', [LoginController::class, 'authenticateBackend'])->name('process');
-            Route::get('/register', [LoginController::class, 'registerBackend'])->name('register');
-            Route::post('/register', [LoginController::class, 'storeRegister'])->name('register.process');
-            Route::post('/logout', [LoginController::class, 'logoutBackend'])->name('logout');
+            Route::get('/login', [LoginController::class, 'loginBackend'])->name('backend.login');
+            Route::post('/login', [LoginController::class, 'authenticateBackend'])->name('backend.login.process');
+            Route::get('/register', [LoginController::class, 'registerBackend'])->name('backend.register');
+            Route::post('/register', [LoginController::class, 'storeRegister'])->name('backend.register.process');
+            Route::post('/logout', [LoginController::class, 'logoutBackend'])->name('backend.logout');
         });
     });
 
     Route::prefix('frontend')->name('frontend.')->group(function () { 
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
-            Route::get('/login', [LoginController::class, 'loginFrontend'])->name('index'); 
-            Route::post('/login', [LoginController::class, 'authenticateFrontend'])->name('process'); 
-            Route::get('/register', [LoginController::class, 'registerFrontend'])->name('register'); 
-            Route::post('/register', [LoginController::class, 'storeRegister'])->name('register.process'); 
-            Route::post('/logout', [LoginController::class, 'logoutFrontend'])->name('logout'); 
+            Route::get('/login', [LoginController::class, 'loginFrontend'])->name('frontend.login'); 
+            Route::post('/login', [LoginController::class, 'authenticateFrontend'])->name('frontend.login.process'); 
+            Route::get('/register', [LoginController::class, 'registerFrontend'])->name('frontend.register'); 
+            Route::post('/register', [LoginController::class, 'storeRegister'])->name('frontend.register.process'); 
+            Route::post('/logout', [LoginController::class, 'logoutFrontend'])->name('frontend.logout'); 
         });
     }); 
 });
