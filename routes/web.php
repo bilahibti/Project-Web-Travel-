@@ -40,8 +40,8 @@ Route::resource('anggota', AnggotaController::class);
 Route::prefix('v1')->name('v1.')->group(function () { 
     Route::prefix('backend')->name('backend.')->group(function () {
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () {
-            Route::get('/login',  'loginBackend')->name('backend.login');
-            Route::post('/login',  'authenticateBackend')->name('backend.login.process');
+            Route::get('',  'loginBackend')->name('backend.login');
+            Route::post('',  'authenticateBackend')->name('backend.login.process');
             Route::get('/register', 'registerBackend')->name('backend.register');
             Route::post('/register', 'storeRegister')->name('backend.register.process');
             Route::post('/logout', 'logoutBackend')->name('backend.logout');
