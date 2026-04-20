@@ -46,9 +46,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::post('/logout', [LoginController::class, 'logoutBackend'])->name('logout');
         });
     });
-});
 
-Route::prefix('v1')->name('v1')->group(function () { 
     Route::prefix('frontend')->name('frontend.')->group(function () { 
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
             Route::get('/login', [LoginController::class, 'loginFrontend'])->name('index'); 
@@ -59,6 +57,7 @@ Route::prefix('v1')->name('v1')->group(function () {
         });
     }); 
 });
+
 
 Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])->name('backend.beranda')->middleware('auth'); 
 Route::get('/admin/dashboard', [BerandaController::class, 'berandaBackend'])->name('backend.admin.dashboard'    );
