@@ -57,6 +57,13 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::post('/logout', 'logoutFrontend')->name('logout'); 
         });
     }); 
+
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () { 
+        Route::prefix('beranda')->name('beranda.')->controller(App\Http\Controllers\BerandaController::class)->group(function () { 
+            Route::get('', 'berandaBackend')->name('beranda'); 
+            Route::get('', 'index')->name('index');
+        });
+     });
 });
 
 
