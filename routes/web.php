@@ -24,20 +24,16 @@ use App\Http\Controllers\PaketController;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/login');
-}); 
-
 Route::get('/', function () { 
-    // return view('welcome'); 
-    return redirect()->route('frontend.beranda'); 
-}); 
+    return redirect()->route('v1.frontend.beranda'); 
+});
 
 Route::get('helloworld', [HelloWorldController::class, 'index']); 
 Route::get('ambilfile', [HelloWorldController::class, 'ambilFile']); 
 Route::resource('anggota', AnggotaController::class); 
 
 Route::prefix('v1')->name('v1.')->group(function () { 
+    // 🔐 BACKEND AUTH
     Route::prefix('backend')->name('backend.')->group(function () {
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () {
             Route::get('',  'loginBackend')->name('login');
@@ -48,7 +44,16 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
+    //
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () { 
+        Route::prefix('beranda')->name('beranda.')->controller(App\Http\Controllers\BerandaController::class)->group(function () { 
+            Route::get('', 'berandaBackend')->name('beranda'); 
+            Route::get('', 'index')->name('index');
+        });
+     });
+
     Route::prefix('frontend')->name('frontend.')->group(function () { 
+        Route::get('beranda', [BerandaController::class, 'index'])->name('beranda');
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
             Route::get('', 'loginFrontend')->name('login'); 
             Route::post('', 'authenticateFrontend')->name('login.process'); 
@@ -56,14 +61,8 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::post('/register', 'storeRegister')->name('register.process'); 
             Route::post('/logout', 'logoutFrontend')->name('logout'); 
         });
-    }); 
+    });
 
-    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () { 
-        Route::prefix('beranda')->name('beranda.')->controller(App\Http\Controllers\BerandaController::class)->group(function () { 
-            Route::get('', 'berandaBackend')->name('beranda'); 
-            Route::get('', 'index')->name('index');
-        });
-     });
 
 });
 
@@ -94,5 +93,5 @@ Route::view('/blog', 'frontend.v_blog.blog')
 Route::get('backend/laporan/formuser', [UserController::class, 'formUser'])->name('backend.laporan.formuser')->middleware('auth'); 
 Route::post('backend/laporan/cetakuser', [UserController::class, 'cetakUser'])->name('backend.laporan.cetakuser')->middleware('auth'); 
 
-Route::get('beranda', [BerandaController::class, 'index'])->name('frontend.beranda'); 
+
 
