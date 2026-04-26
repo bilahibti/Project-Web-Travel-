@@ -70,9 +70,54 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('/{id}/edit', 'edit')->name('edit'); 
         Route::put('/{id}', 'update')->name('update'); 
         Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/laporan/formuser', 'formUser')->name('laporan.formuser'); 
+        Route::post('/laporan/cetakuser', 'cetakUser')->name('laporan.cetakuser');
+    });
 
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
+        Route::prefix('destinasi')->name('destinasi.')->controller(App\Http\Controllers\DestinasiController::class)->group(function () { 
+            Route::get('', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
+        Route::prefix('hotel')->name('hotel.')->controller(App\Http\Controllers\HotelController::class)->group(function () { 
+            Route::get('', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
+        Route::prefix('transportasi')->name('transportasi.')->controller(App\Http\Controllers\TransportasiController::class)->group(function () { 
+            Route::get('', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
+        Route::prefix('paket')->name('paket.')->controller(App\Http\Controllers\PaketController::class)->group(function () { 
+            Route::get('', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+    });
 });
-
 
 Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])->name('backend.beranda')->middleware('auth'); 
 Route::get('/admin/dashboard', [BerandaController::class, 'berandaBackend'])->name('backend.admin.dashboard'    );
@@ -96,6 +141,3 @@ Route::view('/gallery', 'frontend.v_gallery.gallery')
     ->name('frontend.gallery');
 Route::view('/blog', 'frontend.v_blog.blog')
     ->name('frontend.blog');
-
-Route::get('backend/laporan/formuser', [UserController::class, 'formUser'])->name('backend.laporan.formuser')->middleware('auth'); 
-Route::post('backend/laporan/cetakuser', [UserController::class, 'cetakUser'])->name('backend.laporan.cetakuser')->middleware('auth'); 
