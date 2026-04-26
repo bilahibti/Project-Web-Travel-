@@ -63,6 +63,13 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
+    Route::prefix('user')->name('user.')->middleware('auth')->controller(App\Http\Controllers\UserController::class)->group(function () { 
+        Route::get('', 'index')->name('index'); 
+        Route::get('/create', 'create')->name('create'); 
+        Route::post('', 'store')->name('store'); 
+        Route::get('/{id}/edit', 'edit')->name('edit'); 
+        Route::put('/{id}', 'update')->name('update'); 
+        Route::delete('/{id}', 'destroy')->name('destroy');
 
 });
 
@@ -92,6 +99,3 @@ Route::view('/blog', 'frontend.v_blog.blog')
 
 Route::get('backend/laporan/formuser', [UserController::class, 'formUser'])->name('backend.laporan.formuser')->middleware('auth'); 
 Route::post('backend/laporan/cetakuser', [UserController::class, 'cetakUser'])->name('backend.laporan.cetakuser')->middleware('auth'); 
-
-
-
