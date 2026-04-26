@@ -57,7 +57,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('beranda', [BerandaController::class, 'index'])->name('beranda');
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
             Route::get('', 'loginFrontend')->name('login'); 
-            Route::post('', 'authenticateFrontend')->name('login.process'); 
+            Route::post('/process', 'authenticateFrontend')->name('process'); 
             Route::get('/register', 'registerFrontend')->name('register'); 
             Route::post('/register', 'storeRegister')->name('register.process'); 
             Route::post('/logout', 'logoutFrontend')->name('logout'); 

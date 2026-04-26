@@ -65,7 +65,7 @@
           <div class="card p-sm-7 p-2">
             <!-- Logo -->
             <div class="app-brand justify-content-center mt-5">
-              <a href="{{ route('frontend.login.process') }}" class="app-brand-link gap-3">
+              <a href="{{ route('v1.frontend.login.process') }}" class="app-brand-link gap-3">
                 <span class="app-brand-logo demo">
                   <span class="text-primary">
                     <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +145,7 @@
               </div> 
               @endif 
               <!-- errorEnd --> 
-              <form id="formAuthentication" class="mb-5" action="{{ route('frontend.login.process') }}" method="POST">
+              <form id="formAuthentication" class="mb-5" action="{{ route('v1.frontend.login.process') }}" method="POST">
                 @csrf
                 <div class="form-floating form-floating-outline mb-5 form-control-validation">
                   <input
