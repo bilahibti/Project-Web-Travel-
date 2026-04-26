@@ -137,7 +137,7 @@
           <ul class="menu-inner py-1">
             <!-- Dashboards -->
             <li class="menu-item">
-              <a href="{{ route('v1.backend.beranda') }}" class="menu-link">
+              <a href="{{ route('v1.backend.beranda.beranda') }}" class="menu-link">
                 <i class="menu-icon icon-base ri ri-home-smile-line"></i>
                 <div data-i18n="Dashboards">Dashboards</div>
               </a>
@@ -154,7 +154,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{{ route('v1.backend.user.index') }}" class="menu-link">
+                  <a href="{{ route('v1.user.index') }}" class="menu-link">
                     <div data-i18n="Analytics">Users</div>
                   </a>
                 </li>
@@ -202,7 +202,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{{ route('v1.laporan.formuser') }}" class="menu-link">
+                  <a href="{{ route('v1.user.laporan.formuser') }}" class="menu-link">
                     <div data-i18n="Laporan User">User</div>
                   </a>
                 </li>

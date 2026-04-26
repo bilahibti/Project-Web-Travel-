@@ -48,12 +48,12 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ route('frontend.beranda') }}">Home</a></li>
-          <li><a href="{{ route('frontend.about') }}">About</a></li>
-          <li><a href="{{ route('frontend.destinasi') }}">Destinations</a></li>
-          <li><a href="{{ route('frontend.tours') }}">Tours</a></li>
-          <li><a href="{{ route('frontend.gallery') }}" class="active">Gallery</a></li>
-          <li><a href="{{ route('frontend.blog') }}">Blog</a></li>
+          <li><a href="{{ route('v1.frontend.beranda') }}">Home</a></li>
+          <li><a href="{{ route('v1.frontend.about') }}">About</a></li>
+          <li><a href="{{ route('v1.frontend.destinasi') }}">Destinations</a></li>
+          <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
+          <li><a href="{{ route('v1.frontend.gallery') }}" class="active">Gallery</a></li>
+          <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
           <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="destination-details.html">Destination Details</a></li>

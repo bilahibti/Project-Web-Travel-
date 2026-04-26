@@ -5,7 +5,7 @@
 <div class="row"> 
     <div class="col-12"> 
         <div class="card"> 
-            <form class="form-horizontal" action="{{ route('backend.laporan.cetakuser') }}" method="post" target="_blank"> 
+            <form class="form-horizontal" action="{{ route('v1.user.laporan.cetakuser') }}" method="post" target="_blank"> 
                 @csrf 
                  <div class="card-body"> 
                     <h4 class="card-title"> {{$judul}} </h4> 

@@ -44,14 +44,15 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
-    //
+    // route untuk beranda backend 
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () { 
         Route::prefix('beranda')->name('beranda.')->controller(App\Http\Controllers\BerandaController::class)->group(function () { 
-            Route::get('', 'berandaBackend')->name('beranda'); 
-            Route::get('', 'index')->name('index');
+            Route::get('/beranda', 'berandaBackend')->name('beranda'); 
+            Route::get('/index', 'index')->name('index');
         });
      });
 
+    // 🔐 FRONTEND AUTH
     Route::prefix('frontend')->name('frontend.')->group(function () { 
         Route::get('beranda', [BerandaController::class, 'index'])->name('beranda');
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
@@ -63,10 +64,20 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
+    // route untuk halaman statis frontend
+    Route::prefix('frontend')->name('frontend.')->group(function () { 
+        Route::get('/about', fn() => view('frontend.v_about.about'))->name('about'); 
+        Route::get('/destinasi', fn() => view('frontend.v_destinasi.destinasi'))->name('destinasi'); 
+        Route::get('/tours', fn() => view('frontend.v_tours.tours'))->name('tours'); 
+        Route::get('/gallery', fn() => view('frontend.v_gallery.gallery'))->name('gallery'); 
+        Route::get('/blog', fn() => view('frontend.v_blog.blog'))->name('blog'); 
+    });
+
+    // route untuk user
     Route::prefix('user')->name('user.')->middleware('auth')->controller(App\Http\Controllers\UserController::class)->group(function () { 
-        Route::get('', 'index')->name('index'); 
+        Route::get('/index', 'index')->name('index'); 
         Route::get('/create', 'create')->name('create'); 
-        Route::post('', 'store')->name('store'); 
+        Route::post('/store', 'store')->name('store'); 
         Route::get('/{id}/edit', 'edit')->name('edit'); 
         Route::put('/{id}', 'update')->name('update'); 
         Route::delete('/{id}', 'destroy')->name('destroy');
@@ -74,44 +85,48 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::post('/laporan/cetakuser', 'cetakUser')->name('laporan.cetakuser');
     });
 
+    // backend route untuk destinasi
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
         Route::prefix('destinasi')->name('destinasi.')->controller(App\Http\Controllers\DestinasiController::class)->group(function () { 
-            Route::get('', 'index')->name('index'); 
+            Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
-            Route::post('', 'store')->name('store'); 
+            Route::post('/store', 'store')->name('store'); 
             Route::get('/{id}/edit', 'edit')->name('edit'); 
             Route::put('/{id}', 'update')->name('update'); 
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 
+    // backend route untuk hotel
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
         Route::prefix('hotel')->name('hotel.')->controller(App\Http\Controllers\HotelController::class)->group(function () { 
-            Route::get('', 'index')->name('index'); 
+            Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
-            Route::post('', 'store')->name('store'); 
+            Route::post('/store', 'store')->name('store'); 
             Route::get('/{id}/edit', 'edit')->name('edit'); 
             Route::put('/{id}', 'update')->name('update'); 
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 
+    // backend route untuk transportasi
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
         Route::prefix('transportasi')->name('transportasi.')->controller(App\Http\Controllers\TransportasiController::class)->group(function () { 
-            Route::get('', 'index')->name('index'); 
+            Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
-            Route::post('', 'store')->name('store'); 
+            Route::post('/store', 'store')->name('store'); 
             Route::get('/{id}/edit', 'edit')->name('edit'); 
             Route::put('/{id}', 'update')->name('update'); 
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 
+    // backend route untuk paket
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
         Route::prefix('paket')->name('paket.')->controller(App\Http\Controllers\PaketController::class)->group(function () { 
-            Route::get('', 'index')->name('index'); 
+            Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
-            Route::post('', 'store')->name('store'); 
+            Route::post('/store', 'store')->name('store'); 
             Route::get('/{id}/edit', 'edit')->name('edit'); 
             Route::put('/{id}', 'update')->name('update'); 
             Route::delete('/{id}', 'destroy')->name('destroy');
@@ -119,25 +134,3 @@ Route::prefix('v1')->name('v1.')->group(function () {
     });
 });
 
-Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])->name('backend.beranda')->middleware('auth'); 
-Route::get('/admin/dashboard', [BerandaController::class, 'berandaBackend'])->name('backend.admin.dashboard'    );
-Route::get('/staff/dashboard', fn() => view('backend.v_beranda.staff'))->name('backend.staff.dashboard');
-Route::get('/finance/dashboard', fn() => view('backend.v_beranda.finance'))->name('backend.finance.dashboard');
-
-// Route::resource('backend/user', UserController::class)->middleware('auth'); 
-Route::resource('backend/user', UserController::class, ['as' => 'backend'])->middleware('auth'); 
-Route::resource('backend/destinasi', DestinasiController::class, ['as' => 'backend'])->middleware('auth'); 
-Route::resource('backend/hotel', HotelController::class, ['as' => 'backend'])->middleware('auth');
-Route::resource('backend/transportasi', TransportasiController::class, ['as' => 'backend'])->middleware('auth');
-Route::resource('backend/paket', PaketController::class, ['as' => 'backend'])->middleware('auth');  
-
-Route::view('/about', 'frontend.v_about.about')
-    ->name('frontend.about');
-Route::view('/destinasi', 'frontend.v_destinasi.destinasi')
-    ->name('frontend.destinasi');
-Route::view('/tours', 'frontend.v_tours.tours')
-    ->name('frontend.tours');
-Route::view('/gallery', 'frontend.v_gallery.gallery')
-    ->name('frontend.gallery');
-Route::view('/blog', 'frontend.v_blog.blog')
-    ->name('frontend.blog');
