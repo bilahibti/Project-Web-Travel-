@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>About - TravelTime</title>
+  <title>Faq - TravelTime Bootstrap Template</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -35,7 +35,7 @@
   ======================================================== -->
 </head>
 
-<body class="about-page">
+<body class="faq-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
@@ -48,19 +48,19 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ route('v1.frontend.beranda') }}">Home</a></li>
-          <li><a href="{{ route('v1.frontend.about') }}" class="active">About</a></li>
-          <li><a href="{{ route('v1.frontend.destinasi') }}">Destinations</a></li>
-          <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
-          <li><a href="{{ route('v1.frontend.gallery') }}">Gallery</a></li>
-          <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="tours.html">Tours</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="blog.html">Blog</a></li>
           <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="{{ route('v1.frontend.destinationdetails') }}">Destination Details</a></li>
+              <li><a href="destination-details.html">Destination Details</a></li>
               <li><a href="tour-details.html">Tour Details</a></li>
               <li><a href="booking.html">Booking</a></li>
               <li><a href="testimonials">Testimonials</a></li>
-              <li><a href="faq.html">Frequently Asked Questions</a></li>
+              <li><a href="faq.html" class="active">Frequently Asked Questions</a></li>
               <li><a href="blog-details.html">Blog Details</a></li>
               <li><a href="terms.html">Terms</a></li>
               <li><a href="privacy.html">Privacy</a></li>
@@ -89,7 +89,7 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="{{ route('v1.frontend.login.login') }}">Login</a>
+      <a class="btn-getstarted" href="index.html#about">Get Started</a>
 
     </div>
   </header>
@@ -99,139 +99,93 @@
     <!-- Page Title -->
     <div class="page-title dark-background" style="background-image: url({{ asset('frontend/img/travel/showcase-11.webp') }});">
       <div class="container position-relative">
-        <h1>About</h1>
+        <h1>Frequently Asked Questions</h1>
         <p>Esse dolorum voluptatum ullam est sint nemo et est ipsa porro placeat quibusdam quia assumenda numquam molestias.</p>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.html">Home</a></li>
-            <li class="current">About</li>
+            <li class="current">Faq</li>
           </ol>
         </nav>
       </div>
     </div><!-- End Page Title -->
 
-    <!-- About Section -->
-    <section id="about" class="about section">
+    <!-- Faq Section -->
+    <section id="faq" class="faq section">
 
       <div class="container">
 
-        <div class="row g-5 align-items-center">
+        <div class="row gy-4 justify-content-between">
+          <div class="col-lg-8">
 
-          <div class="col-lg-6">
-            <div class="content">
-              <h2 class="mb-4">Crafting Unforgettable Journeys Since 2015</h2>
-              <p class="lead mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-              <p class="mb-5">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-
-              <div class="row g-4 mb-5">
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">350+</div>
-                    <div class="stat-label">Tours Completed</div>
-                  </div>
+            <div class="faq-list">
+              <div class="faq-item faq-active">
+                <h3>Vivamus suscipit tortor eget felis porttitor volutpat?</h3>
+                <div class="faq-content">
+                  <p>
+                    Nulla quis lorem ut libero malesuada feugiat. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Curabitur aliquet quam id dui posuere blandit. Nulla porttitor accumsan tincidunt.
+                  </p>
                 </div>
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">25+</div>
-                    <div class="stat-label">Countries</div>
-                  </div>
+                <i class="bi bi-plus faq-toggle"></i>
+              </div><!-- End FAQ Item-->
+
+              <div class="faq-item">
+                <h3>Curabitur aliquet quam id dui posuere blandit?</h3>
+                <div class="faq-content">
+                  <p>
+                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Proin eget tortor risus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar.
+                  </p>
                 </div>
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">8</div>
-                    <div class="stat-label">Years Experience</div>
-                  </div>
+                <i class="bi bi-plus faq-toggle"></i>
+              </div><!-- End FAQ Item-->
+
+              <div class="faq-item">
+                <h3>Sed porttitor lectus nibh ullamcorper sit amet?</h3>
+                <div class="faq-content">
+                  <p>
+                    Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Donec sollicitudin molestie malesuada. Vestibulum ac diam sit amet quam vehicula elementum.
+                  </p>
                 </div>
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">Satisfied Guests</div>
-                  </div>
+                <i class="bi bi-plus faq-toggle"></i>
+              </div><!-- End FAQ Item-->
+
+              <div class="faq-item">
+                <h3>Nulla quis lorem ut libero malesuada feugiat?</h3>
+                <div class="faq-content">
+                  <p>
+                    Donec sollicitudin molestie malesuada. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel.
+                  </p>
                 </div>
-              </div>
+                <i class="bi bi-plus faq-toggle"></i>
+              </div><!-- End FAQ Item-->
+
+              <div class="faq-item">
+                <h3>Vestibulum ac diam sit amet quam vehicula elementum?</h3>
+                <div class="faq-content">
+                  <p>
+                    Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+                  </p>
+                </div>
+                <i class="bi bi-plus faq-toggle"></i>
+              </div><!-- End FAQ Item-->
+
             </div>
+
           </div>
 
-          <div class="col-lg-6">
-            <div class="image-stack">
-              <div class="image-main">
-                <img src="{{ asset('frontend/img/travel/showcase-3.webp') }}" alt="Travel Experience" class="img-fluid">
-              </div>
-              <div class="image-overlay">
-                <img src="{{ asset('frontend/img/travel/misc-12.webp') }}" alt="Happy Travelers" class="img-fluid">
-              </div>
+          <div class="col-lg-4">
+            <div class="faq-card">
+              <i class="bi bi-chat-dots-fill"></i>
+              <h3>Can't find answer to your question?</h3>
+              <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Curabitur aliquet quam id dui posuere blandit. Nulla quis lorem ut libero malesuada feugiat.</p>
+              <a href="#" class="btn btn-primary">Contact Us</a>
             </div>
           </div>
-
-        </div>
-
-        <div class="row g-4 mt-5">
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-award"></i>
-              </div>
-              <h5>Expert Local Guides</h5>
-              <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-headset"></i>
-              </div>
-              <h5>24/7 Customer Support</h5>
-              <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-shield-check"></i>
-              </div>
-              <h5>Best Price Guarantee</h5>
-              <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-geo-alt"></i>
-              </div>
-              <h5>Local Expertise</h5>
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-calendar-check"></i>
-              </div>
-              <h5>Flexible Booking</h5>
-              <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-leaf"></i>
-              </div>
-              <h5>Sustainable Travel</h5>
-              <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur adipisci velit</p>
-            </div>
-          </div>
-
         </div>
 
       </div>
 
-    </section><!-- /About Section -->
+    </section><!-- /Faq Section -->
 
   </main>
 

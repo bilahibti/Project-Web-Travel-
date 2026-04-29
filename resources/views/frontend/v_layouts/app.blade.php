@@ -80,26 +80,26 @@
                             ></a>
                             <ul>
                                 <li>
-                                    <a href="destination-details.html"
+                                    <a href="{{ route('v1.frontend.destinationdetails') }}"
                                         >Destination Details</a
                                     >
                                 </li>
                                 <li>
-                                    <a href="tour-details.html">Tour Details</a>
+                                    <a href="{{ route('v1.frontend.tourdetails') }}">Tour Details</a>
                                 </li>
-                                <li><a href="booking.html">Booking</a></li>
-                                <li><a href="testimonials">Testimonials</a></li>
+                                <li><a href="{{ route('v1.frontend.booking') }}">Booking</a></li>
+                                <li><a href="{{ route('v1.frontend.testimonials') }}">Testimonials</a></li>
                                 <li>
-                                    <a href="faq.html"
+                                    <a href="{{ route('v1.frontend.faq') }}"
                                         >Frequently Asked Questions</a
                                     >
                                 </li>
                                 <li>
-                                    <a href="blog-details.html">Blog Details</a>
+                                    <a href="{{ route('v1.frontend.blogdetails') }}">Blog Details</a>
                                 </li>
-                                <li><a href="terms.html">Terms</a></li>
-                                <li><a href="privacy.html">Privacy</a></li>
-                                <li><a href="404.html">404</a></li>
+                                <li><a href="{{ route('v1.frontend.terms') }}">Terms</a></li>
+                                <li><a href="{{ route('v1.frontend.privacy') }}">Privacy</a></li>
+                                <li><a href="{{ route('v1.frontend.404') }}">404</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -131,7 +131,7 @@
                                 <li><a href="#">Dropdown 4</a></li>
                             </ul>
                         </li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="{{ route('v1.frontend.contact') }}">Contact</a></li>
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
@@ -160,12 +160,12 @@
                                 </p>
                                 <div class="d-flex flex-wrap gap-3 mt-4">
                                     <a
-                                        href="destinations.html"
+                                        href="{{ route('v1.frontend.destinasi') }}"
                                         class="btn btn-primary"
                                         >Start Exploring</a
                                     >
                                     <a
-                                        href="tours.html"
+                                        href="{{ route('v1.frontend.tours') }}"
                                         class="btn btn-outline-light"
                                         >View Tours</a
                                     >

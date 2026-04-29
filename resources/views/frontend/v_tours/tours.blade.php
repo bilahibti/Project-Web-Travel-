@@ -56,15 +56,15 @@
           <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
           <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="destination-details.html">Destination Details</a></li>
-              <li><a href="tour-details.html">Tour Details</a></li>
-              <li><a href="booking.html">Booking</a></li>
-              <li><a href="testimonials">Testimonials</a></li>
-              <li><a href="faq.html">Frequently Asked Questions</a></li>
-              <li><a href="blog-details.html">Blog Details</a></li>
-              <li><a href="terms.html">Terms</a></li>
-              <li><a href="privacy.html">Privacy</a></li>
-              <li><a href="404.html">404</a></li>
+              <li><a href="{{ route('v1.frontend.destinationdetails') }}">Destination Details</a></li>
+              <li><a href="{{ route('v1.frontend.tourdetails') }}">Tour Details</a></li>
+              <li><a href="{{ route('v1.frontend.booking') }}">Booking</a></li>
+              <li><a href="{{ route('v1.frontend.testimonials') }}">Testimonials</a></li>
+              <li><a href="{{ route('v1.frontend.faq') }}">Frequently Asked Questions</a></li>
+              <li><a href="{{ route('v1.frontend.blogdetails') }}">Blog Details</a></li>
+              <li><a href="{{ route('v1.frontend.terms') }}">Terms</a></li>
+              <li><a href="{{ route('v1.frontend.privacy') }}">Privacy</a></li>
+              <li><a href="{{ route('v1.frontend.404') }}">404</a></li>
             </ul>
           </li>
           <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>

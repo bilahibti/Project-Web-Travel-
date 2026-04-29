@@ -71,6 +71,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('/tours', fn() => view('frontend.v_tours.tours'))->name('tours'); 
         Route::get('/gallery', fn() => view('frontend.v_gallery.gallery'))->name('gallery'); 
         Route::get('/blog', fn() => view('frontend.v_blog.blog'))->name('blog'); 
+        Route::get('/destinationdetails', fn() => view('frontend.v_morepages.destinationdetails'))->name('destinationdetails');
     });
 
     // route untuk user

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>About - TravelTime</title>
+  <title>Terms - TravelTime Bootstrap Template</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -15,7 +15,8 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,8₀;₀,9₀₀;1,1₀₀;1,2₀₀;1,3₀₀;1,4₀₀;1,5₀₀;1,6₀₀;1,7₀₀;1,8₀₀;1,9₀₀&family=Raleway:ital,wght@０,１００;０,２００;０,３００;０,４００;０,５００;０,６００;０,７００;０,８００;０,９００;１,１００;１,２００;１,３００;１,４００;１,５００;１,６００;１,７００;１,８０ۏ;
+
 
   <!-- Vendor CSS Files -->
   <link href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -35,7 +36,7 @@
   ======================================================== -->
 </head>
 
-<body class="about-page">
+<body class="terms-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
@@ -48,21 +49,21 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ route('v1.frontend.beranda') }}">Home</a></li>
-          <li><a href="{{ route('v1.frontend.about') }}" class="active">About</a></li>
-          <li><a href="{{ route('v1.frontend.destinasi') }}">Destinations</a></li>
-          <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
-          <li><a href="{{ route('v1.frontend.gallery') }}">Gallery</a></li>
-          <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="tours.html">Tours</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="blog.html">Blog</a></li>
           <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="{{ route('v1.frontend.destinationdetails') }}">Destination Details</a></li>
+              <li><a href="destination-details.html">Destination Details</a></li>
               <li><a href="tour-details.html">Tour Details</a></li>
               <li><a href="booking.html">Booking</a></li>
               <li><a href="testimonials">Testimonials</a></li>
               <li><a href="faq.html">Frequently Asked Questions</a></li>
               <li><a href="blog-details.html">Blog Details</a></li>
-              <li><a href="terms.html">Terms</a></li>
+              <li><a href="terms.html" class="active">Terms</a></li>
               <li><a href="privacy.html">Privacy</a></li>
               <li><a href="404.html">404</a></li>
             </ul>
@@ -89,7 +90,7 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="{{ route('v1.frontend.login.login') }}">Login</a>
+      <a class="btn-getstarted" href="index.html#about">Get Started</a>
 
     </div>
   </header>
@@ -97,141 +98,157 @@
   <main class="main">
 
     <!-- Page Title -->
-    <div class="page-title dark-background" style="background-image: url({{ asset('frontend/img/travel/showcase-11.webp') }});">
+    <div class="page-title dark-background" style="background-image: url(assets/img/travel/showcase-11.webp);">
       <div class="container position-relative">
-        <h1>About</h1>
+        <h1>Terms</h1>
         <p>Esse dolorum voluptatum ullam est sint nemo et est ipsa porro placeat quibusdam quia assumenda numquam molestias.</p>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.html">Home</a></li>
-            <li class="current">About</li>
+            <li class="current">Terms</li>
           </ol>
         </nav>
       </div>
     </div><!-- End Page Title -->
 
-    <!-- About Section -->
-    <section id="about" class="about section">
+    <!-- Terms Of Service Section -->
+    <section id="terms-of-service" class="terms-of-service section">
 
       <div class="container">
-
-        <div class="row g-5 align-items-center">
-
-          <div class="col-lg-6">
-            <div class="content">
-              <h2 class="mb-4">Crafting Unforgettable Journeys Since 2015</h2>
-              <p class="lead mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-              <p class="mb-5">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-
-              <div class="row g-4 mb-5">
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">350+</div>
-                    <div class="stat-label">Tours Completed</div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">25+</div>
-                    <div class="stat-label">Countries</div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">8</div>
-                    <div class="stat-label">Years Experience</div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="stat-item text-center">
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">Satisfied Guests</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6">
-            <div class="image-stack">
-              <div class="image-main">
-                <img src="{{ asset('frontend/img/travel/showcase-3.webp') }}" alt="Travel Experience" class="img-fluid">
-              </div>
-              <div class="image-overlay">
-                <img src="{{ asset('frontend/img/travel/misc-12.webp') }}" alt="Happy Travelers" class="img-fluid">
-              </div>
-            </div>
-          </div>
-
+        <!-- Page Header -->
+        <div class="tos-header text-center">
+          <span class="last-updated">Last Updated: February 27, 2025</span>
+          <h2>Terms of Service</h2>
+          <p>Please read these terms of service carefully before using our services</p>
         </div>
 
-        <div class="row g-4 mt-5">
-
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-award"></i>
-              </div>
-              <h5>Expert Local Guides</h5>
-              <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore</p>
+        <!-- Content -->
+        <div class="tos-content">
+          <!-- Agreement Section -->
+          <div id="agreement" class="content-section">
+            <h3>1. Agreement to Terms</h3>
+            <p>By accessing our website and services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing our services.</p>
+            <div class="info-box">
+              <i class="bi bi-info-circle"></i>
+              <p>These terms apply to all users, visitors, and others who access or use our services.</p>
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-headset"></i>
+          <!-- Intellectual Property -->
+          <div id="intellectual-property" class="content-section">
+            <h3>2. Intellectual Property Rights</h3>
+            <p>Our service and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.</p>
+            <ul class="list-items">
+              <li>All content is our exclusive property</li>
+              <li>You may not copy or modify the content</li>
+              <li>Our trademarks may not be used without permission</li>
+              <li>Content is for personal, non-commercial use only</li>
+            </ul>
+          </div>
+
+          <!-- User Accounts -->
+          <div id="user-accounts" class="content-section">
+            <h3>3. User Accounts</h3>
+            <p>When you create an account with us, you must provide accurate, complete, and current information. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account.</p>
+            <div class="alert-box">
+              <i class="bi bi-exclamation-triangle"></i>
+              <div class="alert-content">
+                <h5>Important Notice</h5>
+                <p>You are responsible for safeguarding the password and for all activities that occur under your account.</p>
               </div>
-              <h5>24/7 Customer Support</h5>
-              <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure</p>
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-shield-check"></i>
+          <!-- Prohibited Activities -->
+          <div id="prohibited" class="content-section">
+            <h3>4. Prohibited Activities</h3>
+            <p>You may not access or use the Service for any purpose other than that for which we make it available.</p>
+            <div class="prohibited-list">
+              <div class="prohibited-item">
+                <i class="bi bi-x-circle"></i>
+                <span>Systematic retrieval of data or content</span>
               </div>
-              <h5>Best Price Guarantee</h5>
-              <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim</p>
+              <div class="prohibited-item">
+                <i class="bi bi-x-circle"></i>
+                <span>Publishing malicious content</span>
+              </div>
+              <div class="prohibited-item">
+                <i class="bi bi-x-circle"></i>
+                <span>Engaging in unauthorized framing</span>
+              </div>
+              <div class="prohibited-item">
+                <i class="bi bi-x-circle"></i>
+                <span>Attempting to gain unauthorized access</span>
+              </div>
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-geo-alt"></i>
-              </div>
-              <h5>Local Expertise</h5>
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
+          <!-- Disclaimers -->
+          <div id="disclaimer" class="content-section">
+            <h3>5. Disclaimers</h3>
+            <p>Your use of our service is at your sole risk. The service is provided "AS IS" and "AS AVAILABLE" without warranties of any kind, whether express or implied.</p>
+            <div class="disclaimer-box">
+              <p>We do not guarantee that:</p>
+              <ul>
+                <li>The service will meet your requirements</li>
+                <li>The service will be uninterrupted or error-free</li>
+                <li>Results from using the service will be accurate</li>
+                <li>Any errors will be corrected</li>
+              </ul>
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-calendar-check"></i>
-              </div>
-              <h5>Flexible Booking</h5>
-              <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum</p>
-            </div>
+          <!-- Limitation of Liability -->
+          <div id="limitation" class="content-section">
+            <h3>6. Limitation of Liability</h3>
+            <p>In no event shall we be liable for any indirect, punitive, incidental, special, consequential, or exemplary damages arising out of or in connection with your use of the service.</p>
           </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="feature-item text-center">
-              <div class="feature-icon">
-                <i class="bi bi-leaf"></i>
-              </div>
-              <h5>Sustainable Travel</h5>
-              <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur adipisci velit</p>
-            </div>
+          <!-- Indemnification -->
+          <div id="indemnification" class="content-section">
+            <h3>7. Indemnification</h3>
+            <p>You agree to defend, indemnify, and hold us harmless from and against any claims, liabilities, damages, losses, and expenses arising out of your use of the service.</p>
           </div>
 
+          <!-- Termination -->
+          <div id="termination" class="content-section">
+            <h3>8. Termination</h3>
+            <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+          </div>
+
+          <!-- Governing Law -->
+          <div id="governing-law" class="content-section">
+            <h3>9. Governing Law</h3>
+            <p>These Terms shall be governed by and construed in accordance with the laws of [Your Country], without regard to its conflict of law provisions.</p>
+          </div>
+
+          <!-- Changes -->
+          <div id="changes" class="content-section">
+            <h3>10. Changes to Terms</h3>
+            <p>We reserve the right to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
+            <div class="notice-box">
+              <i class="bi bi-bell"></i>
+              <p>By continuing to access or use our service after those revisions become effective, you agree to be bound by the revised terms.</p>
+            </div>
+          </div>
         </div>
 
+        <!-- Contact Section -->
+        <div class="tos-contact">
+          <div class="contact-box">
+            <div class="contact-icon">
+              <i class="bi bi-envelope"></i>
+            </div>
+            <div class="contact-content">
+              <h4>Questions About Terms?</h4>
+              <p>If you have any questions about these Terms, please contact us.</p>
+              <a href="#" class="contact-link">Contact Support</a>
+            </div>
+          </div>
+        </div>
       </div>
 
-    </section><!-- /About Section -->
+    </section><!-- /Terms Of Service Section -->
 
   </main>
 
