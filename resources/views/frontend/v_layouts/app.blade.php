@@ -80,26 +80,26 @@
                             ></a>
                             <ul>
                                 <li>
-                                    <a href="{{ route('v1.frontend.destinationdetails') }}"
+                                    <a href="destinationdetails.html"
                                         >Destination Details</a
                                     >
                                 </li>
                                 <li>
-                                    <a href="{{ route('v1.frontend.tourdetails') }}">Tour Details</a>
+                                    <a href="tourdetails.html">Tour Details</a>
                                 </li>
-                                <li><a href="{{ route('v1.frontend.booking') }}">Booking</a></li>
-                                <li><a href="{{ route('v1.frontend.testimonials') }}">Testimonials</a></li>
+                                <li><a href="booking.html">Booking</a></li>
+                                <li><a href="testimonials.html">Testimonials</a></li>
                                 <li>
-                                    <a href="{{ route('v1.frontend.faq') }}"
+                                    <a href="faq.html"
                                         >Frequently Asked Questions</a
                                     >
                                 </li>
                                 <li>
-                                    <a href="{{ route('v1.frontend.blogdetails') }}">Blog Details</a>
+                                    <a href="blogdetails.html">Blog Details</a>
                                 </li>
-                                <li><a href="{{ route('v1.frontend.terms') }}">Terms</a></li>
-                                <li><a href="{{ route('v1.frontend.privacy') }}">Privacy</a></li>
-                                <li><a href="{{ route('v1.frontend.404') }}">404</a></li>
+                                <li><a href="terms.html">Terms</a></li>
+                                <li><a href="privacy.html">Privacy</a></li>
+                                <li><a href="404.html">404</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -131,7 +131,7 @@
                                 <li><a href="#">Dropdown 4</a></li>
                             </ul>
                         </li>
-                        <li><a href="{{ route('v1.frontend.contact') }}">Contact</a></li>
+                        <li><a href="contact.html">Contact</a></li>
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
@@ -277,18 +277,10 @@
                                     </div>
                                     <div class="about-content">
                                         <p>
-                                            Sed ut perspiciatis unde omnis iste
-                                            natus error sit voluptatem
-                                            accusantium doloremque laudantium,
-                                            totam rem aperiam eaque ipsa quae ab
-                                            illo inventore veritatis.
+                                            Ready to escape the ordinary? We’re here to turn your travel dreams into real adventures! From hidden gems to must-visit destinations, we make every trip exciting, easy, and totally unforgettable. Pack your bags—we’ll handle the rest!
                                         </p>
                                         <p>
-                                            At vero eos et accusamus et iusto
-                                            odio dignissimos ducimus qui
-                                            blanditiis praesentium voluptatum
-                                            deleniti atque corrupti quos
-                                            dolores.
+                                            Adventure is calling—and we’ve got the answer! Whether you’re chasing sunsets, exploring new cities, or just taking a break, we make every journey feel like the best decision you’ve ever made.
                                         </p>
 
                                         <div class="feature-list">

@@ -43,13 +43,13 @@ class LoginController extends Controller
             switch ($user->role->slug) {
 
                 case 'admin':
-                    return redirect()->route('backend.admin.dashboard');
+                    return redirect()->route('v1.backend.beranda.admin.dashboard');
 
                 case 'staff':
-                    return redirect()->route('backend.staff.dashboard');
+                    return redirect()->route('v1.backend.beranda.staff.dashboard');
 
                 case 'finance':
-                    return redirect()->route('backend.finance.dashboard');
+                    return redirect()->route('v1.backend.beranda.finance.dashboard');
 
                 default:
                     // kalau bukan role backend

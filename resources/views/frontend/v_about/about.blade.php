@@ -56,7 +56,7 @@
           <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
           <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="{{ route('v1.frontend.destinationdetails') }}">Destination Details</a></li>
+              <li><a href="destinationdetails.html">Destination Details</a></li>
               <li><a href="tour-details.html">Tour Details</a></li>
               <li><a href="booking.html">Booking</a></li>
               <li><a href="testimonials">Testimonials</a></li>

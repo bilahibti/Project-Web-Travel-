@@ -49,6 +49,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::prefix('beranda')->name('beranda.')->controller(App\Http\Controllers\BerandaController::class)->group(function () { 
             Route::get('/beranda', 'berandaBackend')->name('beranda'); 
             Route::get('/index', 'index')->name('index');
+            Route::get('/admin/dashboard', 'berandaBackend')->name('admin.dashboard');
+            Route::get('/staff/dashboard', fn() => view('backend.v_beranda.staff'))->name('staff.dashboard');
+            Route::get('/finance/dashboard', fn() => view('backend.v_beranda.finance'))->name('finance.dashboard');
         });
      });
 
@@ -71,7 +74,6 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('/tours', fn() => view('frontend.v_tours.tours'))->name('tours'); 
         Route::get('/gallery', fn() => view('frontend.v_gallery.gallery'))->name('gallery'); 
         Route::get('/blog', fn() => view('frontend.v_blog.blog'))->name('blog'); 
-        Route::get('/destinationdetails', fn() => view('frontend.v_morepages.destinationdetails'))->name('destinationdetails');
     });
 
     // route untuk user
