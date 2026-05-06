@@ -12,10 +12,13 @@ return new class extends Migration
     public function up(): void
     {
          Schema::create('customer', function (Blueprint $table) { 
-            $table->id(); 
-            $table->unsignedBigInteger('user_id'); 
-            $table->string('google_id')->nullable(); 
-            $table->string('google_token')->nullable(); 
+            $table->uuid('id')->primary();
+            $table->string('nama');
+            $table->string('email')->unique(); 
+            $table->string('password');
+            $table->string('hp', 13);
+            $table->string('foto')->nullable();
+            $table->unsignedBigInteger('user_id');  
             $table->string('alamat')->nullable(); 
             $table->string('pos')->nullable(); 
             $table->timestamps(); 
