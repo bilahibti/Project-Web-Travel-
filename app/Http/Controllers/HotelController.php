@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hotel;
+use App\Models\Destination;
 use App\Helpers\ImageHelper;
 
 class HotelController extends Controller
@@ -13,7 +14,7 @@ class HotelController extends Controller
      */
     public function index()
     {
-        $hotel = Hotel::orderBy('nama_hotel', 'asc')->get(); 
+        $hotel = Hotel::orderBy('hotel_name', 'asc')->get(); 
         return view('backend.v_hotel.index', [ 
             'judul' => 'Hotel', 
             'index' => $hotel
@@ -36,16 +37,19 @@ class HotelController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([ 
-            'nama_hotel' => 'required|max:255',
-            'alamat' => 'required',
-            'deskripsi' => 'required',
-            'rating' => 'required|max:255', 
-            'harga_per_malam' => 'required|numeric|min:0',   
-            'foto' => 'image|mimes:jpeg,jpg,png,gif|file|max:1024',  
-            'status' => 'required|in:Tersedia,Full Booked',
+            'destination_id' => 'required|exists:destination,id',
+            'hotel_name' => 'required|string|max:255',
+            'address' => 'required',
+            'description' => 'required',
+            'star_rating' => 'required|integer|min:1|max:5',
+            'price_per_night' => 'required|numeric',
+            'facilities' => 'required',
+            'quota' => 'required|integer|min:1',
+            'status' => 'required|in:Available,Full Booked',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png',
         ], $messages = [ 
-            'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.', 
-            'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.' 
+            'foto.image' => 'The image must be a file of type: jpeg, jpg, png, or gif.',
+            'foto.max' => 'The maximum image size allowed is 1024 KB.' 
         ]);  
  
         if ($request->hasFile('foto')) {
@@ -56,7 +60,7 @@ class HotelController extends Controller
         $validatedData['foto'] = $originalFileName;
     }
         Hotel::create($validatedData); 
-        return redirect()->route('backend.hotel.index')->with('success', 'Data berhasil tersimpan');
+        return redirect()->route('backend.hotel.index')->with('success', 'Data successfully saved');
     }
 
     /**
@@ -87,24 +91,26 @@ class HotelController extends Controller
          //ddd($request); 
         $hotel = Hotel::findOrFail($id); 
         $validatedData = $request->validate([ 
-            'nama_hotel' => 'required|max:255',
-            'alamat' => 'required',
-            'deskripsi' => 'required',
-            'rating' => 'required|max:255', 
-            'harga_per_malam' => 'required|numeric|min:0',   
+            'hotel_name' => 'required|max:255',
+            'address' => 'required',
+            'description' => 'required',
+            'star_rating' => 'required|integer|min:1|max:5',
+            'price_per_night' => 'required|numeric',
+            'facilities' => 'required',
+            'quota' => 'required|integer|min:1',
+            'status' => 'required|in:Available,Full Booked',
             'foto' => 'image|mimes:jpeg,jpg,png,gif|file|max:1024',  
-            'status' => 'required|in:Tersedia,Full Booked',
         ], 
         $messages = [ 
-            'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.', 
-            'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.' 
+            'foto.image' => 'The image must be a file of type: jpeg, jpg, png, or gif.', 
+            'foto.max' => 'The maximum image size allowed is 1024 KB.' 
         ]); 
  
         // menggunakan ImageHelper 
         if ($request->file('foto')) { 
             //hapus gambar lama 
             if ($hotel->foto) { 
-                $oldImagePath = public_path('storage/img-hotel/') . $destinasi->foto; 
+                $oldImagePath = public_path('storage/img-hotel/') . $hotel->foto; 
                 if (file_exists($oldImagePath)) { 
                     unlink($oldImagePath); 
                 } 
@@ -120,7 +126,7 @@ class HotelController extends Controller
         } 
  
         $hotel->update($validatedData); 
-        return redirect()->route('backend.hotel.index')->with('success', 'Data berhasil diperbaharui'); 
+        return redirect()->route('backend.hotel.index')->with('success', 'Data successfully updated'); 
     }
 
     /**
@@ -130,7 +136,7 @@ class HotelController extends Controller
     {
         $hotel = Hotel::findOrFail($id); 
         $hotel ->delete(); 
-        return redirect()->route('backend.hotel.index')->with('success', 'Data berhasil dihapus'); 
+        return redirect()->route('backend.hotel.index')->with('success', 'Data successfully deleted'); 
     }
 
 }

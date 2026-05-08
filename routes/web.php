@@ -6,10 +6,10 @@ use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DestinasiController;
+use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\HotelController;
-use App\Http\Controllers\TransportasiController;
-use App\Http\Controllers\PaketController;
+use App\Http\Controllers\TransportationController;
+use App\Http\Controllers\TravelPackagesController;
 
 
 
@@ -70,7 +70,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
     // route untuk halaman statis frontend
     Route::prefix('frontend')->name('frontend.')->group(function () { 
         Route::get('/about', fn() => view('frontend.v_about.about'))->name('about'); 
-        Route::get('/destinasi', fn() => view('frontend.v_destinasi.destinasi'))->name('destinasi'); 
+        Route::get('/destination', fn() => view('frontend.v_destination.destination'))->name('destination'); 
         Route::get('/tours', fn() => view('frontend.v_tours.tours'))->name('tours'); 
         Route::get('/gallery', fn() => view('frontend.v_gallery.gallery'))->name('gallery'); 
         Route::get('/blog', fn() => view('frontend.v_blog.blog'))->name('blog'); 
@@ -90,7 +90,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
     // backend route untuk destinasi
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('destinasi')->name('destinasi.')->controller(App\Http\Controllers\DestinasiController::class)->group(function () { 
+        Route::prefix('destination')->name('destination.')->controller(App\Http\Controllers\DestinationController::class)->group(function () { 
             Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
             Route::post('/store', 'store')->name('store'); 
@@ -114,7 +114,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
     // backend route untuk transportasi
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('transportasi')->name('transportasi.')->controller(App\Http\Controllers\TransportasiController::class)->group(function () { 
+        Route::prefix('transportation')->name('transportation.')->controller(App\Http\Controllers\TransportationController::class)->group(function () { 
             Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
             Route::post('/store', 'store')->name('store'); 
@@ -124,9 +124,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
-    // backend route untuk paket
+    // backend route untuk travel_packages
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('paket')->name('paket.')->controller(App\Http\Controllers\PaketController::class)->group(function () { 
+        Route::prefix('travel-packages')->name('travel-packages.')->controller(App\Http\Controllers\TravelPackagesController::class)->group(function () { 
             Route::get('/index', 'index')->name('index'); 
             Route::get('/create', 'create')->name('create'); 
             Route::post('/store', 'store')->name('store'); 

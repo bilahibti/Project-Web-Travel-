@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('hotel', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_hotel');
-            $table->text('alamat');
-            $table->text('deskripsi');
-            $table->string('rating');
-            $table->decimal('harga_per_malam', 12, 2);
+            $table->foreignId('destination_id')->constrained('destination')->onDelete('cascade');
+            $table->string('hotel_name');
+            $table->text('address');
+            $table->text('description');
+            $table->integer('star_rating');
+            $table->decimal('price_per_night', 12, 2);
+            $table->text('facilities');
             $table->integer('quota')->default(1); 
             $table->integer('booked')->default(0);
             $table->string('foto')->nullable();
-            $table->enum('status', ['Tersedia', 'Full Booked'])->default('Tersedia');
+            $table->enum('status', ['Available', 'Full Booked'])->default('Available');
             $table->timestamps();
         });
     }

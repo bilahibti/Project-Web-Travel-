@@ -11,13 +11,21 @@ class Hotel extends Model
     protected $table = "hotel"; 
     // protected $fillable = [nama_hotel]; 
     protected $fillable = [
-        'nama_hotel',
-        'alamat',
-        'deskripsi',
-        'rating',
-        'harga_per_malam',
+        'destination_id',
+        'hotel_name',
+        'address',
+        'description',
+        'star_rating',
+        'price_per_night',
+        'facilities',
+        'quota',
+        'booked',
         'foto',
-        'status'
+        'status',
     ]; 
 
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class, 'destination_id');
+    }
 }
