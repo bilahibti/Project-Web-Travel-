@@ -7,44 +7,56 @@
         <div class="row mb-6 gy-6">
             <div class="col-xl">
                 <div class="card">
-                    <form class="form-horizontal" action="{{ route('backend.destinasi.store') }}" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="{{ route('backend.destination.store') }}" method="post" enctype="multipart/form-data">
                         @csrf 
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Tambah Destinasi</h5>
+                            <h5 class="mb-0">Add Destination</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="mb-4">
-                                        <label class="form-label">Nama Destinasi</label>
-                                        <input type="text" name="nama_destinasi"
-                                        value="{{ old('nama_destinasi') }}"
-                                        class="form-control @error('nama_destinasi') is-invalid @enderror"
-                                        placeholder="Masukkan Nama Destinasi">
-                                        @error('nama_destinasi')
+                                        <label class="form-label">Destination Name</label>
+                                        <input type="text" name="destination_name"
+                                        value="{{ old('destination_name') }}"
+                                        class="form-control @error('destination_name') is-invalid @enderror"
+                                        placeholder="Enter Destination Name">
+                                        @error('destination_name')
                                         <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Negara</label>
-                                        <input type="text" name="negara"
-                                            value="{{ old('negara') }}"
-                                            class="form-control @error('negara') is-invalid @enderror"
-                                            placeholder="Masukkan Negara">
-                                        @error('negara')
+                                        <label class="form-label">Country</label>
+                                        <input type="text" name="country"
+                                            value="{{ old('country') }}"
+                                            class="form-control @error('country') is-invalid @enderror"
+                                            placeholder="Enter Country">
+                                        @error('country')
                                             <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Deskripsi</label>
+                                        <label class="form-label">City</label>
+                                        <input type="text" name="city"
+                                            value="{{ old('city') }}"
+                                            class="form-control @error('city') is-invalid @enderror"
+                                            placeholder="Enter City">
+                                        @error('city')
+                                            <div class="invalid-feedback">{{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
                                         <textarea
-                                        name="deskripsi"
-                                        class="form-control @error('deskripsi') is-invalid @enderror"
-                                        placeholder="Masukkan Deskripsi"
-                                        style="height: 60px">{{ old('deskripsi') }}</textarea>
-                                        @error('deskripsi') 
+                                        name="description"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        placeholder="Enter Description"
+                                        style="height: 60px">{{ old('description') }}</textarea>
+                                        @error('description') 
                                         <span class="invalid-feedback alert-danger" role="alert"> 
                                             {{ $message }} 
                                         </span>
@@ -63,14 +75,36 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Harga Tiket</label>
-                                        <input type="text" name="harga_tiket"
-                                            value="{{ old('harga_tiket') }}"
-                                            onkeypress="return hanyaAngka(event)"
-                                            class="form-control @error('harga_tiket') is-invalid @enderror"
-                                            placeholder="Masukkan Harga Tiket">
-                                        @error('harga_tiket')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        <label class="form-label">Destination Type</label>
+                                        <select name="destination_type"
+                                            class="form-control @error('destination_type') is-invalid @enderror">
+                                            <option value="">-- Select Type --</option>
+                                            <option value="Domestic"
+                                                {{ old('destination_type') == 'Domestic' ? 'selected' : '' }}>
+                                                Domestic
+                                            </option>
+                                            <option value="International"
+                                                {{ old('destination_type') == 'International' ? 'selected' : '' }}>
+                                                International
+                                            </option>
+                                        </select>
+                                        @error('destination_type')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Quota</label>
+                                        <input type="number" name="quota"
+                                            value="{{ old('quota') }}"
+                                            class="form-control @error('quota') is-invalid @enderror"
+                                            placeholder="Enter Quota">
+                                        @error('quota')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
@@ -78,15 +112,22 @@
                                         <label class="form-label">Status</label>
                                         <select name="status"
                                             class="form-control @error('status') is-invalid @enderror">
-                                            <option value="">- Pilih Status -</option>
-                                            <option value="Tersedia" {{ old('status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                                            <option value="Full Booked" {{ old('status') == 'Full Booked' ? 'selected' : '' }}>Full Booked</option>
+                                            <option value="">-- Select Status --</option>
+                                            <option value="Available"
+                                                {{ old('status') == 'Available' ? 'selected' : '' }}>
+                                                Available
+                                            </option>
+                                            <option value="Full Booked"
+                                                {{ old('status') == 'Full Booked' ? 'selected' : '' }}>
+                                                Full Booked
+                                            </option>
                                         </select>
                                         @error('status')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
-                                </div>
 
                                 <div class="col-md-4 text-center">
                                     <img id="preview-image" src="{{ asset('backend/img/avatars/1.png') }}"
@@ -123,9 +164,9 @@
 
                             <div class="row mt-4">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <a href="{{ route('backend.destinasi.index') }}" class="btn btn-secondary">
-                                        Kembali
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a href="{{ route('backend.destination.index') }}" class="btn btn-secondary">
+                                        Back
                                     </a>
                                 </div>
                             </div>

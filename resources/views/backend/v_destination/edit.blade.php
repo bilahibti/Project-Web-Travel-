@@ -7,45 +7,58 @@
         <div class="row mb-6 gy-6">
             <div class="col-xxl">
                 <div class="card">
-                    <form class="form-horizontal" action="{{ route('backend.destinasi.update', $edit->id) }}"  method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="{{ route('backend.destination.update', $edit->id) }}"  method="post" enctype="multipart/form-data">
                         @csrf 
                         @method('PUT')
                         <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0">Edit Destinasi</h5>
+                            <h5 class="mb-0">Edit Destination</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="mb-4">
-                                        <label class="form-label">Nama Destinasi</label>
-                                        <input type="text" name="nama_destinasi"
-                                        value="{{ old('nama_destinasi', $edit->nama_destinasi) }}"
-                                        class="form-control @error('nama_destinasi') is-invalid @enderror"
-                                        placeholder="Masukkan Nama Destinasi">
-                                        @error('nama_destinasi')
+                                        <label class="form-label">Destination Name</label>
+                                        <input type="text" name="destination_name"
+                                        value="{{ old('destination_name', $edit->destination_name) }}"
+                                        class="form-control @error('destination_name') is-invalid @enderror"
+                                        placeholder="Enter Destination Name">
+                                        @error('destination_name')
                                         <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Negara</label>
-                                        <input type="text" name="negara"
-                                            value="{{ old('negara', $edit->negara) }}"
-                                            class="form-control @error('negara') is-invalid @enderror"
-                                            placeholder="Masukkan Negara">
-                                        @error('negara')
+                                        <label class="form-label">Country</label>
+                                        <input type="text" name="country"
+                                            value="{{ old('country', $edit->country) }}"
+                                            class="form-control @error('country') is-invalid @enderror"
+                                            placeholder="Enter Country">
+                                        @error('country')
                                             <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Deskripsi</label>
+                                        <label class="form-label">City</label>
+                                        <input type="text" name="city"
+                                            value="{{ old('city', $edit->city) }}"
+                                            class="form-control @error('city') is-invalid @enderror"
+                                            placeholder="Enter City">
+                                        @error('city')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
                                         <textarea
-                                        name="deskripsi"
-                                        class="form-control @error('deskripsi') is-invalid @enderror"
-                                        placeholder="Masukkan Deskripsi"
-                                        style="height: 60px">{{ old('deskripsi', $edit->deskripsi) }}</textarea>
-                                        @error('deskripsi') 
+                                        name="description"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        placeholder="Enter Description"
+                                        style="height: 60px">{{ old('description', $edit->description) }}</textarea>
+                                        @error('description') 
                                         <span class="invalid-feedback alert-danger" role="alert"> 
                                             {{ $message }} 
                                         </span> 
@@ -53,38 +66,68 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Lokasi</label>
-                                        <input type="text" name="lokasi"
-                                            value="{{ old('lokasi', $edit->lokasi) }}"
-                                            class="form-control @error('lokasi') is-invalid @enderror"
-                                            placeholder="Masukkan Lokasi">
-                                        @error('lokasi')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        <label class="form-label">
+                                            Destination Type
+                                        </label>
+                                        <select name="destination_type"
+                                            class="form-control @error('destination_type') is-invalid @enderror">
+                                            <option value="">
+                                                -- Select Type --
+                                            </option>
+                                            <option value="Domestic"
+                                                {{ old('destination_type', $edit->destination_type) == 'Domestic' ? 'selected' : '' }}>
+                                                Domestic
+                                            </option>
+                                            <option value="International"
+                                                {{ old('destination_type', $edit->destination_type) == 'International' ? 'selected' : '' }}>
+                                                International
+                                            </option>
+                                        </select>
+                                        @error('destination_type')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Harga Tiket</label>
-                                        <input type="text" name="harga_tiket"
-                                            value="{{ old('harga_tiket', $edit->harga_tiket) }}"
-                                            onkeypress="return hanyaAngka(event)"
-                                            class="form-control @error('harga_tiket') is-invalid @enderror"
-                                            placeholder="Masukkan Harga Tiket">
-                                        @error('harga_tiket')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        <label class="form-label">
+                                            Quota
+                                        </label>
+                                        <input type="number"
+                                            name="quota"
+                                            value="{{ old('quota', $edit->quota) }}"
+                                            class="form-control @error('quota') is-invalid @enderror"
+                                            placeholder="Enter Quota">
+                                        @error('quota')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Status</label>
+                                        <label class="form-label">
+                                            Status
+                                        </label>
                                         <select name="status"
                                             class="form-control @error('status') is-invalid @enderror">
-                                            <option value="">- Pilih Status -</option>
-                                            <option value="Tersedia" {{ old('Status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                                            <option value="Full Booked" {{ old('Status') == 'Full Booked' ? 'selected' : '' }}>Full Booked</option>
+                                            <option value="">
+                                                -- Select Status --
+                                            </option>
+                                            <option value="Available"
+                                                {{ old('status', $edit->status) == 'Available' ? 'selected' : '' }}>
+                                                Available
+                                            </option>
+                                            <option value="Full Booked"
+                                                {{ old('status', $edit->status) == 'Full Booked' ? 'selected' : '' }}>
+                                                Full Booked
+                                            </option>
                                         </select>
                                         @error('status')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -92,7 +135,7 @@
                                 <div class="col-md-4 text-center">
                                     {{-- view image --}} 
                                     @if ($edit->foto) 
-                                    <img id="preview-image" src="{{ asset('storage/img-destinasi/' . $edit->foto) }}" 
+                                    <img id="preview-image" src="{{ asset('storage/img-destination/' . $edit->foto) }}" 
                                     class="img-fluid rounded mb-3"
                                     style="width: 200px; height: auto; border-radius: 8px;">
                                     <p></p> 
@@ -132,9 +175,9 @@
 
                             <div class="row mt-4">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <a href="{{ route('backend.destinasi.index') }}" class="btn btn-secondary">
-                                        Kembali
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a href="{{ route('backend.destination.index') }}" class="btn btn-secondary">
+                                        Back
                                     </a>
                                 </div>
                             </div>
@@ -164,7 +207,7 @@ function previewImage(input) {
 function resetPreview() {
     const img = document.getElementById('preview-image');
     img.src = "{{ $edit->foto 
-        ? asset('storage/img-destinasi/'.$edit->foto) 
+        ? asset('storage/img-destination/'.$edit->foto) 
         : asset('storage/img-user/1.png') }}";
     document.getElementById('upload').value = '';
 }

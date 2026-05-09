@@ -84,8 +84,8 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('/{id}/edit', 'edit')->name('edit'); 
         Route::put('/{id}', 'update')->name('update'); 
         Route::delete('/{id}', 'destroy')->name('destroy');
-        Route::get('/laporan/formuser', 'formUser')->name('laporan.formuser'); 
-        Route::post('/laporan/cetakuser', 'cetakUser')->name('laporan.cetakuser');
+        Route::get('/report/formuser', 'formUser')->name('report.formuser'); 
+        Route::post('/report/printuser', 'printUser')->name('report.printuser');
     });
 
     // backend route untuk destinasi

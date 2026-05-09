@@ -23,8 +23,8 @@
     </tr> --> 
     <tr> 
         <td align="left"> 
-            Perihal : {{ $judul }} <br> 
-            Tanggal Awal: {{ $tanggalAwal }} s/d Tanggal Akhir: {{ $tanggalAkhir }} 
+            Subject : {{ $judul }} <br> 
+            Start Date: {{ $startdate }} s/d End Date: {{ $enddate }} 
         </td> 
     </tr> 
 </table> 
@@ -32,32 +32,26 @@
 <table> 
     <thead> 
         <tr> 
-            <th>No</th> 
-            <th>Email</th> 
-            <th>Nama</th> 
+            <th>No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
             <th>Role</th> 
-            <th>Status</th> 
         </tr> 
     </thead> 
     <tbody> 
-        @foreach ($cetak as $row) 
+        @foreach ($print as $row) 
         <tr> 
             <td> {{ $loop->iteration }} </td> 
-            <td> {{$row->nama}} </td> 
+            <td> {{$row->name}} </td> 
             <td> {{$row->email}} </td> 
-            <td> 
-                @if ($row->role == 1) 
-                Super Admin 
-                @elseif($row->role == 0) 
-                Admin 
-                @endif 
-            </td> 
-            <td> 
-                @if ($row->status ==1) 
-                Aktif 
-                @elseif($row->status ==0) 
-                NonAktif 
-                @endif 
+            <td>{{ $row->hp }}</td>
+            <td>
+                @if ($row->role)
+                    {{ $row->role->name }}
+                @else
+                    No Role
+                @endif
             </td> 
         </tr> 
         @endforeach 

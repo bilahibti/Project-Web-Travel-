@@ -3,36 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Destinasi;
-use App\Models\Paket;
+use App\Models\Destination;
+use App\Models\TravelPackage as Paket;
 use App\Models\Hotel;
-use App\Models\Transportasi;
+use App\Models\Transportation;
 
 class BerandaController extends Controller
 {
     public function berandaBackend() 
     { 
-        $paket = Paket::all();
+        $travelpackages = Paket::all();
         $hotel = Hotel::all();
-        $transportasi = Transportasi::all();
-        $destinasi = Destinasi::all();
+        $transportatiom = Transportation::all();
+        $destination = Destination::all();
         
         return view('backend.v_beranda.index', compact(
-            'paket',
-            'hotel',
-            'transportasi',
-            'destinasi'
-        )); 
+            'travelpackages',
+             'hotel', 
+             'transportation', 
+             'destination'
+        ));
     } 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $destinasi = Destinasi::where('status', 'Tersedia')->orderBy('updated_at', 'desc')->paginate(6); 
+        $destination = Destination::where('status', 'Available')->orderBy('updated_at', 'desc')->paginate(6); 
         return view('frontend.v_beranda.index', [ 
             'judul' => 'Halan Beranda', 
-            'destinasi' => $destinasi, 
+            'destination' => $destination, 
         ]);
     }
 

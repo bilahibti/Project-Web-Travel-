@@ -17,12 +17,12 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="mb-4">
-                                        <label class="form-label">Nama</label>
-                                        <input type="text" name="nama"
-                                        value="{{ old('nama', $edit->nama) }}"
-                                        class="form-control @error('nama') is-invalid @enderror"
-                                        placeholder="Masukkan Nama">
-                                        @error('nama')
+                                        <label class="form-label">Name</label>
+                                        <input type="text" name="name"
+                                        value="{{ old('name', $edit->name) }}"
+                                        class="form-control @error('name') is-invalid @enderror"
+                                        placeholder="Enter Name">
+                                        @error('name')
                                         <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -32,7 +32,7 @@
                                         <input type="text" name="email"
                                             value="{{ old('email', $edit->email) }}"
                                             class="form-control @error('email') is-invalid @enderror"
-                                            placeholder="Masukkan Email">
+                                            placeholder="Enter Email">
                                         @error('email')
                                             <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
@@ -40,43 +40,44 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Hak Akses</label>
-                                        <select name="role"
-                                            class="form-control @error('role') is-invalid @enderror">
-                                            <option value="">- Pilih Hak Akses -</option>
-                                            <option value="1" {{ old('role') == '1' ? 'selected' : '' }}>Super Admin</option>
-                                            <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>Admin</option>
+                                        <label class="form-label">
+                                            Role
+                                        </label>
+                                        <select name="role_id"
+                                            class="form-control @error('role_id') is-invalid @enderror">
+                                            <option value="">
+                                                -- Select Role --
+                                            </option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}"
+                                                    {{ old('role_id', $edit->role_id) == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
-                                        @error('role')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        @error('role_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label">Status</label>
-                                        <select name="status"
-                                            class="form-control @error('status') is-invalid @enderror">
-                                            <option value="">- Pilih Status -</option>
-                                            <option value="1" {{ old('Status') == '1' ? 'selected' : '' }}>Aktif</option>
-                                            <option value="0" {{ old('Status') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
-                                        </select>
-                                        @error('status')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label">No HP</label>
-                                        <input type="text" name="hp"
+                                        <label class="form-label">
+                                            Phone Number
+                                        </label>
+                                        <input type="text"
+                                            name="hp"
                                             value="{{ old('hp', $edit->hp) }}"
                                             onkeypress="return hanyaAngka(event)"
                                             class="form-control @error('hp') is-invalid @enderror"
-                                            placeholder="Masukkan Nomor HP">
+                                            placeholder="Enter Phone Number">
                                         @error('hp')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
-
                                 </div>
 
                                 <div class="col-md-4 text-center">
@@ -122,9 +123,9 @@
 
                             <div class="row mt-4">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                     <a href="{{ route('backend.user.index') }}" class="btn btn-secondary">
-                                        Kembali
+                                        Back
                                     </a>
                                 </div>
                             </div>

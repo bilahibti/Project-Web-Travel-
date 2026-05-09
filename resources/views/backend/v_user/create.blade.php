@@ -10,18 +10,18 @@
                     <form class="form-horizontal" action="{{ route('backend.user.store') }}" method="post" enctype="multipart/form-data">
                         @csrf 
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Tambah User</h5>
+                            <h5 class="mb-0">Add User</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="mb-4">
-                                        <label class="form-label">Nama</label>
-                                        <input type="text" name="nama"
-                                        value="{{ old('nama') }}"
-                                        class="form-control @error('nama') is-invalid @enderror"
-                                        placeholder="Masukkan Nama">
-                                        @error('nama')
+                                        <label class="form-label">Name</label>
+                                        <input type="text" name="name"
+                                        value="{{ old('name') }}"
+                                        class="form-control @error('name') is-invalid @enderror"
+                                        placeholder="Enter Name">
+                                        @error('name')
                                         <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -31,54 +31,49 @@
                                         <input type="text" name="email"
                                             value="{{ old('email') }}"
                                             class="form-control @error('email') is-invalid @enderror"
-                                            placeholder="Masukkan Email">
+                                            placeholder="Enter Email">
                                         @error('email')
                                             <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
                                         <div class="form-text">You can use letters, numbers & periods</div>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <label class="form-label">Hak Akses</label>
-                                        <select name="role"
-                                            class="form-control @error('role') is-invalid @enderror">
-                                            <option value="">- Pilih Hak Akses -</option>
-                                            <option value="1" {{ old('role') == '1' ? 'selected' : '' }}>Super Admin</option>
-                                            <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>Admin</option>
+                                     <div class="mb-4">
+                                        <label class="form-label">Role</label>
+                                        <select name="role_id"
+                                            class="form-control @error('role_id') is-invalid @enderror">
+                                            <option value="">
+                                                -- Select Role --
+                                            </option>       
+                                            @foreach ($roles as $role)
+
+                                            <option value="{{ $role->id }}"
+                                                {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                                {{ $role->name }}
+                                            </option>
+                                            @endforeach
                                         </select>
-                                        @error('role')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        @error('role_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="col-sm-2 col-form-label" for="basic-default-status">Status</label>
-                                        <div class="col-sm-10">
-                                            <select name="status" class="form-control @error('status') is-invalid @enderror">
-                                                <option value="" {{ old('status') == '' ? 'selected' : '' }}> - Pilih Status 
-                                                    -    
-                                                </option> 
-                                                <option value="1" {{ old('status') == '1' ? 'selected' : '' }}> Aktif </option> 
-                                                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}> Tidak Aktif 
-                                                </option> 
-                                            </select> 
-                                            @error('status') 
-                                            <span class="invalid-feedback alert-danger" role="alert"> 
-                                                {{ $message }} 
-                                            </span> 
-                                            @enderror 
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label">No HP</label>
-                                        <input type="text" name="hp"
+                                        <label class="form-label">
+                                            Phone Number
+                                        </label>
+                                        <input type="text"
+                                            name="hp"
                                             value="{{ old('hp') }}"
                                             onkeypress="return hanyaAngka(event)"
                                             class="form-control @error('hp') is-invalid @enderror"
-                                            placeholder="Masukkan Nomor HP">
+                                            placeholder="Enter Phone Number">
                                         @error('hp')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
@@ -86,7 +81,7 @@
                                         <label class="form-label">Password</label>
                                         <input type="password" name="password"
                                             class="form-control @error('password') is-invalid @enderror"
-                                            placeholder="Masukkan Password">
+                                            placeholder="Enter Password">
                                         @error('password')
                                             <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                         @enderror
@@ -135,9 +130,9 @@
 
                             <div class="row mt-4">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                     <a href="{{ route('backend.user.index') }}" class="btn btn-secondary">
-                                        Kembali
+                                        Back
                                     </a>
                                 </div>
                             </div>

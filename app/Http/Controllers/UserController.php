@@ -20,6 +20,8 @@ class UserController extends Controller
 
      public function create() 
     { 
+        $roles = Role::all();
+
         return view('backend.v_user.create', [ 
             'judul' => 'Tambah User', 
         ]); 
@@ -133,36 +135,36 @@ class UserController extends Controller
         return redirect()->route('backend.user.index')->with('success', 'Data berhasil diperbaharui'); 
     }
     
-     public function formUser() 
+    public function formUser() 
     { 
         return view('backend.v_user.form', [ 
-            'judul' => 'Laporan Data User', 
+            'judul' => 'User Report', 
         ]); 
     } 
  
-    public function cetakUser(Request $request) 
+    public function printUser(Request $request) 
     { 
         // Menambahkan aturan validasi 
         $request->validate([ 
-            'tanggal_awal' => 'required|date', 
-            'tanggal_akhir' => 'required|date|after_or_equal:tanggal_awal', 
+            'start_date' => 'required|date', 
+            'end_date' => 'required|date|after_or_equal:start_date', 
         ], [ 
-            'tanggal_awal.required' => 'Tanggal Awal harus diisi.', 
-            'tanggal_akhir.required' => 'Tanggal Akhir harus diisi.', 
-            'tanggal_akhir.after_or_equal' => 'Tanggal Akhir harus lebih besar atau sama dengan Tanggal Awal.', 
+            'start_date.required' => 'Start Date is required.', 
+            'end_date.required' => 'End Date is required.', 
+            'end_date.after_or_equal' => 'End Date must be the same day or later than Start Date.', 
         ]); 
  
-        $tanggalAwal = $request->input('tanggal_awal'); 
-        $tanggalAkhir = $request->input('tanggal_akhir'); 
+        $startdate = $request->input('start_date'); 
+        $enddate = $request->input('end_date'); 
  
-        $query =  User::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir]) 
+        $query =  User::whereBetween('created_at', [$startdate, $enddate]) 
             ->orderBy('id', 'desc'); 
  
         $user = $query->get(); 
-        return view('backend.v_user.cetak', [ 
-            'judul' => 'Laporan User', 
-            'tanggalAwal' => $tanggalAwal, 
-            'tanggalAkhir' => $tanggalAkhir, 
+        return view('backend.v_user.print', [ 
+            'judul' => 'User Report', 
+            'startdate' => $startdate, 
+            'enddate' => $enddate, 
             'cetak' => $user 
         ]); 
     } 

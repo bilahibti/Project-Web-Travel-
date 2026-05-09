@@ -1,4 +1,4 @@
- @extends('Backend.V_Layouts.App') 
+@extends('Backend.V_Layouts.App') 
 @section('content') 
 <!-- contentAwal -->
 
@@ -10,85 +10,166 @@
                     <form class="form-horizontal" action="{{ route('backend.hotel.store') }}" method="post" enctype="multipart/form-data">
                         @csrf 
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Tambah Hotel</h5>
+                            <h5 class="mb-0">Add Hotel</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="mb-4">
-                                        <label class="form-label">Nama Hotel</label>
-                                        <input type="text" name="nama_hotel"
-                                        value="{{ old('nama_hotel') }}"
-                                        class="form-control @error('nama_hotel') is-invalid @enderror"
-                                        placeholder="Masukkan Nama Hotel">
-                                        @error('nama_hotel')
-                                        <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        <label class="form-label">
+                                            Destination
+                                        </label>
+                                        <select name="destination_id"
+                                            class="form-control @error('destination_id') is-invalid @enderror">
+                                            <option value="">
+                                                -- Select Destination --
+                                            </option>
+                                            @foreach ($destinations as $destination)
+                                                <option value="{{ $destination->id }}"
+                                                    {{ old('destination_id') == $destination->id ? 'selected' : '' }}>
+                                                    {{ $destination->destination_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('destination_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
+                                    <!-- HOTEL NAME -->
                                     <div class="mb-4">
-                                        <label class="form-label">Alamat</label>
-                                        <input type="text" name="alamat"
-                                            value="{{ old('negara') }}"
-                                            class="form-control @error('alamat') is-invalid @enderror"
-                                            placeholder="Masukkan Alamat">
-                                        @error('alamat')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                        <label class="form-label">
+                                            Hotel Name
+                                        </label>
+                                        <input type="text"
+                                            name="hotel_name"
+                                            value="{{ old('hotel_name') }}"
+                                            class="form-control @error('hotel_name') is-invalid @enderror"
+                                            placeholder="Enter Hotel Name">
+                                        @error('hotel_name')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
+                                    <!-- ADDRESS -->
                                     <div class="mb-4">
-                                        <label class="form-label">Deskripsi</label>
+                                        <label class="form-label">
+                                            Address
+                                        </label>
+                                        <input type="text"
+                                            name="address"
+                                            value="{{ old('address') }}"
+                                            class="form-control @error('address') is-invalid @enderror"
+                                            placeholder="Enter Address">
+                                        @error('address')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- DESCRIPTION -->
+                                    <div class="mb-4">
+                                        <label class="form-label">
+                                            Description
+                                        </label>
                                         <textarea
-                                        name="deskripsi"
-                                        class="form-control @error('deskripsi') is-invalid @enderror"
-                                        placeholder="Masukkan Deskripsi"
-                                        style="height: 60px">{{ old('deskripsi') }}</textarea>
-                                        @error('deskripsi') 
-                                        <span class="invalid-feedback alert-danger" role="alert"> 
-                                            {{ $message }} 
-                                        </span>
+                                            name="description"
+                                            class="form-control @error('description') is-invalid @enderror"
+                                            placeholder="Enter Description"
+                                            style="height: 80px">{{ old('description') }}</textarea>
+                                        @error('description')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
+                                    <!-- STAR RATING -->
                                     <div class="mb-4">
-                                        <label class="form-label">Rating</label>
-                                        <input type="text" name="rating"
-                                            value="{{ old('rating') }}"
+                                        <label class="form-label">
+                                            Star Rating
+                                        </label>
+                                        <input type="text"
+                                            name="star_rating"
+                                            value="{{ old('star_rating') }}"
                                             onkeypress="return hanyaAngka(event)"
-                                            class="form-control @error('rating') is-invalid @enderror"
-                                            placeholder="Masukkan Rating">
-                                        @error('rating')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            class="form-control @error('star_rating') is-invalid @enderror"
+                                            placeholder="Enter Star Rating">
+                                        @error('star_rating')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
+                                    <!-- PRICE -->
                                     <div class="mb-4">
-                                        <label class="form-label">Harga Per Malam</label>
-                                        <input type="text" name="harga_per_malam"
-                                            value="{{ old('harga_per_malam') }}"
+                                        <label class="form-label">
+                                            Price Per Night
+                                        </label>
+                                        <input type="text"
+                                            name="price_per_night"
+                                            value="{{ old('price_per_night') }}"
                                             onkeypress="return hanyaAngka(event)"
-                                            class="form-control @error('harga_per_malam') is-invalid @enderror"
-                                            placeholder="Masukkan Harga Per Malam">
-                                        @error('harga_per_malam')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            class="form-control @error('price_per_night') is-invalid @enderror"
+                                            placeholder="Enter Price Per Night">
+                                        @error('price_per_night')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
 
+                                    <!-- FACILITIES -->
                                     <div class="mb-4">
-                                        <label class="form-label">Status</label>
+                                        <label class="form-label">
+                                            Facilities
+                                        </label>
+                                        <textarea
+                                            name="facilities"
+                                            class="form-control @error('facilities') is-invalid @enderror"
+                                            placeholder="Enter Facilities"
+                                            style="height: 80px">{{ old('facilities') }}</textarea>
+                                        @error('facilities')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- STATUS -->
+                                    <div class="mb-4">
+                                        <label class="form-label">
+                                            Status
+                                        </label>
                                         <select name="status"
                                             class="form-control @error('status') is-invalid @enderror">
-                                            <option value="">- Pilih Status -</option>
-                                            <option value="Tersedia" {{ old('status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                                            <option value="Full Booked" {{ old('status') == 'Full Booked' ? 'selected' : '' }}>Full Booked</option>
+                                            <option value="">
+                                                -- Select Status --
+                                            </option>
+                                            <option value="Available"
+                                                {{ old('status') == 'Available' ? 'selected' : '' }}>
+                                                Available
+                                            </option>
+                                            <option value="Full Booked"
+                                                {{ old('status') == 'Full Booked' ? 'selected' : '' }}>
+                                                Full Booked
+                                            </option>
                                         </select>
                                         @error('status')
-                                            <div class="invalid-feedback alert-danger">{{ $message }}</div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
 
+                                <!-- IMAGE -->
                                 <div class="col-md-4 text-center">
                                     <img id="preview-image" src="{{ asset('backend/img/avatars/1.png') }}"
                                     class="img-fluid rounded mb-3"
@@ -122,11 +203,12 @@
                                 </div>
                             </div>
 
+                            <!-- BUTTON -->
                             <div class="row mt-4">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                     <a href="{{ route('backend.hotel.index') }}" class="btn btn-secondary">
-                                        Kembali
+                                        Back
                                     </a>
                                 </div>
                             </div>

@@ -3,36 +3,70 @@
 <!-- contentAwal -->
 
 <div  class="card">
-    <h5 class="card-header">Destinasi</h5> 
+    <h5 class="card-header">Destination</h5> 
     <div class="table-responsive text-nowrap">
-        <a href="{{ route('backend.destinasi.create') }}">
-            <button class="btn rounded-pill btn-primary btn-sm" style="border:none; outline:none; border-radius:12px; padding:6px 14px;">Tambah</button>
+        <a href="{{ route('backend.destination.create') }}">
+            <button class="btn rounded-pill btn-primary btn-sm" style="border:none; outline:none; border-radius:12px; padding:6px 14px;">Add</button>
         </a>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>No</th> 
-                    <th>Nama Destinasi</th> 
-                    <th>Negara</th> 
-                    <th>Harga Tiket</th> 
+                    <th>Photo</th>
+                    <th>Destination Name</th> 
+                    <th>Country</th> 
+                    <th>City</th> 
+                    <th>Type</th>
+                    <th>Quota</th>
                     <th>Status</th> 
-                    <th>Aksi</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
-            @foreach ($index as $row)
             <tbody class="table-border-bottom-0">
+            @foreach ($index as $row)
                 <tr>
-                    <td> {{ $loop->iteration }} </td> 
-                    <td> {{$row->nama_destinasi}} </td> 
-                    <td> {{$row->negara}} </td> 
-                    <td> {{$row->harga_tiket}} </td> 
-                    <td> @if ($row->status == 'Tersedia')
-                            <span class="badge bg-label-success rounded-pill">Tersedia</span>
+                    <td>{{ $loop->iteration }}</td>
+                    <!-- FOTO -->
+                    <td>
+                        @if ($row->foto)
+                            <img src="{{ asset('storage/destination/'.$row->foto) }}"
+                                width="60"
+                                class="rounded">
                         @else
-                            <span class="badge bg-label-warning rounded-pill">Full Booked</span>
+                            <img src="{{ asset('backend/img/avatars/1.png') }}"
+                                width="60"
+                                class="rounded">
+                        @endif
+                    </td>
+
+                    <!-- DESTINATION -->
+                    <td>{{ $row->destination_name }}</td>
+                    <!-- COUNTRY -->
+                    <td>{{ $row->country }}</td>
+                    <!-- CITY -->
+                    <td>{{ $row->city }}</td>
+                    <!-- TYPE -->
+                    <td>
+                        <span class="badge bg-label-info rounded-pill">
+                            {{ $row->destination_type }}
+                        </span>
+                    </td>
+                    <!-- QUOTA -->
+                    <td>{{ $row->quota }}</td>
+                    <!-- STATUS -->
+                    <td>
+                        @if ($row->status == 'Available')
+                            <span class="badge bg-label-success rounded-pill">
+                                Available
+                            </span>
+                        @else
+                            <span class="badge bg-label-warning rounded-pill">
+                                Full Booked
+                            </span>
                         @endif 
                     </td>
+                    <!-- ACTION -->
                     <td>
                         <div class="dropdown">
                             <button
@@ -42,20 +76,24 @@
                                 <i class="icon-base ri ri-more-2-line icon-18px"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('backend.destinasi.edit', $row->id) }}">
+
+                                <!-- EDIT -->
+                                <a class="dropdown-item"
+                                    href="{{ route('backend.destination.edit', $row->id) }}">
                                     <i class="icon-base ri ri-pencil-line icon-18px me-1"></i>
                                     Edit
                                 </a>
+
+                                <!-- DELETE -->
                                 <form method="POST"
-                                    action="{{ route('backend.destinasi.destroy', $row->id) }}">
+                                    action="{{ route('backend.destination.destroy', $row->id) }}">
                                     @csrf
                                     @method('DELETE')
-
                                     <button type="submit"
-                                            class="dropdown-item"
-                                            data-konf-delete="{{ $row->nama_destinasi }}">
+                                        class="dropdown-item"
+                                        data-konf-delete="{{ $row->destination_name }}">
                                         <i class="icon-base ri ri-delete-bin-6-line me-1"></i>
-                                        Hapus
+                                        Delete
                                     </button>
                                 </form>
                             </div>

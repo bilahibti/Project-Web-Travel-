@@ -3,74 +3,94 @@
 <!-- contentAwal -->
 
 <div  class="card">
-    <h5 class="card-header">Transportasi</h5> 
+    <h5 class="card-header">Transportation</h5> 
     <div class="table-responsive text-nowrap">
-        <a href="{{ route('backend.transportasi.create') }}">
-            <button class="btn rounded-pill btn-primary btn-sm" style="border:none; outline:none; border-radius:12px; padding:6px 14px;">Tambah</button>
+        <a href="{{ route('backend.transportation.create') }}">
+            <button class="btn rounded-pill btn-primary btn-sm" style="border:none; outline:none; border-radius:12px; padding:6px 14px;">Add Transportation</button>
         </a>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>No</th> 
-                    <th>Jenis Transportasi</th>
-                    <th>Nama Transportasi</th> 
-                    <th>Kota Keberangkatan</th>
-                    <th>Kota Tujuan</th>
-                    <th>Waktu Keberangkatan</th>
-                    <th>Harga</th> 
-                    <th>Status</th> 
-                    <th>Aksi</th>
+                    <th>No</th>
+                    <th>Transportation Type</th>
+                    <th>Transportation Name</th>
+                    <th>Departure Destination</th>
+                    <th>Arrival Destination</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Price / Person</th>
+                    <th>Quota</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
-            @foreach ($index as $row)
             <tbody class="table-border-bottom-0">
+                @foreach ($index as $row)
                 <tr>
-                    <td> {{ $loop->iteration }} </td> 
-                    <td> {{$row->jenis_transportasi}} </td>
-                    <td> {{$row->nama_transportasi}} </td> 
-                    <td> {{$row->kota_keberangkatan}} </td> 
-                    <td> {{$row->kota_tujuan}} </td>
-                    <td> {{$row->waktu_berangkat}} </td>
-                    <td> {{$row->harga}} </td> 
-                    <td> 
-                        @if ($row->status == 'Tersedia')
-                            <span class="badge bg-label-success rounded-pill">Tersedia</span>
-                        @else
-                            <span class="badge bg-label-warning rounded-pill">Full Booked</span>
-                        @endif 
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $row->transportation_type }}</td>
+                    <td>{{ $row->transportation_name }}</td>
+                    {{-- Foreign Key Relation --}}
+                    <td>
+                        {{ $row->departureDestination->destination_name ?? '-' }}
                     </td>
                     <td>
+                        {{ $row->arrivalDestination->destination_name ?? '-' }}
+                    </td>
+                    <td>{{ $row->departure_time }}</td>
+
+                    <td>{{ $row->arrival_time }}</td>
+                    <td>
+                        Rp {{ number_format($row->price_per_person, 0, ',', '.') }}
+                    </td>
+                    <td>{{ $row->quota }}</td>
+                    <td>
+                        @if ($row->status == 'Available')
+                            <span class="badge bg-label-success rounded-pill">
+                                Available
+                            </span>
+                        @else
+                            <span class="badge bg-label-warning rounded-pill">
+                                Full Booked
+                            </span>
+                        @endif
+                    </td>
+
+                    <td>
                         <div class="dropdown">
-                            <button
-                                type="button"
+                            <button type="button"
                                 class="btn p-0 dropdown-toggle hide-arrow shadow-none"
                                 data-bs-toggle="dropdown">
                                 <i class="icon-base ri ri-more-2-line icon-18px"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('backend.transportasi.edit', $row->id) }}">
+
+                                {{-- Edit --}}
+                                <a class="dropdown-item"
+                                    href="{{ route('backend.transportasi.edit', $row->id) }}">
                                     <i class="icon-base ri ri-pencil-line icon-18px me-1"></i>
                                     Edit
                                 </a>
+
+                                {{-- Delete --}}
                                 <form method="POST"
                                     action="{{ route('backend.transportasi.destroy', $row->id) }}">
                                     @csrf
                                     @method('DELETE')
-
                                     <button type="submit"
                                         class="dropdown-item"
-                                        data-konf-delete="{{ $row->nama_transportasi }}">
+                                        data-konf-delete="{{ $row->transportation_name }}">
                                         <i class="icon-base ri ri-delete-bin-6-line me-1"></i>
-                                        Hapus
+                                        Delete
                                     </button>
-                                </form> 
+                                </form>
                             </div>
                         </div>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
-            @endforeach
         </table>
     </div>
 </div>

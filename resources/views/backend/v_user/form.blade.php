@@ -5,15 +5,15 @@
 <div class="row"> 
     <div class="col-12"> 
         <div class="card"> 
-            <form class="form-horizontal" action="{{ route('v1.user.laporan.cetakuser') }}" method="post" target="_blank"> 
+            <form class="form-horizontal" action="{{ route('v1.user.report.print') }}" method="post" target="_blank"> 
                 @csrf 
                  <div class="card-body"> 
                     <h4 class="card-title"> {{$judul}} </h4> 
  
                     <div class="form-group"> 
-                        <label>Tanggal Awal</label> 
-                        <input type="date" name="tanggal_awal" onkeypress="return hanyaAngka(event)" value="{{ old('tanggal_awal') }}" class="form-control @error('tanggal_awal') is-invalid @enderror" placeholder="Masukkan Jumlah Pinjam"> 
-                        @error('tanggal_awal') 
+                        <label>Start Date</label> 
+                        <input type="date" name="start_date" onkeypress="return hanyaAngka(event)" value="{{ old('start_date') }}" class="form-control @error('start_date') is-invalid @enderror" placeholder="Enter Start Date"> 
+                        @error('start_date') 
                         <span class="invalid-feedback alert-danger" role="alert"> 
                             {{ $message }} 
                         </span> 
@@ -21,9 +21,9 @@
                     </div> 
  
                     <div class="form-group"> 
-                        <label>Tanggal Akhir</label> 
-                        <input type="date" name="tanggal_akhir" onkeypress="return hanyaAngka(event)" value="{{ old('tanggal_akhir') }}" class="form-control @error('tanggal_akhir') is-invalid @enderror" placeholder="Masukkan Jumlah Pinjam"> 
-                        @error('tanggal_akhir') 
+                        <label>End Date</label> 
+                        <input type="date" name="end_date" onkeypress="return hanyaAngka(event)" value="{{ old('end_date') }}" class="form-control @error('end_date') is-invalid @enderror" placeholder="Enter End Date"> 
+                        @error('end_date') 
                         <span class="invalid-feedback alert-danger" role="alert"> 
                             {{ $message }} 
                         </span> 
@@ -31,7 +31,7 @@
                     </div> 
  
                     <br> 
-                    <button type="submit" class="btn btn-primary">Cetak</button> 
+                    <button type="submit" class="btn btn-primary">Print</button> 
  
             </form> 
         </div> 

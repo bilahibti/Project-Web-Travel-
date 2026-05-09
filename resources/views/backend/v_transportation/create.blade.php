@@ -7,17 +7,18 @@
         <div class="row mb-6 gy-6">
             <div class="col-xxl">
                 <div class="card">
-                    <form class="form-horizontal" action="{{ route('backend.transportasi.store') }}" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="{{ route('backend.transportation.store') }}" method="post" enctype="multipart/form-data">
                         @csrf 
                         <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0">Tambah Transportasi</h5>
+                            <h5 class="mb-0">Add Transportation</h5>
                         </div>
                         <div class="card-body">
+                            {{-- Transportation Type --}}
                             <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-jenis-transportasi">Jenis Transportasi</label>
+                                <label class="col-sm-2 col-form-label" for="basic-default-transportation-type">Transportation Type</label>
                                 <div class="col-sm-10">
-                                    <input type="text"  name="jenis_transportasi" value="{{ old('jenis_transportasi') }}" class="form-control @error('jenis_transportasi') is-invalid @enderror" placeholder="Masukkan Jenis Transportasi"> 
-                                    @error('jenis_transportasi') 
+                                    <input type="text"  name="transportation_type" value="{{ old('transportation_type') }}" class="form-control @error('transportation_type') is-invalid @enderror" placeholder="Enter Transportation Type"> 
+                                    @error('transportation_type') 
                                     <span class="invalid-feedback alert-danger" role="alert"> 
                                         {{ $message }} 
                                     </span> 
@@ -25,102 +26,189 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-nama-transportasi">Nama Transportasi</label>
-                                <div class="col-sm-10">
-                                    <input type="text"  name="nama_transportasi" value="{{ old('nama_transportasi') }}" class="form-control @error('nama_transportasi') is-invalid @enderror" placeholder="Masukkan Nama Transportasi"> 
-                                    @error('nama_transportasi') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
+                            {{-- Transportation Name --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Transportation Name
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="text"
+                                        name="transportation_name"
+                                        value="{{ old('transportation_name') }}"
+                                        class="form-control @error('transportation_name') is-invalid @enderror"
+                                        placeholder="Enter Transportation Name">
+                                    @error('transportation_name')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-kota-keberangkatan">Kota Keberangkatan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="kota_keberangkatan" value="{{ old('kota_keberangkatan') }}" class="form-control @error('kota_keberangkatan') is-invalid @enderror" placeholder="Masukkan Kota Keberangkatan"> 
-                                    @error('kota_keberangkatan') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
-                                    @enderror 
+                            {{-- Departure Destination --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Departure Destination
+                                </label>
+                                <div class="col-sm-9">
+                                    <select name="departure_destination_id"
+                                        class="form-control @error('departure_destination_id') is-invalid @enderror">
+                                        <option value="">
+                                            -- Select Destination --
+                                        </option>
+                                        @foreach ($destination as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ old('departure_destination_id') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->destination_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('departure_destination_id')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-kota-tujuan">Kota Tujuan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="kota_tujuan" value="{{ old('kota_tujuan') }}" class="form-control @error('kota_tujuan') is-invalid @enderror" placeholder="Masukkan Kota Tujuan"> 
-                                    @error('kota_tujuan') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
-                                    @enderror 
+                             {{-- Arrival Destination --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Arrival Destination
+                                </label>
+                                <div class="col-sm-9">
+                                    <select name="arrival_destination_id"
+                                        class="form-control @error('arrival_destination_id') is-invalid @enderror">
+                                        <option value="">
+                                            -- Select Destination --
+                                        </option>
+                                        @foreach ($destination as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ old('arrival_destination_id') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->destination_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('arrival_destination_id')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-waktu-berangkat">Waktu Berangkat</label>
-                                <div class="col-sm-10">
-                                    <input type="datetime-local" name="waktu_berangkat" value="{{ old('waktu_berangkat') }}" class="form-control @error('waktu_berangkat') is-invalid @enderror" placeholder="Masukkan Waktu Berangkat"> 
-                                    @error('waktu_berangkat') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
-                                    @enderror 
+                            {{-- Departure Time --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Departure Time
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="datetime-local"
+                                        name="departure_time"
+                                        value="{{ old('departure_time') }}"
+                                        class="form-control @error('departure_time') is-invalid @enderror">
+                                    @error('departure_time')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-waktu-tiba">Waktu Tiba</label>
-                                <div class="col-sm-10">
-                                    <input type="datetime-local" name="waktu_tiba" value="{{ old('waktu_tiba') }}" class="form-control @error('waktu_tiba') is-invalid @enderror" placeholder="Masukkan Waktu Tiba"> 
-                                    @error('waktu_tiba') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
-                                    @enderror 
+                            {{-- Arrival Time --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Arrival Time
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="datetime-local"
+                                        name="arrival_time"
+                                        value="{{ old('arrival_time') }}"
+                                        class="form-control @error('arrival_time') is-invalid @enderror">
+                                    @error('arrival_time')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-harga">Harga</label>
-                                <div class="col-sm-10">
-                                    <input type="text" onkeypress="return hanyaAngka(event)" name="harga" value="{{ old('harga') }}" class="form-control @error('harga') is-invalid @enderror" placeholder="Masukkan Harga"> 
-                                    @error('harga') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
-                                    @enderror 
+                            {{-- Price Per Person --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Price Per Person
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="text"
+                                        onkeypress="return hanyaAngka(event)"
+                                        name="price_per_person"
+                                        value="{{ old('price_per_person') }}"
+                                        class="form-control @error('price_per_person') is-invalid @enderror"
+                                        placeholder="Enter Price">
+                                    @error('price_per_person')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mt-1 g-5">
-                                <label class="col-sm-2 col-form-label" for="basic-default-status">Status</label>
-                                <div class="col-sm-10">
-                                    <select name="status" class="form-control @error('status') is-invalid @enderror">
-                                        <option value="" {{ old('status') == '' ? 'selected' : '' }}> - Pilih Status 
-                                            -    
-                                        </option> 
-                                        <option value="Tersedia" {{ old('status') == 'Tersedia' ? 'selected' : '' }}> Tersedia</option> 
-                                        <option value="Full Booked" {{ old('status') == 'Full Booked' ? 'selected' : '' }}> Full Booked 
-                                        </option> 
-                                    </select> 
-                                    @error('status') 
-                                    <span class="invalid-feedback alert-danger" role="alert"> 
-                                        {{ $message }} 
-                                    </span> 
-                                    @enderror 
+                            {{-- Quota --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Quota
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="text"
+                                        onkeypress="return hanyaAngka(event)"
+                                        name="quota"
+                                        value="{{ old('quota') }}"
+                                        class="form-control @error('quota') is-invalid @enderror"
+                                        placeholder="Enter Quota">
+                                    @error('quota')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
+                            {{-- Status --}}
+                            <div class="row mt-3">
+                                <label class="col-sm-3 col-form-label">
+                                    Status
+                                </label>
+                                <div class="col-sm-9">
+                                    <select name="status"
+                                        class="form-control @error('status') is-invalid @enderror">
+                                        <option value="">
+                                            -- Select Status --
+                                        </option>
+                                        <option value="Available"
+                                            {{ old('status') == 'Available' ? 'selected' : '' }}>
+                                            Available
+                                        </option>
+                                        <option value="Full Booked"
+                                            {{ old('status') == 'Full Booked' ? 'selected' : '' }}>
+                                            Full Booked
+                                        </option>
+                                    </select>
+
+                                    @error('status')
+                                        <span class="invalid-feedback alert-danger" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Button --}}
                             <div class="row mt-4">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <a href="{{ route('backend.transportasi.index') }}" class="btn btn-secondary">
-                                        Kembali
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a href="{{ route('backend.transportation.index') }}" class="btn btn-secondary">
+                                        Back
                                     </a>
                                 </div>
                             </div>

@@ -5,64 +5,94 @@
     <h5 class="card-header">Data User</h5> 
     <div class="table-responsive text-nowrap">
         <a href="{{ route('backend.user.create') }}"> 
-            <button class="btn rounded-pill btn-primary btn-sm" style="border:none; outline:none; border-radius:12px; padding:6px 14px;">Tambah</button> 
+            <button class="btn rounded-pill btn-primary btn-sm" style="border:none; outline:none; border-radius:12px; padding:6px 14px;">Add User</button> 
         </a> 
         <table class="table table-striped"> 
             <thead>
                 <tr> 
                     <th>No</th> 
+                    <th>Foto</th>
+                    <th>Name</th> 
                     <th>Email</th> 
-                    <th>Nama</th> 
+                    <th>Phone Number</th> 
                     <th>Role</th> 
-                    <th>Status</th> 
-                    <th>Aksi</th> 
+                    <th>Action</th> 
                 </tr> 
             </thead>
 
-            @foreach ($index as $row)
             <tbody class="table-border-bottom-0">
+                @foreach ($index as $row)
                 <tr> 
-                    <td> {{ $loop->iteration }} </td> 
-                    <td> {{$row->nama}} </td> 
-                    <td> {{$row->email}} </td> 
-                    <td> {{$row->role}} </td> 
-                    <td> @if ($row->status == 1)
-                            <span class="badge bg-label-success rounded-pill">Active</span>
+                    <!-- Number -->
+                    <td>{{ $loop->iteration }}</td> 
+                    <!-- Photo -->
+                    <td>
+                        @if ($row->foto)
+                            <img src="{{ asset('storage/user/'.$row->foto) }}"
+                                width="60"
+                                class="rounded">
                         @else
-                            <span class="badge bg-label-warning rounded-pill">Tidak Aktif</span>
-                        @endif 
-                    </td> 
+                            <img src="{{ asset('backend/img/avatars/1.png') }}"
+                                width="60"
+                                class="rounded">
+                        @endif
+                    </td>
+
+                    <!-- Name -->
+                    <td>{{ $row->nama }}</td> 
+                    <!-- Email -->
+                    <td>{{ $row->email }}</td> 
+                    <!-- Phone -->
+                    <td>{{ $row->hp }}</td>
+                    <!-- Role -->
+                    <td>
+                        @if ($row->role)
+                            <span class="badge bg-label-primary rounded-pill">
+                                {{ $row->role->name }}
+                            </span>
+                        @else
+                            <span class="badge bg-label-secondary rounded-pill">
+                                No Role
+                            </span>
+                        @endif
+                    </td>
+
+                    <!-- Action -->
                     <td>
                         <div class="dropdown">
                             <button
-                              type="button"
-                              class="btn p-0 dropdown-toggle hide-arrow shadow-none"
-                              data-bs-toggle="dropdown">
-                              <i class="icon-base ri ri-more-2-line icon-18px"></i>
+                                type="button"
+                                class="btn p-0 dropdown-toggle hide-arrow shadow-none"
+                                data-bs-toggle="dropdown">
+                                <i class="icon-base ri ri-more-2-line icon-18px"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('backend.user.edit', $row->id) }}">
+
+                                <!-- Edit -->
+                                <a class="dropdown-item"
+                                    href="{{ route('backend.user.edit', $row->id) }}">
                                     <i class="icon-base ri ri-pencil-line icon-18px me-1"></i>
                                     Edit
                                 </a>
-                                <<form method="POST"
+
+                                <!-- Delete -->
+                                <form method="POST"
                                     action="{{ route('backend.user.destroy', $row->id) }}">
                                     @csrf
                                     @method('DELETE')
-
                                     <button type="submit"
-                                            class="dropdown-item"
-                                            data-konf-delete="{{ $row->nama_user }}">
+                                        class="dropdown-item"
+                                        data-konf-delete="{{ $row->name }}">
                                         <i class="icon-base ri ri-delete-bin-6-line me-1"></i>
-                                        Hapus
+                                        Delete
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </td> 
                 </tr> 
-            </tbody>
-            @endforeach 
+                @endforeach 
+            </tbody> 
         </table> 
     </div>
 </div>
