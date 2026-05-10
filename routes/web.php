@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloWorldController;
 use App\Http\Controllers\AnggotaController;
-use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DestinationController;
@@ -25,7 +25,7 @@ use App\Http\Controllers\TravelPackagesController;
 */
 
 Route::get('/', function () { 
-    return redirect()->route('v1.frontend.beranda'); 
+    return redirect()->route('v1.frontend.dashboard'); 
 });
 
 Route::get('helloworld', [HelloWorldController::class, 'index']); 
@@ -46,18 +46,17 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
     // route untuk beranda backend 
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () { 
-        Route::prefix('beranda')->name('beranda.')->controller(App\Http\Controllers\BerandaController::class)->group(function () { 
-            Route::get('/beranda', 'berandaBackend')->name('beranda'); 
+        Route::prefix('dashboard')->name('dashboard.')->controller(App\Http\Controllers\DashboardController::class)->group(function () { 
+            Route::get('/dashboard', 'dashboardBackend')->name('dashboard'); 
             Route::get('/index', 'index')->name('index');
-            Route::get('/admin/dashboard', 'berandaBackend')->name('admin.dashboard');
-            Route::get('/staff/dashboard', fn() => view('backend.v_beranda.staff'))->name('staff.dashboard');
-            Route::get('/finance/dashboard', fn() => view('backend.v_beranda.finance'))->name('finance.dashboard');
+            Route::get('/admin/dashboard', 'dashboardBackend')->name('admin.dashboard');
+            Route::get('/staff/dashboard', fn() => view('backend.v_dashboard.staff'))->name('staff.dashboard');
         });
      });
 
     // 🔐 FRONTEND AUTH
     Route::prefix('frontend')->name('frontend.')->group(function () { 
-        Route::get('beranda', [BerandaController::class, 'index'])->name('beranda');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
             Route::get('', 'loginFrontend')->name('login'); 
             Route::post('/process', 'authenticateFrontend')->name('process'); 

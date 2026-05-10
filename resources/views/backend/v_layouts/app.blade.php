@@ -137,7 +137,7 @@
           <ul class="menu-inner py-1">
             <!-- Dashboards -->
             <li class="menu-item">
-              <a href="{{ route('v1.backend.beranda.beranda') }}" class="menu-link">
+              <a href="{{ route('v1.backend.dashboard.dashboard') }}" class="menu-link">
                 <i class="menu-icon icon-base ri ri-home-smile-line"></i>
                 <div data-i18n="Dashboards">Dashboards</div>
               </a>
@@ -159,8 +159,8 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{{ route('v1.backend.destinasi.index') }}" class="menu-link">
-                    <div data-i18n="Analytics">Destinasi</div>
+                  <a href="{{ route('v1.backend.destination.index') }}" class="menu-link">
+                    <div data-i18n="Analytics">Destination</div>
                   </a>
                 </li>
                 <li class="menu-item">
@@ -169,8 +169,8 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{{ route('v1.backend.transportasi.index') }}" class="menu-link">
-                    <div data-i18n="Analytics">Transportasi</div>
+                  <a href="{{ route('v1.backend.transportation.index') }}" class="menu-link">
+                    <div data-i18n="Analytics">Transportation</div>
                   </a>
                 </li>
               </ul>
@@ -180,12 +180,12 @@
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ri ri-layout-left-line"></i>
-                <div data-i18n="Menu Travel">Menu Paket</div>
+                <div data-i18n="Menu Travel">Packages</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{{ route('v1.backend.paket.index') }}" class="menu-link">
-                    <div data-i18n="Paket Travel">Paket Travel</div>
+                  <a href="{{ route('v1.backend.travel-packages.index') }}" class="menu-link">
+                    <div data-i18n="Paket Travel">Travel Packages</div>
                   </a>
                 </li>
               </ul>
@@ -193,17 +193,17 @@
 
             <!-- Laporan -->
             <li class="menu-header mt-7">
-              <span class="menu-header-text">Laporan</span>
+              <span class="menu-header-text">Report</span>
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ri ri-layout-left-line"></i>
-                <div data-i18n="Laporan">Laporan</div>
+                <div data-i18n="Laporan">Report</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{{ route('v1.user.laporan.formuser') }}" class="menu-link">
-                    <div data-i18n="Laporan User">User</div>
+                  <a href="{{ route('v1.user.report.formuser') }}" class="menu-link">
+                    <div data-i18n="Report User">User</div>
                   </a>
                 </li>
               </ul>
@@ -340,7 +340,7 @@
     <script> 
         Swal.fire({ 
             icon: 'success', 
-            title: 'Berhasil!', 
+            title: 'Success!', 
             text: "{{ session('success') }}" 
         }); 
     </script> 
@@ -354,17 +354,17 @@
         var konfdelete = $(this).data("konf-delete"); 
         event.preventDefault(); 
         Swal.fire({ 
-          title: 'Konfirmasi Hapus Data?', 
-          html: "Data yang dihapus <strong>" + konfdelete + "</strong> tidak dapat dikembalikan!", 
+          title: 'Confirm Delete Data?', 
+          html: "Data that is deleted <strong>" + konfdelete + "</strong> cannot be recovered!", 
           icon: 'warning', 
           showCancelButton: true, 
           confirmButtonColor: '#3085d6', 
           cancelButtonColor: '#d33', 
-          confirmButtonText: 'Ya, dihapus', 
-          cancelButtonText: 'Batal' 
+          confirmButtonText: 'Yes, delete it', 
+          cancelButtonText: 'Cancel' 
         }).then((result) => { 
           if (result.isConfirmed) { 
-            Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success') 
+            Swal.fire('Deleted!', 'Data has been deleted.', 'success') 
               .then(() => { 
                 form.submit(); 
               }); 

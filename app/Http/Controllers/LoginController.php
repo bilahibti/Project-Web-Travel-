@@ -31,30 +31,21 @@ class LoginController extends Controller
             
             $user = Auth::user();
 
-            // cek status aktif
-            if ($user->status == 0) { 
-                Auth::logout(); 
-                return back()->with('error', 'User belum aktif'); 
-            } 
-
             $request->session()->regenerate(); 
 
             // 🔥 ROLE BASED REDIRECT
             switch ($user->role->slug) {
 
                 case 'admin':
-                    return redirect()->route('v1.backend.beranda.admin.dashboard');
+                    return redirect()->route('v1.backend.dashboard.admin');
 
                 case 'staff':
-                    return redirect()->route('v1.backend.beranda.staff.dashboard');
-
-                case 'finance':
-                    return redirect()->route('v1.backend.beranda.finance.dashboard');
+                    return redirect()->route('v1.backend.dashboard.staff');
 
                 default:
                     // kalau bukan role backend
                     Auth::logout();
-                    return back()->with('error', 'Akses bukan untuk backend');
+                    return back()->with('error', 'Access is not allowed for backend users');
             }
         } 
 
@@ -69,14 +60,10 @@ class LoginController extends Controller
         ]); 
  
         if (Auth::attempt($credentials)) { 
-            if (Auth::user()->status == 0) { 
-                Auth::logout(); 
-                return back()->with('error', 'User belum aktif'); 
-            } 
             $request->session()->regenerate(); 
-            return redirect()->intended(route('frontend.beranda')); 
+            return redirect()->intended(route('frontend.dashboard')); 
         } 
-        return back()->with('error', 'Login Gagal'); 
+        return back()->with('error', 'Login Failed'); 
     }
  
     public function logoutBackend() 

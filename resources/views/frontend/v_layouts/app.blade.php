@@ -66,11 +66,11 @@
                 <nav id="navmenu" class="navmenu">
                     <ul>
                         <li><a href="index.html" class="active">Home</a></li>
-                        <li><a href="{{ route('v1.frontend.about') }}">About</a></li>
-                        <li><a href="{{ route('v1.frontend.destinasi') }}">Destinations</a></li>
-                        <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
-                        <li><a href="{{ route('v1.frontend.gallery') }}">Gallery</a></li>
-                        <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="{{ route('v1.frontend.destination') }}">Destinations</a></li>
+                        <li><a href="tours.html">Tours</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                         <li class="dropdown">
                             <a href="#"
                                 ><span>More Pages</span>
@@ -160,12 +160,12 @@
                                 </p>
                                 <div class="d-flex flex-wrap gap-3 mt-4">
                                     <a
-                                        href="{{ route('v1.frontend.destinasi') }}"
+                                        href="{{ route('v1.frontend.destination') }}"
                                         class="btn btn-primary"
                                         >Start Exploring</a
                                     >
                                     <a
-                                        href="{{ route('v1.frontend.tours') }}"
+                                        href="tours.html"
                                         class="btn btn-outline-light"
                                         >View Tours</a
                                     >

@@ -9,12 +9,12 @@
     {{-- FILTER --}}
     <div class="card mb-4">
         <div class="card-body d-flex gap-3">
-            <input type="text" class="form-control" placeholder="Cari data...">
+            <input type="text" class="form-control" placeholder="Search data...">
             <select class="form-control">
-                <option>Semua Lokasi</option>
+                <option>All Location</option>
             </select>
             <select class="form-control">
-                <option>Semua Status</option>
+                <option>All Status</option>
             </select>
         </div>
     </div>
@@ -22,30 +22,30 @@
     {{-- TAB --}}
     <ul class="nav nav-tabs mb-3" id="tabMenu">
         <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#travel">Paket Travel</a>
+            <a class="nav-link active" data-bs-toggle="tab" href="#travel">Travel Packages</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#hotel">Hotel</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#hotel">Hotels</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#flight">Penerbangan</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#flight">Flights</a>
         </li>
     </ul>
 
     <div class="tab-content">
 
-        {{-- ================= PAKET TRAVEL ================= --}}
+        {{-- ================= TRAVEL PACKAGES ================= --}}
         <div class="tab-pane fade show active" id="travel">
             <div class="card">
                 <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Nama Paket</th>
-                                <th>Lokasi</th>
-                                <th>Slot</th>
-                                <th>Harga</th>
-                                <th>Aksi</th>
+                                <th>Package Name</th>
+                                <th>Destination</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,7 +55,7 @@
                             @endphp
                             <tr>
                                 <td>{{ $item->name }}</td>
-                                <td>{{ $item->location }}</td>
+                                <td>{{ $item->destination }}</td>
                                 <td>
                                     <small>{{ $item->booked }} / {{ $item->quota }}</small>
                                     <div class="progress">
@@ -83,11 +83,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Nama Hotel</th>
-                                <th>Lokasi</th>
-                                <th>Kamar Terisi</th>
-                                <th>Harga / Malam</th>
-                                <th>Aksi</th>
+                                <th>Hotel Name</th>
+                                <th>Address</th>
+                                <th>Room Type</th>
+                                <th>Price / Night</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -97,7 +97,7 @@
                             @endphp
                             <tr>
                                 <td>{{ $item->name }}</td>
-                                <td>{{ $item->location }}</td>
+                                <td>{{ $item->address }}</td>
                                 <td>
                                     <small>{{ $item->booked }} / {{ $item->quota }}</small>
                                     <div class="progress">
@@ -118,22 +118,22 @@
             </div>
         </div>
 
-        {{-- ================= PENERBANGAN ================= --}}
+        {{-- ================= FLIGHT ================= --}}
         <div class="tab-pane fade" id="flight">
             <div class="card">
                 <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Maskapai</th>
-                                <th>Rute</th>
-                                <th>Kursi Terisi</th>
-                                <th>Harga</th>
-                                <th>Aksi</th>
+                                <th>Airline</th>
+                                <th>Route</th>
+                                <th>Seats Booked</th>
+                                <th>Price</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($transportasi as $item)
+                            @foreach($transportation as $item)
                             @php
                                 $percent = ($item->booked / $item->quota) * 100;
                             @endphp

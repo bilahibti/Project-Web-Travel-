@@ -2,10 +2,10 @@
 
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
-        <a class="nav-link active" data-bs-toggle="tab" href="#travel">Paket Travel</a>
+        <a class="nav-link active" data-bs-toggle="tab" href="#travel">Travel Packages</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" href="#flight">Penerbangan</a>
+        <a class="nav-link" data-bs-toggle="tab" href="#flight">Flights</a>
     </li>
 </ul>
 

@@ -8,16 +8,16 @@ use App\Models\TravelPackage as Paket;
 use App\Models\Hotel;
 use App\Models\Transportation;
 
-class BerandaController extends Controller
+class DashboardController extends Controller
 {
-    public function berandaBackend() 
+    public function dashboardBackend() 
     { 
         $travelpackages = Paket::all();
         $hotel = Hotel::all();
         $transportatiom = Transportation::all();
         $destination = Destination::all();
         
-        return view('backend.v_beranda.index', compact(
+        return view('backend.v_dashboard.index', compact(
             'travelpackages',
              'hotel', 
              'transportation', 
@@ -30,7 +30,7 @@ class BerandaController extends Controller
     public function index()
     {
         $destination = Destination::where('status', 'Available')->orderBy('updated_at', 'desc')->paginate(6); 
-        return view('frontend.v_beranda.index', [ 
+        return view('frontend.v_dashboard.index', [ 
             'judul' => 'Halan Beranda', 
             'destination' => $destination, 
         ]);
