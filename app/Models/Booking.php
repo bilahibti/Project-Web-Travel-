@@ -35,17 +35,6 @@ class Booking extends Model
         });
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($booking) {
-            if (!$booking->booking_code) {
-                $booking->booking_code = 'TRV-' . strtoupper(Str::random(10));
-            }
-        });
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
