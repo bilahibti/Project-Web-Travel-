@@ -24,12 +24,13 @@ class UserController extends Controller
 
         return view('backend.v_user.create', [ 
             'judul' => 'Tambah User', 
+            'roles' => Role::all(),
         ]); 
     } 
 
     public function destroy(string $id) 
     { 
-        $user = user::findOrFail($id); 
+        $user = User::findOrFail($id); 
         if ($user->foto) { 
             $oldImagePath = public_path('storage/img-user/') . $user->foto; 
             if (file_exists($oldImagePath)) { 
@@ -74,8 +75,6 @@ class UserController extends Controller
             $validatedData['foto'] = $originalFileName;
         }
             User::create($validatedData); 
-
-            return redirect()->route('backend.user.index')->with('success', 'Data berhasil tersimpan');
         
  
         // password kombinasi  
@@ -108,9 +107,17 @@ class UserController extends Controller
             'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.' 
         ]); 
  
-        if ($request->email != $user->email) { 
-            $rules['email'] = 'required|max:255|email|unique:user'; 
-        } 
+        $rules = [
+            'nama' => 'required|max:255',
+            'role_id' => 'required|exists:roles,id',
+            'status' => 'required',
+            'hp' => 'required|min:10|max:13',
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+        ];
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|max:255|email|unique:user,email';
+        }
+        $validatedData = $request->validate($rules, [...messages]);
  
         // menggunakan ImageHelper 
         if ($request->file('foto')) { 

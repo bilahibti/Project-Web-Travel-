@@ -61,7 +61,7 @@ class LoginController extends Controller
  
         if (Auth::attempt($credentials)) { 
             $request->session()->regenerate(); 
-            return redirect()->intended(route('frontend.dashboard')); 
+            return redirect()->intended(route('v1.frontend.dashboard')); 
         } 
         return back()->with('error', 'Login Failed'); 
     }
@@ -71,7 +71,7 @@ class LoginController extends Controller
         Auth::logout(); 
         request()->session()->invalidate(); 
         request()->session()->regenerateToken(); 
-        return redirect(route('backend.login')); 
+        return redirect(route('v1.backend.login.login')); 
     } 
 
     public function logoutFrontend() 
@@ -79,7 +79,7 @@ class LoginController extends Controller
         Auth::logout(); 
         request()->session()->invalidate(); 
         request()->session()->regenerateToken(); 
-        return redirect(route('frontend.login')); 
+        return redirect(route('v1.frontend.login.login')); 
     }
 
     public function registerBackend()
@@ -98,6 +98,23 @@ class LoginController extends Controller
     
     public function storeRegister(Request $request)
     {
-        // nanti isi logika simpan user di sini
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:user',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+
+        $customerRole = \App\Models\Role::where('slug', 'customer')->first();
+
+        $user = \App\Models\User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+            'role_id' => $customerRole->id,
+        ]);
+
+        \Illuminate\Support\Facades\Auth::login($user);
+
+        return redirect()->route('v1.frontend.dashboard');
     }
 } 

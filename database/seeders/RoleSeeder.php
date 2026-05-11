@@ -32,12 +32,9 @@ class RoleSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'Finance',
-                'slug' => 'finance',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
         ]);
+        foreach ($roles as $role) {
+            \App\Models\Role::firstOrCreate(['slug' => $role['slug']], $role);
+        }
     }
 }

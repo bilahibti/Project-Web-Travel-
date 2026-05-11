@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Booking extends Model
 {
     use HasFactory;
+
+    protected $table = 'booking';
+
     protected $fillable = [
         'user_id', 'booking_code', 'type', 'status',
         'subtotal', 'discount', 'tax', 'total_price',
@@ -27,7 +31,6 @@ class Booking extends Model
     protected static function boot()
     {
         parent::boot();
-
         static::creating(function ($booking) {
             if (!$booking->booking_code) {
                 $booking->booking_code = 'TRV-' . strtoupper(Str::random(10));
@@ -35,49 +38,18 @@ class Booking extends Model
         });
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function packages()
-    {
-        return $this->hasMany(BookingPackage::class);
-    }
-
-    public function hotels()
-    {
-        return $this->hasMany(BookingHotel::class);
-    }
-
-    public function transports()
-    {
-        return $this->hasMany(BookingTransport::class);
-    }
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
-
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
+    public function user() { return $this->belongsTo(User::class); }
+    public function packages() { return $this->hasMany(BookingPackage::class); }
+    public function hotels() { return $this->hasMany(BookingHotel::class); }
+    public function transports() { return $this->hasMany(BookingTransport::class); }
+    public function payments() { return $this->hasMany(Payment::class); }
+    public function reviews() { return $this->hasMany(Review::class); }
 
     public function isPaid(): bool
     {
         return $this->payments()->where('status', 'paid')->exists();
     }
 
-    public function scopePending($query)
-    {
-        return $query->where('status', 'pending');
-    }
-
-    public function scopeConfirmed($query)
-    {
-        return $query->where('status', 'confirmed');
-    }
-
+    public function scopePending($query) { return $query->where('status', 'pending'); }
+    public function scopeConfirmed($query) { return $query->where('status', 'confirmed'); }
 }

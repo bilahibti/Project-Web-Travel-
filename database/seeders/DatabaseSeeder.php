@@ -6,10 +6,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Anggota; 
 use App\Models\User; 
-use App\Models\Destinasi;
+use App\Models\Destination;
 use App\Models\Hotel;
-use App\Models\Transportasi;
-use App\Models\Paket;
+use App\Models\Transportation;
+use App\Models\TravelPackages;
 use App\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
         $adminRole = Role::where('slug', 'admin')->firstOrFail();
         $staffRole = Role::where('slug', 'staff')->firstOrFail();
         $customerRole = Role::where('slug', 'customer')->firstOrFail();
-        $financeRole = Role::where('slug', 'finance')->firstOrFail();
 
         User::create([ 
             'nama' => 'Administrator', 
@@ -60,7 +59,7 @@ class DatabaseSeeder extends Seeder
         User::create([ 
             'nama' => 'Naufal Aksa Pranaya', 
             'email' => 'aksanaya@gmail.com',  
-            'role_id' => $financeRole?->id,
+            'role_id' => $customerRole?->id,
             'hp' => '087856432690', 
             'password' => bcrypt('Pranayaksa5^'), 
         ]); 

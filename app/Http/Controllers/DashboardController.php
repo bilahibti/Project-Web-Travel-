@@ -14,14 +14,14 @@ class DashboardController extends Controller
     { 
         $travelpackages = Paket::all();
         $hotel = Hotel::all();
-        $transportatiom = Transportation::all();
+        $transportation = Transportation::all();
         $destination = Destination::all();
         
         return view('backend.v_dashboard.index', compact(
             'travelpackages',
-             'hotel', 
-             'transportation', 
-             'destination'
+            'hotel', 
+            'transportation', 
+            'destination'
         ));
     } 
     /**

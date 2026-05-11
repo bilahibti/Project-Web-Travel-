@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\TravelPackage;
+use App\Models\TravelPackages;
 use App\Models\Hotel;
 use App\Models\HotelRoom;
 use App\Models\Transportation;
@@ -18,7 +18,7 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $bookings = Booking::with(['packages.travelPackage', 'hotels.hotel', 'transports.transportation', 'payments'])
             ->where('user_id', auth()->id())
@@ -61,7 +61,7 @@ class BookingController extends Controller
             'payments',
             'reviews',
         ])
-        ->where('booking_code', $bookingCode)
+        ->where('id', $id)
         ->where('user_id', auth()->id())
         ->firstOrFail();
 
@@ -143,7 +143,7 @@ class BookingController extends Controller
                 'travel_package_id' => $package->id,
                 'persons'           => $request->persons,
                 'unit_price'        => $package->price,
-                'total_price'       => $totalPrice,
+                'packages_total_price'       => $totalPrice,
             ]);
 
             return response()->json([
@@ -303,6 +303,17 @@ class BookingController extends Controller
             'success' => true,
             'message' => 'Booking has been successfully cancelled.',
         ]);
+    }
+
+    public function isAvailableForDate($rentalDate, $returnDate): bool
+    {
+        $booked = BookingTransport::where('transportation_id', $this->id)
+            ->whereHas('booking', fn($q) => $q->whereNotIn('status', ['cancelled', 'refunded'])
+                ->where('travel_date', '<=', $returnDate)
+                ->where('return_date', '>=', $rentalDate)
+            )->count();
+
+        return ($this->quota - $booked) > 0;
     }
 
 }

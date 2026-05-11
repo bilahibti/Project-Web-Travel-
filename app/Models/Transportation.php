@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transportation extends Model
 {
     public $timestamps = false; 
-    protected $table = "transportasi"; 
+    protected $table = "transportation"; 
     // protected $fillable = [nama_destinasi]; 
     protected $fillable = [
         'transportation_name',

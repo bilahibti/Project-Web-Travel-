@@ -23,6 +23,9 @@ class TravelPackages extends Model
         'booked',
         'status',
         'foto',
+        'duration_days',   
+        'max_persons',     
+        'is_active',      
     ]; 
 
     public function destination()
