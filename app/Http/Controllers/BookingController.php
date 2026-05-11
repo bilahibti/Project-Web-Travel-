@@ -55,9 +55,9 @@ class BookingController extends Controller
         $booking = Booking::with([
             'user',
             'packages.travelPackage.destination',
-            'hotels.hotel.destination',
-            'hotels.room',
-            'transports.transportation',
+            'hotel.hotel.destination',
+            'hotel.room',
+            'transport.transportation',
             'payments',
             'reviews',
         ])
@@ -110,11 +110,11 @@ class BookingController extends Controller
         $package = TravelPackage::findOrFail($request->travel_package_id);
 
         if (!$package->is_active) {
-            return response()->json(['success' => false, 'message' => 'Paket tidak tersedia.'], 422);
+            return response()->json(['success' => false, 'message' => 'Package is not available.'], 422);
         }
 
         if ($request->persons > $package->max_persons) {
-            return response()->json(['success' => false, 'message' => "Maksimum {$package->max_persons} orang untuk paket ini."], 422);
+            return response()->json(['success' => false, 'message' => "Maximum {$package->max_persons} people for this package."], 422);
         }
 
         $totalPrice  = $package->price * $request->persons;
@@ -148,7 +148,7 @@ class BookingController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Booking paket berhasil dibuat. Lanjutkan ke pembayaran.',
+                'message' => 'Package booking has been successfully created. Please proceed to payment.',
                 'data'    => $booking->load('packages.travelPackage'),
             ], 201);
         });
@@ -172,14 +172,14 @@ class BookingController extends Controller
         $hotel = Hotel::findOrFail($request->hotel_id);
 
         if (!$hotel->is_active) {
-            return response()->json(['success' => false, 'message' => 'Hotel tidak tersedia.'], 422);
+            return response()->json(['success' => false, 'message' => 'Hotel is not available.'], 422);
         }
 
         $available = $room->getAvailableRoomsForDate($request->check_in, $request->check_out);
         if ($request->rooms > $available) {
             return response()->json([
                 'success' => false,
-                'message' => "Hanya tersedia {$available} kamar untuk tanggal yang dipilih.",
+                'message' => "Only {$available} rooms are available for the selected date.",
             ], 422);
         }
 
@@ -217,8 +217,8 @@ class BookingController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Booking hotel berhasil dibuat. Lanjutkan ke pembayaran.',
-                'data'    => $booking->load('hotels.hotel', 'hotels.room'),
+                'message' => 'Hotel booking has been successfully created. Please proceed to payment.',
+                'data'    => $booking->load('hotel.hotel', 'hotel.room'),
             ], 201);
         });
     }
@@ -242,7 +242,7 @@ class BookingController extends Controller
         if (!$transport->isAvailableForDate($request->rental_date, $request->return_date)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kendaraan tidak tersedia untuk tanggal yang dipilih.',
+                'message' => 'Flights are not available for the selected date.',
             ], 422);
         }
 
@@ -281,8 +281,8 @@ class BookingController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Booking transportasi berhasil dibuat. Lanjutkan ke pembayaran.',
-                'data'    => $booking->load('transports.transportation'),
+                'message' => 'Transportation booking has been successfully created. Please proceed to payment.',
+                'data'    => $booking->load('transport.transportation'),
             ], 201);
         });
     }
@@ -290,18 +290,18 @@ class BookingController extends Controller
     public function cancel(Booking $booking): JsonResponse
     {
         if ($booking->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'message' => 'Tidak diizinkan.'], 403);
+            return response()->json(['success' => false, 'message' => 'Not allowed.'], 403);
         }
 
         if (!in_array($booking->status, ['pending', 'confirmed'])) {
-            return response()->json(['success' => false, 'message' => 'Booking tidak dapat dibatalkan.'], 422);
+            return response()->json(['success' => false, 'message' => 'Booking cannot be cancelled.'], 422);
         }
 
         $booking->update(['status' => 'cancelled']);
 
         return response()->json([
             'success' => true,
-            'message' => 'Booking berhasil dibatalkan.',
+            'message' => 'Booking has been successfully cancelled.',
         ]);
     }
 
