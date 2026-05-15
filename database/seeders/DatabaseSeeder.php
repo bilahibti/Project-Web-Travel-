@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Anggota; 
+use Illuminate\Database\Seeder; 
 use App\Models\User; 
 use App\Models\Destination;
 use App\Models\Hotel;

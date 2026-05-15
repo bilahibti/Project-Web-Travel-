@@ -33,8 +33,5 @@ class RoleSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
-        foreach ($roles as $role) {
-            \App\Models\Role::firstOrCreate(['slug' => $role['slug']], $role);
-        }
     }
 }

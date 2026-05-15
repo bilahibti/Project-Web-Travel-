@@ -27,9 +27,9 @@ return new class extends Migration
             $table->enum('status', ['Available', 'Full Booked'])->default('Available');
             $table->string('foto')->nullable();
             $table->timestamps();
-            $table->integer('duration_days')->default(1)->after('foto');
-            $table->integer('max_persons')->default(10)->after('duration_days');
-            $table->boolean('is_active')->default(true)->after('max_persons');
+            $table->integer('duration_days')->default(1);
+            $table->integer('max_persons')->default(10);
+            $table->boolean('is_active')->default(true);
             $table->foreign('destination_id')->references('id')->on('destination'); 
             $table->foreign('hotel_id')->references('id')->on('hotel'); 
             $table->foreign('transportation_id')->references('id')->on('transportation'); 

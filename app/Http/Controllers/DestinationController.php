@@ -134,4 +134,26 @@ class DestinationController extends Controller
         $destination ->delete(); 
         return redirect()->route('backend.destination.index')->with('success', 'Data successfully deleted'); 
     }
+
+    public function frontendIndex()
+    {
+        $destinations = Destination::where('status', 'Available')
+            ->orderBy('destination_name')
+            ->paginate(12);
+
+        return view('frontend.v_destination.destination', compact('destinations'));
+    }
+
+    public function frontendShow(string $id)
+    {
+        $destination = Destination::findOrFail($id);
+        $packages = TravelPackages::where('destination_id', $id)
+            ->where('status', 'Available')
+            ->get();
+        $hotels = Hotel::where('destination_id', $id)
+            ->where('status', 'Available')
+            ->get();
+
+        return view('frontend.v_destination.show', compact('destination', 'packages', 'hotels'));
+    }
 }

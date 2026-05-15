@@ -20,10 +20,8 @@ class UserController extends Controller
 
      public function create() 
     { 
-        $roles = Role::all();
-
         return view('backend.v_user.create', [ 
-            'judul' => 'Tambah User', 
+            'judul' => 'Add User', 
             'roles' => Role::all(),
         ]); 
     } 
@@ -38,14 +36,14 @@ class UserController extends Controller
             } 
         } 
         $user->delete(); 
-        return redirect()->route('backend.user.index')->with('success', 'Data berhasil dihapus'); 
+        return redirect()->route('backend.user.index')->with('success', 'Data already deleted'); 
     }
 
     public function edit(string $id) 
     { 
         $user = User::findOrFail($id); 
         return view('backend.v_user.edit', [ 
-            'judul' => 'Ubah User', 
+            'judul' => 'Change User', 
             'edit' => $user 
         ]); 
     }
@@ -53,24 +51,23 @@ class UserController extends Controller
     public function store(Request $request) 
     { 
         $validatedData = $request->validate([ 
-            'nama' => 'required|max:255', 
+            'name' => 'required|max:255', 
             'email' => 'required|max:255|email|unique:user,email', 
-            'role' => 'required',
-            'status' => 'required', 
+            'role' => 'required', 
             'hp' => 'required|min:10|max:13', 
             'password' => 'required|min:4|confirmed', 
             'foto' => 'image|mimes:jpeg,jpg,png,gif|file|max:1024', 
 
         ], $messages = [ 
-            'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.', 
-            'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.' 
+            'foto.image' => 'The image format must be jpeg, jpg, png, or gif.', 
+            'foto.max' => 'The maximum image file size is 1024 KB.' 
         ]); 
 
  
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $originalFileName = date('YmdHis') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $directory = 'storage/img-user/';
+            $directory = 'storage/img-user/';   
             ImageHelper::uploadAndResize($file, $directory, $originalFileName);
             $validatedData['foto'] = $originalFileName;
         }
@@ -95,22 +92,20 @@ class UserController extends Controller
         //ddd($request); 
         $user = User::findOrFail($id); 
         $validatedData = $request->validate([
-            'nama' => 'required|max:255', 
-            'role' => 'required', 
-            'status' => 'required', 
+            'name' => 'required|max:255', 
+            'role' => 'required',  
             'hp' => 'required|min:10|max:13', 
             'foto' => 'image|mimes:jpeg,jpg,png,gif|file|max:1024', 
         ],
         
         $messages = [ 
-            'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.', 
-            'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.' 
+            'foto.image' => 'The image format must be jpeg, jpg, png, or gif.', 
+            'foto.max' => 'The maximum image file size is 1024 KB.' 
         ]); 
  
         $rules = [
-            'nama' => 'required|max:255',
+            'name' => 'required|max:255',
             'role_id' => 'required|exists:roles,id',
-            'status' => 'required',
             'hp' => 'required|min:10|max:13',
             'foto' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
         ];
