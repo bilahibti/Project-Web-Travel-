@@ -131,4 +131,21 @@ class TravelPackagesController extends Controller
         $travelpackages ->delete(); 
         return redirect()->route('backend.travel-packages.index')->with('success', 'Data successfully deleted'); 
     }
+
+    public function frontendIndex()
+    {
+        $packages = TravelPackages::with(['destination', 'hotel', 'transportation'])
+            ->where('status', 'Available')
+            ->paginate(12);
+
+        return view('frontend.v_tours.tours', compact('packages'));
+    }
+
+    public function frontendShow(string $id)
+    {
+        $package = TravelPackages::with(['destination', 'hotel', 'transportation'])
+            ->findOrFail($id);
+
+        return view('frontend.v_tours.show', compact('package'));
+    }
 }

@@ -20,7 +20,7 @@ class BookingController extends Controller
      */
     public function index(Request $request)
     {
-        $bookings = Booking::with(['packages.travelPackage', 'hotels.hotel', 'transports.transportation', 'payments'])
+        $bookings = Booking::with(['packages.travelPackage', 'hotel.hotel', 'transport.transportation', 'payment'])
             ->where('user_id', auth()->id())
             ->orderByDesc('created_at')
             ->paginate($request->get('per_page', 10));
@@ -316,4 +316,37 @@ class BookingController extends Controller
         return ($this->quota - $booked) > 0;
     }
 
+    // Frontend customer — daftar booking milik user yang login
+    public function myBookings()
+    {
+        $bookings = Booking::with(['packages.travelPackage', 'hotels.hotel', 'transports.transportation', 'payments'])
+            ->where('user_id', auth()->id())
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('frontend.v_booking.index', compact('bookings'));
+    }
+
+    // Frontend customer — detail satu booking
+    public function myBookingDetail(string $id)
+    {
+        $booking = Booking::with([
+            'packages.travelPackage.destination',
+            'hotels.hotel',
+            'hotels.room',
+            'transports.transportation',
+            'payments',
+        ])->where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+
+        return view('frontend.v_booking.show', compact('booking'));
+    }
+
+    // Backend admin — update status booking
+    public function updateStatus(Request $request, string $id)
+    {
+        $booking = Booking::findOrFail($id);
+        $request->validate(['status' => 'required|in:pending,confirmed,in_progress,completed,cancelled,refunded']);
+        $booking->update(['status' => $request->status]);
+        return redirect()->back()->with('success', 'Status booking berhasil diupdate');
+    }
 }

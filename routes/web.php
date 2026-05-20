@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HelloWorldController;
-use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
@@ -28,12 +26,8 @@ Route::get('/', function () {
     return redirect()->route('v1.frontend.dashboard'); 
 });
 
-Route::get('helloworld', [HelloWorldController::class, 'index']); 
-Route::get('ambilfile', [HelloWorldController::class, 'ambilFile']); 
-Route::resource('anggota', AnggotaController::class); 
-
 Route::prefix('v1')->name('v1.')->group(function () { 
-    // 🔐 BACKEND AUTH
+    // Auth Backend (tanpa middleware auth)
     Route::prefix('backend')->name('backend.')->group(function () {
         Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () {
             Route::get('',  'loginBackend')->name('login');
@@ -44,95 +38,113 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
-    // route untuk beranda backend 
+     // Semua route backend yang butuh auth — dalam SATU group 
     Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () { 
+         // Dashboard
         Route::prefix('dashboard')->name('dashboard.')->controller(App\Http\Controllers\DashboardController::class)->group(function () { 
-            Route::get('/dashboard', 'dashboardBackend')->name('dashboard'); 
+            Route::get('', 'dashboardBackend')->name('dashboard'); 
             Route::get('/index', 'index')->name('index');
             Route::get('/admin/dashboard', 'dashboardBackend')->name('admin.dashboard');
             Route::get('/staff/dashboard', fn() => view('backend.v_dashboard.staff'))->name('staff.dashboard');
         });
+
+        // User Management
+        Route::prefix('user')->name('user.')->controller(UserController::class)->group(function () {
+            Route::get('', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('/store', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+            Route::get('/report/formuser', 'formUser')->name('report.formuser'); 
+            Route::post('/report/printuser', 'printUser')->name('report.printuser');
+        });
+
+         // Destination
+        Route::prefix('destination')->name('destination.')->controller(DestinationController::class)->group(function () {
+            Route::get('/', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('/store', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+
+         // Hotel
+        Route::prefix('hotel')->name('hotel.')->controller(HotelController::class)->group(function () {
+            Route::get('/', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('/store', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+
+        // Transportation
+        Route::prefix('transportation')->name('transportation.')->controller(TransportationController::class)->group(function () {
+            Route::get('/', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('/store', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+
+         // Travel Packages
+        Route::prefix('travel-packages')->name('travel-packages.')->controller(TravelPackagesController::class)->group(function () {
+            Route::get('/', 'index')->name('index'); 
+            Route::get('/create', 'create')->name('create'); 
+            Route::post('/store', 'store')->name('store'); 
+            Route::get('/{id}/edit', 'edit')->name('edit'); 
+            Route::put('/{id}', 'update')->name('update'); 
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+
+        // Booking (Backend)
+        Route::prefix('booking')->name('booking.')->controller(BookingController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{id}', 'show')->name('show');
+            Route::put('/{id}/status', 'updateStatus')->name('update-status');
+        });
      });
 
-    // 🔐 FRONTEND AUTH
+    // Frontend
     Route::prefix('frontend')->name('frontend.')->group(function () { 
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::prefix('login')->name('login.')->controller(App\Http\Controllers\LoginController::class)->group(function () { 
-            Route::get('', 'loginFrontend')->name('login'); 
-            Route::post('/process', 'authenticateFrontend')->name('process'); 
-            Route::get('/register', 'registerFrontend')->name('register'); 
-            Route::post('/register', 'storeRegister')->name('register.process'); 
-            Route::post('/logout', 'logoutFrontend')->name('logout'); 
+         // Auth Frontend (tanpa middleware auth)
+        Route::prefix('login')->name('login.')->controller(LoginController::class)->group(function () {
+            Route::get('', 'loginFrontend')->name('login');
+            Route::post('/process', 'authenticateFrontend')->name('process');
+            Route::get('/register', 'registerFrontend')->name('register');
+            Route::post('/register', 'storeRegister')->name('register.process');
+            Route::post('/logout', 'logoutFrontend')->name('logout');
         });
+
+         // Halaman Publik (tanpa auth)
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/about', fn() => view('frontend.v_about.about'))->name('about');
+        Route::get('/destination', [DestinationController::class, 'frontendIndex'])->name('destination');
+        Route::get('/destination/{id}', [DestinationController::class, 'frontendShow'])->name('destination.show');
+        Route::get('/tours', [TravelPackagesController::class, 'frontendIndex'])->name('tours');
+        Route::get('/tours/{id}', [TravelPackagesController::class, 'frontendShow'])->name('tours.show');
+        Route::get('/hotel', [HotelController::class, 'frontendIndex'])->name('hotel');
+        Route::get('/hotel/{id}', [HotelController::class, 'frontendShow'])->name('hotel.show');
     });
 
-    // route untuk halaman statis frontend
-    Route::prefix('frontend')->name('frontend.')->group(function () { 
-        Route::get('/about', fn() => view('frontend.v_about.about'))->name('about'); 
-        Route::get('/destination', fn() => view('frontend.v_destination.destination'))->name('destination'); 
-        Route::get('/tours', fn() => view('frontend.v_tours.tours'))->name('tours'); 
-        Route::get('/gallery', fn() => view('frontend.v_gallery.gallery'))->name('gallery'); 
-        Route::get('/blog', fn() => view('frontend.v_blog.blog'))->name('blog'); 
-    });
-
-    // route untuk user
-    Route::prefix('user')->name('user.')->middleware('auth')->controller(App\Http\Controllers\UserController::class)->group(function () { 
-        Route::get('/index', 'index')->name('index'); 
-        Route::get('/create', 'create')->name('create'); 
-        Route::post('/store', 'store')->name('store'); 
-        Route::get('/{id}/edit', 'edit')->name('edit'); 
-        Route::put('/{id}', 'update')->name('update'); 
-        Route::delete('/{id}', 'destroy')->name('destroy');
-        Route::get('/report/formuser', 'formUser')->name('report.formuser'); 
-        Route::post('/report/printuser', 'printUser')->name('report.printuser');
-    });
-
-    // backend route untuk destinasi
-    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('destination')->name('destination.')->controller(App\Http\Controllers\DestinationController::class)->group(function () { 
-            Route::get('/index', 'index')->name('index'); 
-            Route::get('/create', 'create')->name('create'); 
-            Route::post('/store', 'store')->name('store'); 
-            Route::get('/{id}/edit', 'edit')->name('edit'); 
-            Route::put('/{id}', 'update')->name('update'); 
-            Route::delete('/{id}', 'destroy')->name('destroy');
+    // Halaman yang butuh login
+    Route::middleware('auth')->group(function () {
+        Route::prefix('booking')->name('booking.')->controller(BookingController::class)->group(function () {
+            Route::get('/', 'myBookings')->name('index');
+            Route::get('/{id}', 'myBookingDetail')->name('show');
+            Route::post('/package', 'bookPackage')->name('package');
+            Route::post('/hotel', 'bookHotel')->name('hotel');
+            Route::post('/transport', 'bookTransport')->name('transport');
+            Route::put('/{id}/cancel', 'cancel')->name('cancel');
         });
-    });
 
-    // backend route untuk hotel
-    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('hotel')->name('hotel.')->controller(App\Http\Controllers\HotelController::class)->group(function () { 
-            Route::get('/index', 'index')->name('index'); 
-            Route::get('/create', 'create')->name('create'); 
-            Route::post('/store', 'store')->name('store'); 
-            Route::get('/{id}/edit', 'edit')->name('edit'); 
-            Route::put('/{id}', 'update')->name('update'); 
-            Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::prefix('payment')->name('payment.')->group(function () {
+            Route::post('/', [PaymentController::class, 'store'])->name('store');
+            Route::get('/{bookingId}', [PaymentController::class, 'show'])->name('show');
         });
-    });
-
-    // backend route untuk transportasi
-    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('transportation')->name('transportation.')->controller(App\Http\Controllers\TransportationController::class)->group(function () { 
-            Route::get('/index', 'index')->name('index'); 
-            Route::get('/create', 'create')->name('create'); 
-            Route::post('/store', 'store')->name('store'); 
-            Route::get('/{id}/edit', 'edit')->name('edit'); 
-            Route::put('/{id}', 'update')->name('update'); 
-            Route::delete('/{id}', 'destroy')->name('destroy');
-        });
-    });
-
-    // backend route untuk travel_packages
-    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
-        Route::prefix('travel-packages')->name('travel-packages.')->controller(App\Http\Controllers\TravelPackagesController::class)->group(function () { 
-            Route::get('/index', 'index')->name('index'); 
-            Route::get('/create', 'create')->name('create'); 
-            Route::post('/store', 'store')->name('store'); 
-            Route::get('/{id}/edit', 'edit')->name('edit'); 
-            Route::put('/{id}', 'update')->name('update'); 
-            Route::delete('/{id}', 'destroy')->name('destroy');
-        });
-    });
+     });
 });
 
