@@ -1,241 +1,384 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Register - TravelTime</title>
+        <meta name="description" content="" />
 
-<html
-  lang="en"
-  class="layout-wide customizer-hide"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
+        <!-- Favicons -->
+        <link href="{{ asset('frontend/img/favicon.png')}}" rel="icon" />
+        <link href="{{ asset('frontend/img/apple-touch-icon.png')}}" rel="apple-touch-icon" />
 
-    <title>Welcome to TravelVibes</title>
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-    <meta name="description" content="" />
+        <!-- Vendor CSS -->
+        <link href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{ asset('frontend/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('backend/img/favicon/favicon.ico') }}" />
+        <!-- Main CSS -->
+        <link href="{{ asset('frontend/css/main.css')}}" rel="stylesheet" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
-      rel="stylesheet" />
+        <style>
+            .auth-page {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4)),
+                            url('{{ asset('frontend/img/travel/destination-1.webp') }}') center/cover no-repeat fixed;
+                padding: 80px 0 40px;
+            }
 
-    <link rel="stylesheet" href="{{ asset('frontend/vendor/fonts/iconify-icons.css') }}" />
+            .auth-card {
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+                overflow: hidden;
+                max-width: 480px;
+                width: 100%;
+                margin: 0 auto;
+            }
 
-    <!-- Core CSS -->
-    <!-- build:css assets/vendor/css/theme.css -->
+            .auth-card-header {
+                background: linear-gradient(135deg, var(--color-primary, #e84393), var(--color-secondary, #f85a16));
+                padding: 32px 40px 24px;
+                text-align: center;
+                color: #fff;
+            }
 
-    <link rel="stylesheet" href="{{ asset('frontend/vendor/libs/node-waves/node-waves.css') }}" />
+            .auth-card-header .sitename {
+                font-size: 1.8rem;
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
 
-    <link rel="stylesheet" href="{{ asset('frontend/vendor/css/core.css') }}" />
-    <link rel="stylesheet" href="{{ asset('frontend/css/demo.css') }}" />
+            .auth-card-header p {
+                margin: 6px 0 0;
+                opacity: 0.9;
+                font-size: 0.9rem;
+            }
 
-    <!-- Vendors CSS -->
+            .auth-card-body {
+                padding: 36px 40px 40px;
+            }
 
-    <link rel="stylesheet" href="{{ asset('frontend/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+            .auth-card-body .form-label {
+                font-weight: 500;
+                color: #444;
+                font-size: 0.875rem;
+            }
 
-    <!-- endbuild -->
+            .auth-card-body .form-control {
+                border-radius: 8px;
+                padding: 10px 14px;
+                border: 1.5px solid #e0e0e0;
+                font-size: 0.95rem;
+                transition: border-color 0.2s;
+            }
 
-    <!-- Page CSS -->
-    <!-- Page -->
-    <link rel="stylesheet" href="{{ asset('frontend/vendor/css/pages/page-auth.css') }}" />
+            .auth-card-body .form-control:focus {
+                border-color: var(--color-primary, #e84393);
+                box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.1);
+            }
 
-    <!-- Helpers -->
-    <script src="{{ asset('frontend/vendor/js/helpers.js') }}"></script>
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+            .auth-card-body .input-group .form-control {
+                border-right: 0;
+            }
 
-    <!--? Config: Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file. -->
+            .auth-card-body .input-group-text {
+                background: #fff;
+                border: 1.5px solid #e0e0e0;
+                border-left: 0;
+                border-radius: 0 8px 8px 0;
+                cursor: pointer;
+                color: #888;
+            }
 
-    <script src="{{ asset('frontend/js/config.js') }}"></script>
-  </head>
+            .btn-auth {
+                background: linear-gradient(135deg, var(--color-primary, #e84393), var(--color-secondary, #f85a16));
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 12px;
+                font-weight: 600;
+                font-size: 0.95rem;
+                width: 100%;
+                transition: opacity 0.2s, transform 0.1s;
+            }
 
-  <body>
-    <!-- Content -->
+            .btn-auth:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+                color: #fff;
+            }
 
-    <div class="position-relative">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner py-6 mx-4">
-          <!-- Register Card -->
-          <div class="card p-sm-7 p-2">
-            <!-- Logo -->
-            <div class="app-brand justify-content-center mt-5">
-              <a href="index.html" class="app-brand-link gap-3">
-                <span class="app-brand-logo demo">
-                  <span class="text-primary">
-                    <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.3002 1.25469L56.655 28.6432C59.0349 30.1128 60.4839 32.711 60.4839 35.5089V160.63C60.4839 163.468 58.9941 166.097 56.5603 167.553L12.2055 194.107C8.3836 196.395 3.43136 195.15 1.14435 191.327C0.395485 190.075 0 188.643 0 187.184V8.12039C0 3.66447 3.61061 0.0522461 8.06452 0.0522461C9.56056 0.0522461 11.0271 0.468577 12.3002 1.25469Z"
-                        fill="currentColor" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 65.2656L60.4839 99.9629V133.979L0 65.2656Z"
-                        fill="black" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 65.2656L60.4839 99.0795V119.859L0 65.2656Z"
-                        fill="black" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.71 1.22393L193.355 28.5207C190.97 29.9889 189.516 32.5905 189.516 35.3927V160.631C189.516 163.469 191.006 166.098 193.44 167.555L237.794 194.108C241.616 196.396 246.569 195.151 248.856 191.328C249.605 190.076 250 188.644 250 187.185V8.09597C250 3.64006 246.389 0.027832 241.935 0.027832C240.444 0.027832 238.981 0.441882 237.71 1.22393Z"
-                        fill="currentColor" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M250 65.2656L189.516 99.8897V135.006L250 65.2656Z"
-                        fill="black" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M250 65.2656L189.516 99.0497V120.886L250 65.2656Z"
-                        fill="black" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z"
-                        fill="currentColor" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z"
-                        fill="white"
-                        fill-opacity="0.15" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z"
-                        fill="currentColor" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z"
-                        fill="white"
-                        fill-opacity="0.3" />
-                    </svg>
-                  </span>
-                </span>
-                <span class="app-brand-text demo text-heading fw-semibold">TravelVibes</span>
-              </a>
+            .password-strength {
+                height: 4px;
+                border-radius: 4px;
+                background: #e0e0e0;
+                margin-top: 6px;
+                overflow: hidden;
+            }
+
+            .password-strength-bar {
+                height: 100%;
+                border-radius: 4px;
+                transition: width 0.3s, background 0.3s;
+                width: 0%;
+            }
+
+            .auth-link {
+                color: var(--color-primary, #e84393);
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+            .auth-link:hover {
+                text-decoration: underline;
+            }
+
+            .alert-danger {
+                border-radius: 8px;
+                font-size: 0.875rem;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <header id="header" class="header d-flex align-items-center fixed-top">
+            <div class="container position-relative d-flex align-items-center justify-content-between">
+                <a href="{{ route('v1.frontend.dashboard') }}" class="logo d-flex align-items-center me-auto me-xl-0">
+                    <h1 class="sitename">TravelTime</h1>
+                </a>
+                <nav id="navmenu" class="navmenu">
+                    <ul>
+                        <li><a href="{{ route('v1.frontend.dashboard') }}">Home</a></li>
+                        <li><a href="{{ route('v1.frontend.destination') }}">Destinations</a></li>
+                        <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
+                        <li><a href="{{ route('v1.frontend.hotel') }}">Hotels</a></li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                </nav>
+                <a class="btn-getstarted" href="{{ route('v1.frontend.login.login') }}">Login</a>
             </div>
-            <!-- /Logo -->
-            <div class="card-body mt-1">
-              <h4 class="mb-1">Adventure starts here 🚀</h4>
-              <p class="mb-5">Make your app management easy and fun!</p>
+        </header>
 
-              <form id="formAuthentication" class="mb-5" action="{{ route('backend.register.process') }}" method="POST">
-                @csrf
-                <div class="form-floating form-floating-outline mb-5 form-control-validation">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    placeholder="Enter your username"
-                    autofocus />
-                  <label for="username">Username</label>
-                </div>
-                <div class="form-floating form-floating-outline mb-5 form-control-validation">
-                  <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" />
-                  <label for="email">Email</label>
-                </div>
-                <div class="mb-5 form-password-toggle form-control-validation">
-                  <div class="input-group input-group-merge">
-                    <div class="form-floating form-floating-outline">
-                      <input
-                        type="password"
-                        id="password"
-                        class="form-control"
-                        name="password"
-                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                        aria-describedby="password" />
-                      <label for="password">Password</label>
+        <!-- Auth Section -->
+        <div class="auth-page">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-7 col-xl-6">
+                        <div class="auth-card">
+                            <!-- Header -->
+                            <div class="auth-card-header">
+                                <div class="sitename">TravelTime</div>
+                                <p>Create your account and start exploring the world</p>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="auth-card-body">
+
+                                @if($errors->any())
+                                <div class="alert alert-danger mb-4" role="alert">
+                                    <ul class="mb-0 ps-3">
+                                        @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
+
+                                <form action="{{ route('v1.frontend.login.register.process') }}" method="POST">
+                                    @csrf
+
+                                    <!-- Name -->
+                                    <div class="mb-3">
+                                        <label for="nama" class="form-label">Full Name</label>
+                                        <input
+                                            type="text"
+                                            id="nama"
+                                            name="nama"
+                                            class="form-control @error('nama') is-invalid @enderror"
+                                            placeholder="Your full name"
+                                            value="{{ old('nama') }}"
+                                            required
+                                            autofocus
+                                        />
+                                        @error('nama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            class="form-control @error('email') is-invalid @enderror"
+                                            placeholder="your@email.com"
+                                            value="{{ old('email') }}"
+                                            required
+                                        />
+                                        @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Phone (optional) -->
+                                    <div class="mb-3">
+                                        <label for="hp" class="form-label">
+                                            Phone Number
+                                            <span class="text-muted fw-normal">(optional)</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="hp"
+                                            name="hp"
+                                            class="form-control @error('hp') is-invalid @enderror"
+                                            placeholder="+62 812 3456 7890"
+                                            value="{{ old('hp') }}"
+                                        />
+                                        @error('hp')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <div class="input-group">
+                                            <input
+                                                type="password"
+                                                id="password"
+                                                name="password"
+                                                class="form-control @error('password') is-invalid @enderror"
+                                                placeholder="Min. 8 characters"
+                                                required
+                                            />
+                                            <span class="input-group-text" id="togglePassword">
+                                                <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                                            </span>
+                                            @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="password-strength mt-1">
+                                            <div class="password-strength-bar" id="strengthBar"></div>
+                                        </div>
+                                        <div id="strengthText" class="mt-1" style="font-size:0.75rem; color:#888;"></div>
+                                    </div>
+
+                                    <!-- Confirm Password -->
+                                    <div class="mb-4">
+                                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                        <div class="input-group">
+                                            <input
+                                                type="password"
+                                                id="password_confirmation"
+                                                name="password_confirmation"
+                                                class="form-control"
+                                                placeholder="Re-enter your password"
+                                                required
+                                            />
+                                            <span class="input-group-text" id="toggleConfirm">
+                                                <i class="bi bi-eye-slash" id="toggleConfirmIcon"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Terms -->
+                                    <div class="mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="terms" required />
+                                            <label class="form-check-label text-muted" for="terms" style="font-size:0.875rem;">
+                                                I agree to the
+                                                <a href="#" class="auth-link">Terms of Service</a>
+                                                and
+                                                <a href="#" class="auth-link">Privacy Policy</a>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit -->
+                                    <button type="submit" class="btn-auth mb-4">
+                                        <i class="bi bi-person-plus me-2"></i>Create Account
+                                    </button>
+
+                                    <!-- Login link -->
+                                    <p class="text-center text-muted mb-0" style="font-size:0.9rem;">
+                                        Already have an account?
+                                        <a href="{{ route('v1.frontend.login.login') }}" class="auth-link">Sign in here</a>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <span class="input-group-text cursor-pointer"
-                      ><i class="icon-base ri ri-eye-off-line icon-20px"></i
-                    ></span>
-                  </div>
                 </div>
-
-                <div class="mb-5 py-2 form-control-validation">
-                  <div class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-                    <label class="form-check-label" for="terms-conditions">
-                      I agree to
-                      <a href="javascript:void(0);">privacy policy & terms</a>
-                    </label>
-                  </div>
-                </div>
-                <button class="btn btn-primary d-grid w-100 mb-5">Sign up</button>
-              </form>
-
             </div>
-          </div>
-          <!-- Register Card -->
-          <img
-            src="{{ asset('frontend/img/illustrations/tree-3.png') }}"
-            alt="auth-tree"
-            class="authentication-image-object-left d-none d-lg-block" />
-          <img
-            src="{{ asset('frontend/img/illustrations/auth-basic-mask-light.png') }}"
-            class="authentication-image d-none d-lg-block scaleX-n1-rtl"
-            height="172"
-            alt="triangle-bg" />
-          <img
-            src="{{ asset('frontend/img/illustrations/tree.png') }}"
-            alt="auth-tree"
-            class="authentication-image-object-right d-none d-lg-block" />
         </div>
-      </div>
-    </div>
 
-    <!-- / Content -->
+        <!-- Vendor JS -->
+        <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{ asset('frontend/js/main.js')}}"></script>
 
-    <div class="buy-now">
-      <a
-        href="https://themeselection.com/item/materio-dashboard-pro-bootstrap/"
-        target="_blank"
-        class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-      >
-    </div>
+        <script>
+            // Toggle password visibility
+            document.getElementById('togglePassword').addEventListener('click', function () {
+                const input = document.getElementById('password');
+                const icon = document.getElementById('toggleIcon');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'bi bi-eye';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'bi bi-eye-slash';
+                }
+            });
 
-    <!-- Core JS -->
+            document.getElementById('toggleConfirm').addEventListener('click', function () {
+                const input = document.getElementById('password_confirmation');
+                const icon = document.getElementById('toggleConfirmIcon');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'bi bi-eye';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'bi bi-eye-slash';
+                }
+            });
 
-    <script src="{{ asset('frontend/vendor/libs/jquery/jquery.js') }}"></script>
+            // Password strength indicator
+            document.getElementById('password').addEventListener('input', function () {
+                const val = this.value;
+                const bar = document.getElementById('strengthBar');
+                const text = document.getElementById('strengthText');
+                let strength = 0;
 
-    <script src="{{ asset('frontend/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/libs/node-waves/node-waves.js') }}"></script>
+                if (val.length >= 8) strength++;
+                if (/[A-Z]/.test(val)) strength++;
+                if (/[0-9]/.test(val)) strength++;
+                if (/[^A-Za-z0-9]/.test(val)) strength++;
 
-    <script src="{{ asset('frontend/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+                const levels = [
+                    { width: '0%', color: '#e0e0e0', label: '' },
+                    { width: '25%', color: '#e53e3e', label: 'Weak' },
+                    { width: '50%', color: '#dd6b20', label: 'Fair' },
+                    { width: '75%', color: '#d69e2e', label: 'Good' },
+                    { width: '100%', color: '#38a169', label: 'Strong' },
+                ];
 
-    <script src="{{ asset('frontend/vendor/js/menu.js') }}"></script>
-
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-
-    <!-- Main JS -->
-
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
-
-    <!-- Page JS -->
-
-    <!-- Place this tag before closing body tag for github widget button. -->
-    <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
-  </body>
+                const level = levels[strength];
+                bar.style.width = level.width;
+                bar.style.background = level.color;
+                text.textContent = level.label ? `Password strength: ${level.label}` : '';
+                text.style.color = level.color;
+            });
+        </script>
+    </body>
 </html>
