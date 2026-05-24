@@ -130,15 +130,15 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('/hotel/{id}', [HotelController::class, 'frontendShow'])->name('hotel.show');
     });
 
-    // Halaman yang butuh login
+     // ── Booking ──────────────────────────────────────────────────────
     Route::middleware('auth')->group(function () {
         Route::prefix('booking')->name('booking.')->controller(BookingController::class)->group(function () {
-            Route::get('/', 'myBookings')->name('index');
-            Route::get('/{id}', 'myBookingDetail')->name('show');
-            Route::post('/package', 'bookPackage')->name('package');
-            Route::post('/hotel', 'bookHotel')->name('hotel');
-            Route::post('/transport', 'bookTransport')->name('transport');
-            Route::put('/{id}/cancel', 'cancel')->name('cancel');
+             Route::get('/',                   'myBookings')       ->name('index');          // Daftar booking saya
+            Route::get('/{id}',                'myBookingDetail')  ->name('show');           // Detail booking
+            Route::post('/package',            'bookPackage')      ->name('package');        // Pesan paket
+            Route::post('/hotel',              'bookHotel')        ->name('hotel');          // Pesan hotel
+            Route::post('/transport',          'bookTransport')    ->name('transport');      // Pesan transportasi
+            Route::put('/{id}/cancel',         'cancel')           ->name('cancel');         // Batalkan booking
         });
 
         Route::prefix('payment')->name('payment.')->group(function () {
@@ -146,5 +146,16 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::get('/{bookingId}', [PaymentController::class, 'show'])->name('show');
         });
      });
+
+       // ─── Backend admin (butuh auth) ────────────────────────────────────────
+    Route::prefix('backend')->name('backend.')->middleware('auth')->group(function () {
+ 
+        Route::prefix('booking')->name('booking.')->controller(BookingController::class)->group(function () {
+            Route::get('/',               'index')        ->name('index');
+            Route::get('/{id}',           'show')         ->name('show');
+            Route::put('/{id}/status',    'updateStatus') ->name('update-status');
+        });
+    });
+ 
 });
 

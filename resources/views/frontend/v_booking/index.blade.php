@@ -1,366 +1,201 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('frontend.v_layouts.app')
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>My Bookings - TravelTime</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+@section('title', 'My Bookings - TravelTime')
 
-  <!-- Favicons -->
-  <link href="{{ asset('frontend/img/favicon.png') }}" rel="icon">
-  <link href="{{ asset('frontend/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+@section('content')
+<style>
+  .page-title-booking {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    padding: 100px 0 50px;
+    text-align: center;
+    color: #fff;
+  }
+  .page-title-booking h1 { font-size: 2.2rem; font-weight: 700; }
+  .page-title-booking p  { opacity: .8; margin-bottom: 0; }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  .booking-card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.07);
+    transition: transform .2s, box-shadow .2s;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .booking-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.12); }
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('frontend/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset('frontend/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('frontend/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  .booking-card .card-header {
+    background: #fff;
+    border-bottom: 2px solid #f0f4f8;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .booking-code  { font-weight: 700; font-size: .95rem; color: #1a3c5e; letter-spacing: .5px; }
+  .booking-date  { font-size: .82rem; color: #8a9bb0; }
 
-  <!-- Main CSS File -->
-  <link href="{{ asset('frontend/css/main.css') }}" rel="stylesheet">
-</head>
+  .booking-card .card-body { padding: 1.5rem; }
 
-<body class="booking-page">
+  .type-badge {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .35rem .9rem; border-radius: 50px; font-size: .78rem; font-weight: 600;
+  }
+  .type-package   { background: #fff3cd; color: #856404; }
+  .type-hotel     { background: #d1ecf1; color: #0c5460; }
+  .type-transport { background: #d4edda; color: #155724; }
 
-  <!-- ======================================================
-       HEADER / NAV — sama dengan halaman tours
-  ====================================================== -->
-  <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container position-relative d-flex align-items-center justify-content-between">
+  .meta-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .meta-item { display: flex; align-items: center; gap: .4rem; font-size: .88rem; color: #555; }
+  .meta-item i { color: #e8a838; }
 
-      <a href="{{ route('v1.frontend.dashboard') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-        <h1 class="sitename">TravelTime</h1>
-      </a>
+  .price-badge {
+    font-size: 1.1rem; font-weight: 700; color: #2c5364;
+  }
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{{ route('v1.frontend.dashboard') }}">Home</a></li>
-          <li><a href="{{ route('v1.frontend.about') }}">About</a></li>
-          <li><a href="{{ route('v1.frontend.destination') }}">Destinations</a></li>
-          <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
-          <li><a href="{{ route('v1.frontend.gallery') }}">Gallery</a></li>
-          <li><a href="{{ route('v1.frontend.blog') }}">Blog</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
+  .empty-state {
+    text-align: center; padding: 80px 20px;
+  }
+  .empty-state i { font-size: 4rem; color: #d0dde8; display: block; margin-bottom: 1rem; }
+  .empty-state h4 { color: #7a8fa6; margin-bottom: .5rem; }
+  .empty-state p  { color: #a0b0c0; max-width: 300px; margin: 0 auto 1.5rem; }
+</style>
 
-      <div class="d-flex align-items-center gap-2">
-        @auth
-          <span class="text-white fw-semibold d-none d-md-inline" style="font-size:0.9rem;">
-            Hi, {{ auth()->user()->name }}
-          </span>
-          <a class="btn-getstarted" href="{{ route('v1.booking.index') }}" style="background:#0d6efd;">
-            <i class="bi bi-journal-bookmark-fill me-1"></i> My Bookings
-          </a>
-          <form method="POST" action="{{ route('v1.frontend.login.logout') }}" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-outline-danger ms-1">Logout</button>
-          </form>
-        @else
-          <a class="btn-getstarted" href="{{ route('v1.frontend.login.login') }}">Login</a>
-        @endauth
+<!-- Page Title -->
+<div class="page-title-booking">
+  <div class="container">
+    <h1><i class="bi bi-journal-bookmark-fill me-2"></i>My Bookings</h1>
+    <p>Kelola semua pemesanan perjalanan Anda</p>
+  </div>
+</div>
+
+<section style="padding: 50px 0 80px; background: #f4f8fb;">
+  <div class="container">
+
+    @if(session('success'))
+      <div class="alert alert-success alert-dismissible fade show mb-4">
+        <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
-
-    </div>
-  </header>
-
-  <main class="main">
-
-    <!-- Page Title -->
-    <div class="page-title dark-background" style="background-image: url({{ asset('frontend/img/travel/showcase-3.webp') }});">
-      <div class="container position-relative">
-        <h1>My Bookings</h1>
-        <p>Kelola semua pemesanan perjalanan Anda di satu tempat.</p>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="{{ route('v1.frontend.dashboard') }}">Home</a></li>
-            <li class="current">My Bookings</li>
-          </ol>
-        </nav>
+    @endif
+    @if(session('error'))
+      <div class="alert alert-danger alert-dismissible fade show mb-4">
+        <i class="bi bi-exclamation-circle-fill me-2"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
-    </div>
+    @endif
 
-    <!-- Bookings Section -->
-    <section class="section" style="padding: 60px 0;">
-      <div class="container">
-
-        <!-- Flash Messages -->
-        @if(session('success'))
-          <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        @endif
-        @if(session('error'))
-          <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        @endif
-
-        <!-- Summary Stats -->
-        <div class="row g-3 mb-5">
-          <div class="col-6 col-md-3">
-            <div class="text-center p-4 rounded-3" style="background:#e0f2fe;">
-              <div style="font-size:2rem;font-weight:700;color:#0369a1;">{{ $bookings->total() }}</div>
-              <div style="font-size:0.82rem;color:#0369a1;font-weight:600;">Total Booking</div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="text-center p-4 rounded-3" style="background:#d1e7dd;">
-              <div style="font-size:2rem;font-weight:700;color:#0f5132;">
-                {{ $bookings->where('status','confirmed')->count() }}
+    @if($bookings->isEmpty())
+      <div class="empty-state">
+        <i class="bi bi-suitcase-lg"></i>
+        <h4>Belum ada booking</h4>
+        <p>Mulai rencanakan perjalanan impian Anda sekarang!</p>
+        <a href="{{ route('v1.frontend.tours') }}" class="btn btn-primary px-4">
+          <i class="bi bi-compass me-1"></i> Jelajahi Paket Wisata
+        </a>
+      </div>
+    @else
+      <div class="row">
+        <div class="col-12">
+          @foreach($bookings as $booking)
+            <div class="booking-card card">
+              <div class="card-header">
+                <div>
+                  <span class="booking-code">{{ $booking->booking_code }}</span>
+                  @php
+                    $typeClass = match($booking->type) {
+                      'package'   => 'type-package',
+                      'hotel'     => 'type-hotel',
+                      'transport' => 'type-transport',
+                      default     => 'type-package',
+                    };
+                    $typeIcon = match($booking->type) {
+                      'package'   => 'bi-map',
+                      'hotel'     => 'bi-building',
+                      'transport' => 'bi-truck',
+                      default     => 'bi-map',
+                    };
+                  @endphp
+                  <span class="type-badge {{ $typeClass }} ms-2">
+                    <i class="{{ $typeIcon }}"></i> {{ $booking->typeLabel() }}
+                  </span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-{{ $booking->statusBadgeClass() }} rounded-pill px-3 py-2">
+                    {{ $booking->statusLabel() }}
+                  </span>
+                  <span class="booking-date">{{ $booking->created_at->format('d M Y') }}</span>
+                </div>
               </div>
-              <div style="font-size:0.82rem;color:#0f5132;font-weight:600;">Confirmed</div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="text-center p-4 rounded-3" style="background:#fff3cd;">
-              <div style="font-size:2rem;font-weight:700;color:#856404;">
-                {{ $bookings->where('status','pending')->count() }}
-              </div>
-              <div style="font-size:0.82rem;color:#856404;font-weight:600;">Pending</div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="text-center p-4 rounded-3" style="background:#d3d3d3;">
-              <div style="font-size:2rem;font-weight:700;color:#333;">
-                {{ $bookings->where('status','completed')->count() }}
-              </div>
-              <div style="font-size:0.82rem;color:#333;font-weight:600;">Completed</div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Header Row -->
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-          <h4 class="fw-bold mb-0" style="color:#1a1a2e;">
-            <i class="bi bi-journal-bookmark me-2 text-primary"></i>Riwayat Pemesanan
-          </h4>
-          <div class="d-flex flex-wrap gap-2">
-            <a href="{{ route('v1.frontend.tours') }}" class="btn btn-primary btn-sm rounded-pill">
-              <i class="bi bi-plus-circle me-1"></i> Pesan Baru
-            </a>
-          </div>
-        </div>
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    {{-- Nama paket / hotel / transport --}}
+                    <h5 class="fw-700 mb-2" style="color:#1a3c5e;">
+                      @if($booking->type === 'package' && $booking->packages->first())
+                        <i class="{{ $typeIcon }} me-2" style="color:#e8a838;"></i>
+                        {{ $booking->packages->first()->travelPackage->packages_name ?? '-' }}
+                      @elseif($booking->type === 'hotel' && $booking->hotels->first())
+                        <i class="{{ $typeIcon }} me-2" style="color:#e8a838;"></i>
+                        {{ $booking->hotels->first()->hotel->name ?? '-' }}
+                      @elseif($booking->type === 'transport' && $booking->transports->first())
+                        <i class="{{ $typeIcon }} me-2" style="color:#e8a838;"></i>
+                        {{ $booking->transports->first()->transportation->name ?? '-' }}
+                      @endif
+                    </h5>
 
-        @if($bookings->count() > 0)
-
-          <div class="row g-4">
-            @foreach($bookings as $booking)
-            <div class="col-12">
-              <div class="booking-card card">
-                <div class="card-body p-0">
-                  <div class="row g-0">
-
-                    <!-- Left Stripe (type color) -->
-                    <div class="col-auto d-none d-md-block">
-                      <div class="h-100 d-flex align-items-center justify-content-center px-3"
-                        style="
-                          min-width:60px;
-                          border-radius:16px 0 0 16px;
-                          @if($booking->type == 'package') background:#0369a1;
-                          @elseif($booking->type == 'hotel') background:#7e22ce;
-                          @else background:#854d0e; @endif
-                        ">
-                        @if($booking->type == 'package')
-                          <i class="bi bi-map text-white" style="font-size:1.5rem;"></i>
-                        @elseif($booking->type == 'hotel')
-                          <i class="bi bi-building text-white" style="font-size:1.5rem;"></i>
-                        @else
-                          <i class="bi bi-truck text-white" style="font-size:1.5rem;"></i>
+                    <div class="meta-row">
+                      <div class="meta-item">
+                        <i class="bi bi-calendar-event"></i>
+                        {{ $booking->travel_date?->format('d M Y') }}
+                        @if($booking->return_date)
+                          → {{ $booking->return_date?->format('d M Y') }}
                         @endif
                       </div>
-                    </div>
-
-                    <!-- Main Content -->
-                    <div class="col p-4">
-                      <div class="row align-items-center">
-
-                        <!-- Info Kiri -->
-                        <div class="col-md-7">
-                          <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <!-- Tipe -->
-                            <span class="booking-type-badge type-{{ $booking->type }}">
-                              @if($booking->type == 'package') <i class="bi bi-map-fill me-1"></i>Tour Package
-                              @elseif($booking->type == 'hotel') <i class="bi bi-building-fill me-1"></i>Hotel
-                              @else <i class="bi bi-truck me-1"></i>Transportation
-                              @endif
-                            </span>
-                            <!-- Status -->
-                            <span class="status-badge status-{{ $booking->status }}">
-                              {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
-                            </span>
-                          </div>
-
-                          <!-- Kode Booking -->
-                          <div class="booking-code mb-2">
-                            <i class="bi bi-hash me-1"></i>{{ $booking->booking_code }}
-                          </div>
-
-                          <!-- Nama Layanan -->
-                          <h5 class="fw-bold mb-2" style="color:#1a1a2e;">
-                            @if($booking->type == 'package' && $booking->packages->isNotEmpty())
-                              {{ $booking->packages->first()->travelPackage->package_name ?? 'Travel Package' }}
-                            @elseif($booking->type == 'hotel' && $booking->hotels->isNotEmpty())
-                              {{ $booking->hotels->first()->hotel->hotel_name ?? 'Hotel Booking' }}
-                              <small class="text-muted fw-normal">— {{ $booking->hotels->first()->room->room_type ?? '' }}</small>
-                            @elseif($booking->type == 'transport' && $booking->transports->isNotEmpty())
-                              {{ $booking->transports->first()->transportation->vehicle_name ?? 'Transportation' }}
-                            @else
-                              Booking #{{ $booking->id }}
-                            @endif
-                          </h5>
-
-                          <!-- Meta Info -->
-                          <div class="d-flex flex-wrap gap-3 booking-meta">
-                            <span><i class="bi bi-calendar-event"></i> {{ \Carbon\Carbon::parse($booking->travel_date)->format('d M Y') }}</span>
-                            @if($booking->return_date)
-                              <span><i class="bi bi-calendar-check"></i> s/d {{ \Carbon\Carbon::parse($booking->return_date)->format('d M Y') }}</span>
-                            @endif
-                            @if($booking->total_persons)
-                              <span><i class="bi bi-people"></i> {{ $booking->total_persons }}
-                                {{ $booking->type == 'hotel' ? 'Kamar' : ($booking->type == 'transport' ? 'Unit' : 'Orang') }}
-                              </span>
-                            @endif
-                            <span><i class="bi bi-clock-history"></i> {{ $booking->created_at->format('d M Y') }}</span>
-                          </div>
+                      @if($booking->total_persons)
+                        <div class="meta-item">
+                          <i class="bi bi-people"></i>
+                          {{ $booking->total_persons }}
+                          {{ $booking->type === 'hotel' ? 'kamar' : 'orang' }}
                         </div>
-
-                        <!-- Info Kanan -->
-                        <div class="col-md-5 mt-3 mt-md-0">
-                          <div class="text-md-end">
-                            <!-- Harga -->
-                            <div class="price-highlight mb-1">
-                              Rp {{ number_format($booking->total_price, 0, ',', '.') }}
-                            </div>
-                            <div class="booking-meta mb-3">
-                              Subtotal: Rp {{ number_format($booking->subtotal, 0, ',', '.') }}
-                              + Pajak: Rp {{ number_format($booking->tax, 0, ',', '.') }}
-                            </div>
-
-                            <!-- Tombol Aksi -->
-                            <div class="d-flex flex-wrap justify-content-md-end gap-2">
-                              <!-- Detail -->
-                              <a href="{{ route('v1.booking.show', $booking->id) }}"
-                                 class="btn btn-outline-primary btn-sm rounded-pill">
-                                <i class="bi bi-eye me-1"></i> Detail
-                              </a>
-
-                              <!-- Bayar (kalau pending dan belum bayar) -->
-                              @if($booking->status == 'pending' && !$booking->isPaid())
-                                <a href="{{ route('v1.payment.show', $booking->id) }}"
-                                   class="btn btn-success btn-sm rounded-pill">
-                                  <i class="bi bi-credit-card me-1"></i> Bayar Sekarang
-                                </a>
-                              @endif
-
-                              <!-- Cancel -->
-                              @if(in_array($booking->status, ['pending', 'confirmed']))
-                                <form method="POST"
-                                      action="{{ route('v1.booking.cancel', $booking->id) }}"
-                                      onsubmit="return confirm('Yakin ingin membatalkan booking ini?')">
-                                  @csrf
-                                  @method('PUT')
-                                  <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
-                                    <i class="bi bi-x-circle me-1"></i> Batal
-                                  </button>
-                                </form>
-                              @endif
-                            </div>
-
-                          </div>
-                        </div>
+                      @endif
+                      <div class="meta-item">
+                        <i class="bi bi-person"></i> {{ $booking->contact_name }}
                       </div>
                     </div>
+                  </div>
 
+                  <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <div class="price-badge mb-3">
+                      Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                    </div>
+                    <div class="d-flex gap-2 justify-content-md-end flex-wrap">
+                      <a href="{{ route('v1.booking.show', $booking->id) }}"
+                         class="btn btn-outline-primary btn-sm px-3">
+                        <i class="bi bi-eye me-1"></i> Detail
+                      </a>
+                      @if($booking->status === 'pending' && !$booking->isPaid())
+                        <a href="{{ route('v1.payment.show', $booking->id) }}"
+                           class="btn btn-warning btn-sm px-3 fw-600">
+                          <i class="bi bi-credit-card me-1"></i> Bayar
+                        </a>
+                      @endif
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            @endforeach
-          </div>
+          @endforeach
 
-          <!-- Pagination -->
-          <div class="d-flex justify-content-center mt-5">
-            {{ $bookings->links('pagination::bootstrap-5') }}
-          </div>
-
-        @else
-          <!-- Empty State -->
-          <div class="empty-state">
-            <i class="bi bi-journal-x"></i>
-            <h4>Belum Ada Booking</h4>
-            <p class="text-muted mb-4">Anda belum melakukan pemesanan apapun. Mulai jelajahi destinasi impian Anda!</p>
-            <a href="{{ route('v1.frontend.tours') }}" class="btn btn-primary rounded-pill px-5">
-              <i class="bi bi-compass me-2"></i>Jelajahi Paket Tour
-            </a>
-          </div>
-        @endif
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ======================================================
-       FOOTER
-  ====================================================== -->
-  <footer id="footer" class="footer dark-background">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row gy-4">
-          <div class="col-lg-4 col-md-6 footer-about">
-            <a href="{{ route('v1.frontend.dashboard') }}" class="logo d-flex align-items-center">
-              <span class="sitename">TravelTime</span>
-            </a>
-            <div class="footer-contact pt-3">
-              <p>Jl. Sudirman No. 1, Jakarta</p>
-              <p class="mt-3"><strong>Phone:</strong> <span>+62 21 1234 5678</span></p>
-              <p><strong>Email:</strong> <span>info@traveltime.id</span></p>
-            </div>
-            <div class="social-links d-flex mt-4">
-              <a href="#"><i class="bi bi-facebook"></i></a>
-              <a href="#"><i class="bi bi-twitter-x"></i></a>
-              <a href="#"><i class="bi bi-instagram"></i></a>
-              <a href="#"><i class="bi bi-youtube"></i></a>
-            </div>
+          {{-- Pagination --}}
+          <div class="d-flex justify-content-center mt-2">
+            {{ $bookings->links() }}
           </div>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="container">
-        <div class="copyright">
-          <p>© <span>Copyright</span> <strong class="px-1 sitename">TravelTime</strong> <span>All Rights Reserved</span></p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-    <i class="bi bi-arrow-up-short"></i>
-  </a>
-
-  <!-- Preloader -->
-  <div id="preloader"></div>
-
-  <!-- Vendor JS Files -->
-  <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('frontend/vendor/swiper/swiper-bundle.min.js') }}"></script>
-  <script src="{{ asset('frontend/vendor/glightbox/js/glightbox.min.js') }}"></script>
-
-  <!-- Main JS File -->
-  <script src="{{ asset('frontend/js/main.js') }}"></script>
-
-</body>
-
-</html>
+    @endif
+  </div>
+</section>
+@endsection

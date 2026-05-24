@@ -9,125 +9,95 @@ use App\Models\Hotel;
 use App\Models\HotelRoom;
 use App\Models\Transportation;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class BookingController extends Controller
 {
+    // ─────────────────────────────────────────────
+    //  FRONTEND CUSTOMER
+    // ─────────────────────────────────────────────
+
     /**
-     * Display a listing of the resource.
+     * Daftar semua booking milik user yang login.
      */
-    public function index(Request $request)
+    public function myBookings()
     {
-        $bookings = Booking::with(['packages.travelPackage', 'hotel.hotel', 'transport.transportation', 'payment'])
+        $bookings = Booking::with([
+                'packages.travelPackage',
+                'hotels.hotel',
+                'transports.transportation',
+                'payments',
+            ])
             ->where('user_id', auth()->id())
             ->orderByDesc('created_at')
-            ->paginate($request->get('per_page', 10));
+            ->paginate(10);
 
-        return response()->json([
-            'success' => true,
-            'data'    => $bookings,
-        ]);
+        return view('frontend.v_booking.index', compact('bookings'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Detail satu booking milik user yang login.
      */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function myBookingDetail(string $id)
     {
         $booking = Booking::with([
-            'user',
-            'packages.travelPackage.destination',
-            'hotel.hotel.destination',
-            'hotel.room',
-            'transport.transportation',
-            'payments',
-            'reviews',
-        ])
-        ->where('id', $id)
-        ->where('user_id', auth()->id())
-        ->firstOrFail();
+                'packages.travelPackage.destination',
+                'hotels.hotel.destination',
+                'hotels.room',
+                'transports.transportation',
+                'payments',
+            ])
+            ->where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
-        return response()->json([
-            'success' => true,
-            'data'    => $booking,
-        ]);
+        return view('frontend.v_booking.show', compact('booking'));
     }
+
+    // ─────────────────────────────────────────────
+    //  BOOKING — PACKAGE
+    // ─────────────────────────────────────────────
 
     /**
-     * Show the form for editing the specified resource.
+     * Proses booking paket wisata.
+     * POST /v1/booking/package
      */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    public function bookPackage(Request $request): JsonResponse
+    public function bookPackage(Request $request)
     {
         $request->validate([
             'travel_package_id' => 'required|exists:travel_packages,id',
             'travel_date'       => 'required|date|after:today',
-            'persons'           => 'required|integer|min:1',
+            'persons'           => 'required|integer|min:1|max:50',
             'contact_name'      => 'required|string|max:100',
             'contact_phone'     => 'required|string|max:20',
             'contact_email'     => 'required|email',
-            'notes'             => 'nullable|string',
+            'notes'             => 'nullable|string|max:500',
         ]);
 
-        $package = TravelPackage::findOrFail($request->travel_package_id);
+        $package = TravelPackages::findOrFail($request->travel_package_id);
 
+        // Validasi ketersediaan
         if (!$package->is_active) {
-            return response()->json(['success' => false, 'message' => 'Package is not available.'], 422);
+            return back()->withErrors(['travel_package_id' => 'Paket wisata tidak tersedia.'])->withInput();
         }
 
         if ($request->persons > $package->max_persons) {
-            return response()->json(['success' => false, 'message' => "Maximum {$package->max_persons} people for this package."], 422);
+            return back()->withErrors(['persons' => "Maksimal {$package->max_persons} orang untuk paket ini."])->withInput();
         }
 
-        $totalPrice  = $package->price * $request->persons;
-        $tax         = $totalPrice * 0.11; // PPN 11%
-        $grandTotal  = $totalPrice + $tax;
-        $returnDate  = Carbon::parse($request->travel_date)->addDays($package->duration_days);
+        // Hitung harga
+        $subtotal   = $package->price_packages * $request->persons;
+        $tax        = $subtotal * 0.11;            // PPN 11 %
+        $grandTotal = $subtotal + $tax;
+        $returnDate = Carbon::parse($request->travel_date)->addDays($package->duration_days ?? 1);
 
-        return DB::transaction(function () use ($request, $package, $totalPrice, $tax, $grandTotal, $returnDate) {
+        $booking = DB::transaction(function () use ($request, $package, $subtotal, $tax, $grandTotal, $returnDate) {
             $booking = Booking::create([
                 'user_id'       => auth()->id(),
                 'type'          => 'package',
                 'status'        => 'pending',
-                'subtotal'      => $totalPrice,
+                'subtotal'      => $subtotal,
                 'tax'           => $tax,
                 'total_price'   => $grandTotal,
                 'travel_date'   => $request->travel_date,
@@ -140,21 +110,29 @@ class BookingController extends Controller
             ]);
 
             $booking->packages()->create([
-                'travel_package_id' => $package->id,
-                'persons'           => $request->persons,
-                'unit_price'        => $package->price,
-                'packages_total_price'       => $totalPrice,
+                'travel_package_id'    => $package->id,
+                'persons'              => $request->persons,
+                'unit_price'           => $package->price_packages,
+                'packages_total_price' => $subtotal,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Package booking has been successfully created. Please proceed to payment.',
-                'data'    => $booking->load('packages.travelPackage'),
-            ], 201);
+            return $booking;
         });
+
+        return redirect()
+            ->route('v1.payment.show', $booking->id)
+            ->with('success', 'Booking berhasil dibuat! Silakan selesaikan pembayaran.');
     }
 
-    public function bookHotel(Request $request): JsonResponse
+    // ─────────────────────────────────────────────
+    //  BOOKING — HOTEL
+    // ─────────────────────────────────────────────
+
+    /**
+     * Proses booking hotel.
+     * POST /v1/booking/hotel
+     */
+    public function bookHotel(Request $request)
     {
         $request->validate([
             'hotel_id'      => 'required|exists:hotels,id',
@@ -165,22 +143,27 @@ class BookingController extends Controller
             'contact_name'  => 'required|string|max:100',
             'contact_phone' => 'required|string|max:20',
             'contact_email' => 'required|email',
-            'notes'         => 'nullable|string',
+            'notes'         => 'nullable|string|max:500',
         ]);
 
-        $room  = HotelRoom::with('hotel')->findOrFail($request->hotel_room_id);
         $hotel = Hotel::findOrFail($request->hotel_id);
+        $room  = HotelRoom::findOrFail($request->hotel_room_id);
 
         if (!$hotel->is_active) {
-            return response()->json(['success' => false, 'message' => 'Hotel is not available.'], 422);
+            return back()->withErrors(['hotel_id' => 'Hotel tidak tersedia.'])->withInput();
         }
 
-        $available = $room->getAvailableRoomsForDate($request->check_in, $request->check_out);
+        // Cek ketersediaan kamar
+        $bookedRooms = $room->bookings()
+            ->whereHas('booking', fn($q) => $q
+                ->whereNotIn('status', ['cancelled', 'refunded'])
+                ->where('travel_date', '<', $request->check_out)
+                ->where('return_date', '>', $request->check_in)
+            )->sum('rooms');
+
+        $available = $room->total_rooms - $bookedRooms;
         if ($request->rooms > $available) {
-            return response()->json([
-                'success' => false,
-                'message' => "Only {$available} rooms are available for the selected date.",
-            ], 422);
+            return back()->withErrors(['rooms' => "Hanya {$available} kamar tersedia untuk tanggal yang dipilih."])->withInput();
         }
 
         $nights     = Carbon::parse($request->check_in)->diffInDays($request->check_out);
@@ -188,7 +171,7 @@ class BookingController extends Controller
         $tax        = $subtotal * 0.11;
         $grandTotal = $subtotal + $tax;
 
-        return DB::transaction(function () use ($request, $room, $hotel, $subtotal, $tax, $grandTotal, $nights) {
+        $booking = DB::transaction(function () use ($request, $hotel, $room, $subtotal, $tax, $grandTotal, $nights) {
             $booking = Booking::create([
                 'user_id'       => auth()->id(),
                 'type'          => 'hotel',
@@ -211,19 +194,28 @@ class BookingController extends Controller
                 'check_in'        => $request->check_in,
                 'check_out'       => $request->check_out,
                 'rooms'           => $request->rooms,
+                'nights'          => $nights,
                 'price_per_night' => $room->price_per_night,
                 'total_price'     => $subtotal,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Hotel booking has been successfully created. Please proceed to payment.',
-                'data'    => $booking->load('hotel.hotel', 'hotel.room'),
-            ], 201);
+            return $booking;
         });
+
+        return redirect()
+            ->route('v1.payment.show', $booking->id)
+            ->with('success', 'Booking hotel berhasil dibuat! Silakan selesaikan pembayaran.');
     }
 
-    public function bookTransport(Request $request): JsonResponse
+    // ─────────────────────────────────────────────
+    //  BOOKING — TRANSPORT
+    // ─────────────────────────────────────────────
+
+    /**
+     * Proses booking transportasi.
+     * POST /v1/booking/transport
+     */
+    public function bookTransport(Request $request)
     {
         $request->validate([
             'transportation_id' => 'required|exists:transportations,id',
@@ -234,24 +226,33 @@ class BookingController extends Controller
             'contact_name'      => 'required|string|max:100',
             'contact_phone'     => 'required|string|max:20',
             'contact_email'     => 'required|email',
-            'special_request'   => 'nullable|string',
+            'special_request'   => 'nullable|string|max:500',
         ]);
 
         $transport = Transportation::findOrFail($request->transportation_id);
 
-        if (!$transport->isAvailableForDate($request->rental_date, $request->return_date)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Flights are not available for the selected date.',
-            ], 422);
+        if (!$transport->is_active) {
+            return back()->withErrors(['transportation_id' => 'Transportasi tidak tersedia.'])->withInput();
         }
 
-        $days       = Carbon::parse($request->rental_date)->diffInDays($request->return_date) ?: 1;
+        // Cek ketersediaan
+        $bookedCount = $transport->bookings()
+            ->whereHas('booking', fn($q) => $q
+                ->whereNotIn('status', ['cancelled', 'refunded'])
+                ->where('travel_date', '<', $request->return_date)
+                ->where('return_date', '>', $request->rental_date)
+            )->count();
+
+        if ($bookedCount >= $transport->quota) {
+            return back()->withErrors(['transportation_id' => 'Transportasi tidak tersedia untuk tanggal yang dipilih.'])->withInput();
+        }
+
+        $days       = max(1, Carbon::parse($request->rental_date)->diffInDays($request->return_date));
         $subtotal   = $transport->price_per_day * $days;
         $tax        = $subtotal * 0.11;
         $grandTotal = $subtotal + $tax;
 
-        return DB::transaction(function () use ($request, $transport, $subtotal, $tax, $grandTotal, $days) {
+        $booking = DB::transaction(function () use ($request, $transport, $subtotal, $tax, $grandTotal, $days) {
             $booking = Booking::create([
                 'user_id'       => auth()->id(),
                 'type'          => 'transport',
@@ -279,74 +280,87 @@ class BookingController extends Controller
                 'special_request'   => $request->special_request,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Transportation booking has been successfully created. Please proceed to payment.',
-                'data'    => $booking->load('transport.transportation'),
-            ], 201);
+            return $booking;
         });
+
+        return redirect()
+            ->route('v1.payment.show', $booking->id)
+            ->with('success', 'Booking transportasi berhasil dibuat! Silakan selesaikan pembayaran.');
     }
 
-    public function cancel(Booking $booking): JsonResponse
+    // ─────────────────────────────────────────────
+    //  CANCEL BOOKING
+    // ─────────────────────────────────────────────
+
+    /**
+     * Batalkan booking.
+     * PUT /v1/booking/{id}/cancel
+     */
+    public function cancel(string $id)
     {
-        if ($booking->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'message' => 'Not allowed.'], 403);
-        }
+        $booking = Booking::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
         if (!in_array($booking->status, ['pending', 'confirmed'])) {
-            return response()->json(['success' => false, 'message' => 'Booking cannot be cancelled.'], 422);
+            return back()->withErrors(['cancel' => 'Booking tidak dapat dibatalkan.']);
         }
 
         $booking->update(['status' => 'cancelled']);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Booking has been successfully cancelled.',
-        ]);
+        return redirect()
+            ->route('v1.booking.index')
+            ->with('success', 'Booking berhasil dibatalkan.');
     }
 
-    public function isAvailableForDate($rentalDate, $returnDate): bool
-    {
-        $booked = BookingTransport::where('transportation_id', $this->id)
-            ->whereHas('booking', fn($q) => $q->whereNotIn('status', ['cancelled', 'refunded'])
-                ->where('travel_date', '<=', $returnDate)
-                ->where('return_date', '>=', $rentalDate)
-            )->count();
+    // ─────────────────────────────────────────────
+    //  BACKEND ADMIN
+    // ─────────────────────────────────────────────
 
-        return ($this->quota - $booked) > 0;
-    }
-
-    // Frontend customer — daftar booking milik user yang login
-    public function myBookings()
+    /**
+     * Daftar semua booking (backend).
+     */
+    public function index()
     {
-        $bookings = Booking::with(['packages.travelPackage', 'hotels.hotel', 'transports.transportation', 'payments'])
-            ->where('user_id', auth()->id())
+        $bookings = Booking::with(['user', 'payments'])
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(20);
 
-        return view('frontend.v_booking.index', compact('bookings'));
+        return view('backend.v_booking.index', compact('bookings'));
     }
 
-    // Frontend customer — detail satu booking
-    public function myBookingDetail(string $id)
+    /**
+     * Detail booking (backend).
+     */
+    public function show(string $id)
     {
         $booking = Booking::with([
-            'packages.travelPackage.destination',
+            'user',
+            'packages.travelPackage',
             'hotels.hotel',
             'hotels.room',
             'transports.transportation',
             'payments',
-        ])->where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        ])->findOrFail($id);
 
-        return view('frontend.v_booking.show', compact('booking'));
+        return view('backend.v_booking.show', compact('booking'));
     }
 
-    // Backend admin — update status booking
+    /**
+     * Update status booking (backend).
+     */
     public function updateStatus(Request $request, string $id)
     {
         $booking = Booking::findOrFail($id);
-        $request->validate(['status' => 'required|in:pending,confirmed,in_progress,completed,cancelled,refunded']);
+
+        $request->validate([
+            'status' => 'required|in:pending,confirmed,in_progress,completed,cancelled,refunded',
+        ]);
+
         $booking->update(['status' => $request->status]);
-        return redirect()->back()->with('success', 'Status booking berhasil diupdate');
+
+        return redirect()
+            ->back()
+            ->with('success', 'Status booking berhasil diupdate.');
     }
 }

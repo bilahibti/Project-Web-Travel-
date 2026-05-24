@@ -28,6 +28,7 @@ class Booking extends Model
         'return_date' => 'date',
     ];
 
+    // ─── Auto-generate booking code ───
     protected static function boot()
     {
         parent::boot();
@@ -38,18 +39,59 @@ class Booking extends Model
         });
     }
 
-    public function user() { return $this->belongsTo(User::class); }
-    public function packages() { return $this->hasMany(BookingPackage::class); }
-    public function hotels() { return $this->hasMany(BookingHotel::class); }
+    // ─── Relationships ───
+    public function user()       { return $this->belongsTo(User::class); }
+    public function packages()   { return $this->hasMany(BookingPackages::class); }
+    public function hotels()     { return $this->hasMany(BookingHotel::class); }
     public function transports() { return $this->hasMany(BookingTransport::class); }
-    public function payments() { return $this->hasMany(Payment::class); }
-    public function reviews() { return $this->hasMany(Review::class); }
+    public function payments()   { return $this->hasMany(Payment::class); }
+    public function reviews()    { return $this->hasMany(Review::class); }
 
+    // ─── Helpers ───
     public function isPaid(): bool
     {
         return $this->payments()->where('status', 'paid')->exists();
     }
 
-    public function scopePending($query) { return $query->where('status', 'pending'); }
-    public function scopeConfirmed($query) { return $query->where('status', 'confirmed'); }
+    public function statusLabel(): string
+    {
+        return match($this->status) {
+            'pending'     => 'Menunggu Pembayaran',
+            'confirmed'   => 'Dikonfirmasi',
+            'in_progress' => 'Sedang Berlangsung',
+            'completed'   => 'Selesai',
+            'cancelled'   => 'Dibatalkan',
+            'refunded'    => 'Refund',
+            default       => ucfirst($this->status),
+        };
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return match($this->status) {
+            'pending'     => 'warning',
+            'confirmed'   => 'primary',
+            'in_progress' => 'info',
+            'completed'   => 'success',
+            'cancelled'   => 'danger',
+            'refunded'    => 'secondary',
+            default       => 'secondary',
+        };
+    }
+
+    public function typeLabel(): string
+    {
+        return match($this->type) {
+            'package'   => 'Paket Wisata',
+            'hotel'     => 'Hotel',
+            'transport' => 'Transportasi',
+            default     => ucfirst($this->type),
+        };
+    }
+
+    // ─── Scopes ───
+    public function scopePending($query)    { return $query->where('status', 'pending'); }
+    public function scopeConfirmed($query)  { return $query->where('status', 'confirmed'); }
+    public function scopeCompleted($query)  { return $query->where('status', 'completed'); }
+    public function scopeCancelled($query)  { return $query->where('status', 'cancelled'); }
 }

@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $customerRole = Role::where('slug', 'customer')->firstOrFail();
 
         User::create([ 
-            'nama' => 'Administrator', 
+            'name' => 'Administrator', 
             'email' => 'admin@gmail.com',  
             'role_id' => $adminRole?->id,
             'hp' => '0812345678901', 
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]); 
 
         User::create([ 
-            'nama' => 'Sopian Aji', 
+            'name' => 'Sopian Aji', 
             'email' => 'sopian4ji@gmail.com',  
             'role_id' => $staffRole?->id,
             'hp' => '081234567892', 
@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         ]); 
         
         User::create([ 
-            'nama' => 'Karina Adya', 
+            'name' => 'Karina Adya', 
             'email' => 'adyarin@gmail.com',   
             'role_id' => $adminRole?->id,
             'hp' => '085678916598', 
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
         ]); 
 
         User::create([ 
-            'nama' => 'Aditya Rayhan Pratama', 
+            'name' => 'Aditya Rayhan Pratama', 
             'email' => 'pratamayhan@gmail.com',   
             'role_id' => $customerRole?->id,
             'hp' => '089873456120', 
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         ]); 
 
         User::create([ 
-            'nama' => 'Naufal Aksa Pranaya', 
+            'name' => 'Naufal Aksa Pranaya', 
             'email' => 'aksanaya@gmail.com',  
             'role_id' => $customerRole?->id,
             'hp' => '087856432690', 

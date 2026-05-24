@@ -1,483 +1,282 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('frontend.v_layouts.app')
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Pembayaran - TravelTime</title>
-  <meta name="description" content="">
+@section('title', 'Pembayaran - ' . $booking->booking_code)
 
-  <!-- Favicons -->
-  <link href="{{ asset('frontend/img/favicon.png') }}" rel="icon">
-  <link href="{{ asset('frontend/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+@section('content')
+<style>
+  .page-title-payment {
+    background: linear-gradient(135deg, #1a3c5e, #2c5364);
+    padding: 100px 0 50px; text-align: center; color: #fff;
+  }
+  .page-title-payment h1 { font-size: 2rem; font-weight: 700; }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  .payment-layout { display: grid; grid-template-columns: 1fr 380px; gap: 2rem; }
+  @media (max-width: 991px) { .payment-layout { grid-template-columns: 1fr; } }
 
-  <!-- Vendor CSS -->
-  <link href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('frontend/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  .pay-card {
+    border: none; border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.07);
+    padding: 2rem; margin-bottom: 1.5rem;
+  }
+  .pay-card h4 {
+    font-size: 1rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #7a8fa6; border-bottom: 2px solid #f0f4f8;
+    padding-bottom: .75rem; margin-bottom: 1.5rem;
+  }
 
-  <!-- Main CSS -->
-  <link href="{{ asset('frontend/css/main.css') }}" rel="stylesheet">
+  /* Method cards */
+  .method-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+  .method-card {
+    border: 2px solid #e9ecef; border-radius: 14px; padding: 1.2rem 1rem;
+    cursor: pointer; transition: all .2s; text-align: center; background: #fff;
+    position: relative; overflow: hidden;
+  }
+  .method-card:hover { border-color: #e8a838; transform: translateY(-2px); }
+  .method-card.selected { border-color: #2c5364; background: #f0f6fc; }
+  .method-card.selected::after {
+    content: '\F26B'; font-family: 'bootstrap-icons'; position: absolute;
+    top: 8px; right: 10px; color: #2c5364; font-size: .9rem; font-weight: 700;
+  }
+  .method-icon { font-size: 1.8rem; margin-bottom: .5rem; color: #2c5364; }
+  .method-label { font-size: .85rem; font-weight: 700; color: #1a3c5e; }
+  .method-desc  { font-size: .75rem; color: #8a9bb0; margin-top: .2rem; }
 
-</head>
+  input[type="radio"].method-radio { display: none; }
 
-<body class="booking-page">
+  /* Summary */
+  .summary-card { background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,.07); overflow: hidden; }
+  .summary-header {
+    background: linear-gradient(135deg, #1a3c5e, #2c5364);
+    padding: 1.5rem; color: #fff;
+  }
+  .summary-header .booking-code { font-size: .82rem; opacity: .7; }
+  .summary-header h3 { font-size: 1.1rem; font-weight: 700; margin: .3rem 0 0; }
 
-  <!-- HEADER -->
-  <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container position-relative d-flex align-items-center justify-content-between">
-      <a href="{{ route('v1.frontend.dashboard') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-        <h1 class="sitename">TravelTime</h1>
+  .summary-body { padding: 1.5rem; }
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .6rem 0; border-bottom: 1px solid #f0f4f8; font-size: .9rem;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .label { color: #7a8fa6; }
+  .summary-row .value { font-weight: 600; color: #1a3c5e; }
+
+  .total-section {
+    background: #f4f8fb; border-radius: 12px;
+    padding: 1.2rem; margin-top: 1rem; text-align: center;
+  }
+  .total-section .lbl { font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; color: #7a8fa6; }
+  .total-section .amt { font-size: 1.8rem; font-weight: 800; color: #1a3c5e; }
+
+  .btn-pay {
+    width: 100%; padding: 1rem; border-radius: 12px; font-size: 1.05rem;
+    font-weight: 700; background: linear-gradient(135deg, #e8a838, #f5c842);
+    border: none; color: #1a3c5e; margin-top: 1.2rem;
+    transition: opacity .2s, transform .1s;
+  }
+  .btn-pay:hover  { opacity: .9; transform: translateY(-1px); }
+  .btn-pay:active { transform: translateY(0); }
+  .btn-pay:disabled { opacity: .5; cursor: not-allowed; }
+
+  .security-note {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .78rem; color: #8a9bb0; margin-top: .8rem; justify-content: center;
+  }
+</style>
+
+<!-- Page Title -->
+<div class="page-title-payment">
+  <div class="container">
+    <h1><i class="bi bi-credit-card-fill me-2"></i>Pembayaran</h1>
+    <p class="mb-0" style="opacity:.8;">Selesaikan pembayaran untuk mengkonfirmasi booking Anda</p>
+  </div>
+</div>
+
+<section style="padding: 50px 0 80px; background: #f4f8fb;">
+  <div class="container">
+
+    @if($errors->any())
+      <div class="alert alert-danger alert-dismissible fade show mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        @foreach($errors->all() as $err) {{ $err }}<br> @endforeach
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    @endif
+
+    <div class="mb-4">
+      <a href="{{ route('v1.booking.show', $booking->id) }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Kembali ke Detail Booking
       </a>
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{{ route('v1.frontend.dashboard') }}">Home</a></li>
-          <li><a href="{{ route('v1.frontend.destination') }}">Destinations</a></li>
-          <li><a href="{{ route('v1.frontend.tours') }}">Tours</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-      <div class="d-flex align-items-center gap-2">
-        @auth
-          <a class="btn-getstarted" href="{{ route('v1.booking.index') }}" style="background:#0d6efd;">
-            <i class="bi bi-journal-bookmark-fill me-1"></i> My Bookings
-          </a>
-        @endauth
-      </div>
-    </div>
-  </header>
-
-  <main class="main">
-
-    <!-- Page Title -->
-    <div class="page-title dark-background" style="background-image: url({{ asset('frontend/img/travel/showcase-7.webp') }});">
-      <div class="container position-relative">
-        <h1>Pembayaran</h1>
-        <p>Selesaikan pembayaran Anda untuk mengkonfirmasi booking.</p>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="{{ route('v1.frontend.dashboard') }}">Home</a></li>
-            <li><a href="{{ route('v1.booking.index') }}">My Bookings</a></li>
-            <li><a href="{{ route('v1.booking.show', $booking->id) }}">Detail</a></li>
-            <li class="current">Pembayaran</li>
-          </ol>
-        </nav>
-      </div>
     </div>
 
-    <section class="section" style="padding: 50px 0 80px;">
-      <div class="container">
+    <div class="payment-layout">
 
-        <!-- Flash Messages -->
-        @if(session('success'))
-          <div class="alert alert-success alert-dismissible fade show mb-4">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        @endif
-        @if(session('error'))
-          <div class="alert alert-danger alert-dismissible fade show mb-4">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        @endif
+      <!-- KIRI: Form Payment -->
+      <div>
+        <form method="POST" action="{{ route('v1.payment.store') }}" id="paymentForm">
+          @csrf
+          <input type="hidden" name="booking_id" value="{{ $booking->id }}">
 
-        {{-- ========== SUDAH DIBAYAR ========== --}}
-        @if($booking->isPaid())
-          <div class="paid-banner mb-5">
-            <i class="bi bi-check-circle-fill" style="font-size:4rem;display:block;margin-bottom:16px;"></i>
-            <h3 class="fw-bold mb-2">Pembayaran Sudah Lunas!</h3>
-            <p class="mb-4 opacity-75">Booking Anda telah dikonfirmasi. Silakan cek detail booking untuk informasi lebih lanjut.</p>
-            <div class="booking-code text-white mb-4" style="font-size:1.2rem;letter-spacing:3px;">
-              {{ $booking->booking_code }}
+          <!-- Pilih Metode Pembayaran -->
+          <div class="pay-card">
+            <h4><i class="bi bi-wallet2 me-2"></i>Pilih Metode Pembayaran</h4>
+            <div class="method-grid">
+              @foreach($paymentMethods as $key => $method)
+                <label for="method_{{ $key }}" class="method-card" id="card_{{ $key }}">
+                  <input type="radio" name="method" id="method_{{ $key }}"
+                         value="{{ $key }}" class="method-radio"
+                         {{ old('method') === $key ? 'checked' : '' }}>
+                  <div class="method-icon"><i class="{{ $method['icon'] }}"></i></div>
+                  <div class="method-label">{{ $method['label'] }}</div>
+                  <div class="method-desc">{{ $method['desc'] }}</div>
+                </label>
+              @endforeach
             </div>
-            <div class="d-flex justify-content-center gap-3 flex-wrap">
-              <a href="{{ route('v1.booking.show', $booking->id) }}" class="btn btn-light rounded-pill px-5">
-                <i class="bi bi-eye me-2"></i>Lihat Detail Booking
-              </a>
-              <a href="{{ route('v1.booking.index') }}" class="btn btn-outline-light rounded-pill px-5">
-                <i class="bi bi-journal-bookmark me-2"></i>Semua Booking
-              </a>
-            </div>
+            @error('method')
+              <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+            @enderror
           </div>
 
-          {{-- Riwayat Pembayaran --}}
-          <div class="payment-form-card">
-            <h5 class="fw-bold mb-4" style="color:#1a1a2e;">
-              <i class="bi bi-receipt me-2 text-success"></i>Riwayat Pembayaran
-            </h5>
-            @foreach($booking->payments as $payment)
-            <div class="d-flex align-items-center justify-content-between p-4 rounded-3 mb-3" style="background:#f8f9fa;">
-              <div>
-                <div class="fw-bold" style="font-size:1.1rem;">Rp {{ number_format($payment->amount, 0, ',', '.') }}</div>
-                <div style="font-size:0.82rem;color:#6c757d;">
-                  <i class="bi bi-credit-card me-1"></i>
-                  {{ ucfirst(str_replace('_', ' ', $payment->method)) }}
-                  @if($payment->paid_at)
-                    &nbsp;·&nbsp;<i class="bi bi-clock me-1"></i>{{ \Carbon\Carbon::parse($payment->paid_at)->format('d M Y, H:i') }}
-                  @endif
-                </div>
-              </div>
-              <span class="badge bg-success rounded-pill px-3 py-2">Paid</span>
-            </div>
-            @endforeach
+          <!-- Instruksi (dynamic) -->
+          <div class="pay-card" id="instructionBox" style="display:none;">
+            <h4><i class="bi bi-info-circle me-2"></i>Instruksi Pembayaran</h4>
+            <div id="instructionContent"></div>
           </div>
 
-        {{-- ========== BELUM DIBAYAR ========== --}}
-        @else
-
-          <div class="row g-5">
-
-            <!-- Form Kiri -->
-            <div class="col-lg-7">
-
-              <!-- Security Bar -->
-              <div class="security-bar mb-4">
-                <i class="bi bi-shield-lock-fill" style="font-size:1.3rem;"></i>
-                <span>Pembayaran Anda terlindungi. Semua transaksi dienkripsi dengan SSL 256-bit.</span>
-              </div>
-
-              <!-- Info Booking Singkat -->
-              <div class="payment-form-card mb-4">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <h6 class="fw-bold mb-1" style="color:#1a1a2e;">
-                      @if($booking->type == 'package' && $booking->packages->isNotEmpty())
-                        {{ $booking->packages->first()->travelPackage->package_name ?? 'Travel Package' }}
-                      @elseif($booking->type == 'hotel' && $booking->hotels->isNotEmpty())
-                        {{ $booking->hotels->first()->hotel->hotel_name ?? 'Hotel Booking' }}
-                        <small class="text-muted fw-normal">— {{ $booking->hotels->first()->room->room_type ?? '' }}</small>
-                      @elseif($booking->type == 'transport' && $booking->transports->isNotEmpty())
-                        {{ $booking->transports->first()->transportation->vehicle_name ?? 'Transportation' }}
-                      @else
-                        Booking #{{ $booking->id }}
-                      @endif
-                    </h6>
-                    <div class="booking-code">{{ $booking->booking_code }}</div>
-                  </div>
-                  <span class="booking-status-pill status-pending">Belum Dibayar</span>
-                </div>
-
-                <div class="row g-2" style="font-size:0.83rem;color:#6c757d;">
-                  <div class="col-6">
-                    <i class="bi bi-calendar-event me-1"></i>
-                    {{ \Carbon\Carbon::parse($booking->travel_date)->format('d M Y') }}
-                  </div>
-                  <div class="col-6">
-                    <i class="bi bi-people me-1"></i>
-                    {{ $booking->total_persons }}
-                    {{ $booking->type == 'hotel' ? 'Kamar' : ($booking->type == 'transport' ? 'Unit' : 'Orang') }}
-                  </div>
-                  <div class="col-6">
-                    <i class="bi bi-person me-1"></i>
-                    {{ $booking->contact_name }}
-                  </div>
-                  <div class="col-6">
-                    <i class="bi bi-telephone me-1"></i>
-                    {{ $booking->contact_phone }}
-                  </div>
-                </div>
-              </div>
-
-              <!-- Form Pembayaran -->
-              <div class="payment-form-card">
-                <h5 class="fw-bold mb-1" style="color:#1a1a2e;">
-                  <i class="bi bi-credit-card-2-front me-2 text-primary"></i>Pilih Metode Pembayaran
-                </h5>
-                <p class="text-muted mb-4" style="font-size:0.87rem;">Pilih salah satu metode pembayaran di bawah ini.</p>
-
-                <form method="POST" action="{{ route('v1.payment.store') }}" id="paymentForm">
-                  @csrf
-                  <input type="hidden" name="booking_id" value="{{ $booking->id }}">
-
-                  <!-- Grid Metode Pembayaran -->
-                  <div class="method-grid mb-4">
-
-                    <label class="method-card">
-                      <input type="radio" name="method" value="bank_transfer" required>
-                      <div class="method-label">
-                        <span class="method-icon">🏦</span>
-                        <span>Transfer Bank</span>
-                      </div>
-                      <div class="check-indicator"><i class="bi bi-check2"></i></div>
-                    </label>
-
-                    <label class="method-card">
-                      <input type="radio" name="method" value="credit_card">
-                      <div class="method-label">
-                        <span class="method-icon">💳</span>
-                        <span>Kartu Kredit</span>
-                      </div>
-                      <div class="check-indicator"><i class="bi bi-check2"></i></div>
-                    </label>
-
-                    <label class="method-card">
-                      <input type="radio" name="method" value="debit_card">
-                      <div class="method-label">
-                        <span class="method-icon">🪙</span>
-                        <span>Kartu Debit</span>
-                      </div>
-                      <div class="check-indicator"><i class="bi bi-check2"></i></div>
-                    </label>
-
-                    <label class="method-card">
-                      <input type="radio" name="method" value="e_wallet">
-                      <div class="method-label">
-                        <span class="method-icon">📱</span>
-                        <span>E-Wallet</span>
-                      </div>
-                      <div class="check-indicator"><i class="bi bi-check2"></i></div>
-                    </label>
-
-                    <label class="method-card">
-                      <input type="radio" name="method" value="virtual_account">
-                      <div class="method-label">
-                        <span class="method-icon">🔐</span>
-                        <span>Virtual Account</span>
-                      </div>
-                      <div class="check-indicator"><i class="bi bi-check2"></i></div>
-                    </label>
-
-                    <label class="method-card">
-                      <input type="radio" name="method" value="qris">
-                      <div class="method-label">
-                        <span class="method-icon">📷</span>
-                        <span>QRIS</span>
-                      </div>
-                      <div class="check-indicator"><i class="bi bi-check2"></i></div>
-                    </label>
-
-                  </div>
-
-                  @error('method')
-                    <div class="alert alert-danger py-2 mb-3" style="font-size:0.85rem;">
-                      <i class="bi bi-exclamation-circle me-1"></i> {{ $message }}
-                    </div>
-                  @enderror
-
-                  <!-- Info Metode yang Dipilih -->
-                  <div id="methodInfo" class="mb-4" style="display:none;">
-                    <div class="p-4 rounded-3" style="background:#eef3ff;border:1px solid #b8d0fb;">
-                      <div id="methodInfoContent" style="font-size:0.88rem;color:#1a1a2e;"></div>
-                    </div>
-                  </div>
-
-                  <!-- Konfirmasi -->
-                  <div class="mb-4 p-3 rounded-2" style="background:#fff3cd;">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="agreeCheck" required>
-                      <label class="form-check-label" for="agreeCheck" style="font-size:0.86rem;color:#664d03;">
-                        Saya setuju dengan <a href="#" style="color:#0d6efd;">Syarat &amp; Ketentuan</a> dan
-                        <a href="#" style="color:#0d6efd;">Kebijakan Privasi</a> TravelTime.
-                        Total pembayaran sebesar <strong>Rp {{ number_format($booking->total_price, 0, ',', '.') }}</strong>
-                        akan ditagihkan kepada saya.
-                      </label>
-                    </div>
-                  </div>
-
-                  <!-- Tombol Bayar -->
-                  <button type="submit" class="btn btn-primary pay-btn" id="payBtn" disabled>
-                    <i class="bi bi-lock-fill me-2"></i>
-                    Bayar Rp {{ number_format($booking->total_price, 0, ',', '.') }}
-                  </button>
-
-                  <div class="text-center mt-3">
-                    <a href="{{ route('v1.booking.show', $booking->id) }}" class="text-muted" style="font-size:0.85rem;">
-                      <i class="bi bi-arrow-left me-1"></i>Kembali ke Detail Booking
-                    </a>
-                  </div>
-
-                </form>
-              </div>
-
-            </div><!-- /Kiri -->
-
-            <!-- Ringkasan Kanan -->
-            <div class="col-lg-5">
-              <div class="summary-card">
-                <h5 class="fw-bold mb-4" style="color:#1a1a2e;">
-                  <i class="bi bi-receipt-cutoff me-2 text-primary"></i>Ringkasan Pembayaran
-                </h5>
-
-                <!-- Detail Item -->
-                <div class="mb-3 p-3 rounded-2" style="background:#f8f9fa;">
-                  <div style="font-size:0.82rem;color:#6c757d;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">
-                    @if($booking->type == 'package') 📦 Paket Tour
-                    @elseif($booking->type == 'hotel') 🏨 Hotel
-                    @else 🚗 Transportasi @endif
-                  </div>
-                  <div class="fw-bold" style="color:#1a1a2e;font-size:0.95rem;">
-                    @if($booking->type == 'package' && $booking->packages->isNotEmpty())
-                      {{ $booking->packages->first()->travelPackage->package_name ?? '-' }}
-                    @elseif($booking->type == 'hotel' && $booking->hotels->isNotEmpty())
-                      {{ $booking->hotels->first()->hotel->hotel_name ?? '-' }}
-                    @elseif($booking->type == 'transport' && $booking->transports->isNotEmpty())
-                      {{ $booking->transports->first()->transportation->vehicle_name ?? '-' }}
-                    @endif
-                  </div>
-                  <div style="font-size:0.82rem;color:#6c757d;margin-top:4px;">
-                    <i class="bi bi-calendar me-1"></i>
-                    {{ \Carbon\Carbon::parse($booking->travel_date)->format('d M Y') }}
-                    @if($booking->return_date)
-                      → {{ \Carbon\Carbon::parse($booking->return_date)->format('d M Y') }}
-                    @endif
-                  </div>
-                </div>
-
-                <div class="summary-row">
-                  <span class="summary-label">Subtotal</span>
-                  <span class="summary-value">Rp {{ number_format($booking->subtotal, 0, ',', '.') }}</span>
-                </div>
-                @if($booking->discount && $booking->discount > 0)
-                <div class="summary-row">
-                  <span class="summary-label">Diskon</span>
-                  <span class="summary-value text-success">- Rp {{ number_format($booking->discount, 0, ',', '.') }}</span>
-                </div>
-                @endif
-                <div class="summary-row">
-                  <span class="summary-label">PPN (11%)</span>
-                  <span class="summary-value">Rp {{ number_format($booking->tax, 0, ',', '.') }}</span>
-                </div>
-
-                <div class="summary-total">
-                  <span>Total Bayar</span>
-                  <span class="amount">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</span>
-                </div>
-
-                <!-- Metode yang dipilih (update via JS) -->
-                <div id="selectedMethodDisplay" class="mt-3 p-3 rounded-2 text-center" style="background:#f8f9fa;display:none!important;">
-                  <div style="font-size:0.82rem;color:#6c757d;">Metode Dipilih</div>
-                  <div id="selectedMethodName" class="fw-bold" style="color:#0d6efd;font-size:0.95rem;"></div>
-                </div>
-
-                <!-- Jaminan -->
-                <div class="mt-4">
-                  <div class="d-flex align-items-center gap-2 mb-2">
-                    <i class="bi bi-shield-check-fill text-success" style="font-size:1.1rem;"></i>
-                    <span style="font-size:0.82rem;color:#0f5132;font-weight:600;">Pembayaran Aman & Terjamin</span>
-                  </div>
-                  <div class="d-flex align-items-center gap-2 mb-2">
-                    <i class="bi bi-arrow-counterclockwise text-primary" style="font-size:1.1rem;"></i>
-                    <span style="font-size:0.82rem;color:#495057;">Kebijakan pengembalian dana 24 jam</span>
-                  </div>
-                  <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-headset text-warning" style="font-size:1.1rem;"></i>
-                    <span style="font-size:0.82rem;color:#495057;">Dukungan pelanggan 24/7</span>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- /Kanan -->
-
-          </div><!-- /row -->
-
-        @endif
-
+          <!-- Catatan opsional -->
+          <div class="pay-card">
+            <h4><i class="bi bi-chat-text me-2"></i>Catatan (Opsional)</h4>
+            <textarea name="notes" class="form-control" rows="3"
+                      placeholder="Tambahkan catatan pembayaran jika diperlukan...">{{ old('notes') }}</textarea>
+          </div>
+        </form>
       </div>
-    </section>
 
-  </main>
+      <!-- KANAN: Summary -->
+      <div>
+        <div class="summary-card">
+          <div class="summary-header">
+            <div class="booking-code">{{ $booking->booking_code }}</div>
+            <h3>
+              @if($booking->type === 'package' && $booking->packages->first())
+                {{ $booking->packages->first()->travelPackage->packages_name ?? 'Paket Wisata' }}
+              @elseif($booking->type === 'hotel' && $booking->hotels->first())
+                {{ $booking->hotels->first()->hotel->name ?? 'Hotel' }}
+              @elseif($booking->type === 'transport' && $booking->transports->first())
+                {{ $booking->transports->first()->transportation->name ?? 'Transportasi' }}
+              @endif
+            </h3>
+          </div>
 
-  <!-- FOOTER -->
-  <footer id="footer" class="footer dark-background">
-    <div class="footer-bottom">
-      <div class="container">
-        <div class="copyright">
-          <p>© <span>Copyright</span> <strong class="px-1 sitename">TravelTime</strong> <span>All Rights Reserved</span></p>
+          <div class="summary-body">
+            <div class="summary-row">
+              <span class="label">Tipe</span>
+              <span class="value">{{ $booking->typeLabel() }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Tanggal</span>
+              <span class="value">{{ $booking->travel_date?->format('d M Y') }}</span>
+            </div>
+            @if($booking->return_date)
+              <div class="summary-row">
+                <span class="label">Kembali</span>
+                <span class="value">{{ $booking->return_date?->format('d M Y') }}</span>
+              </div>
+            @endif
+            <div class="summary-row">
+              <span class="label">Kontak</span>
+              <span class="value">{{ $booking->contact_name }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Subtotal</span>
+              <span class="value">Rp {{ number_format($booking->subtotal, 0, ',', '.') }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Pajak (11%)</span>
+              <span class="value">Rp {{ number_format($booking->tax, 0, ',', '.') }}</span>
+            </div>
+
+            <div class="total-section">
+              <div class="lbl">Total Pembayaran</div>
+              <div class="amt">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</div>
+            </div>
+
+            <button type="submit" form="paymentForm" class="btn-pay" id="btnPay" disabled>
+              <i class="bi bi-lock-fill me-2"></i>Bayar Sekarang
+            </button>
+
+            <div class="security-note">
+              <i class="bi bi-shield-check"></i> Pembayaran diproses dengan aman
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-    <i class="bi bi-arrow-up-short"></i>
-  </a>
-  <div id="preloader"></div>
+<script>
+  const instructions = {
+    bank_transfer: `
+      <ol class="ps-3" style="font-size:.88rem; color:#555; line-height:1.9;">
+        <li>Catat kode booking Anda: <strong>{{ $booking->booking_code }}</strong></li>
+        <li>Transfer ke salah satu rekening berikut:<br>
+          &bull; <strong>BCA</strong> 1234567890 a.n. PT TravelTime Indonesia<br>
+          &bull; <strong>Mandiri</strong> 9876543210 a.n. PT TravelTime Indonesia</li>
+        <li>Nominal tepat: <strong>Rp {{ number_format($booking->total_price, 0, ',', '.') }}</strong></li>
+        <li>Konfirmasi transfer via WhatsApp / email dalam 1×24 jam.</li>
+      </ol>`,
+    virtual_account: `
+      <div style="font-size:.88rem; color:#555; line-height:1.9;">
+        <p>Nomor Virtual Account akan dikirim ke <strong>{{ $booking->contact_email }}</strong> setelah Anda mengklik "Bayar Sekarang".</p>
+        <p>Bayar sebelum: <strong>{{ now()->addHours(24)->format('d M Y, H:i') }}</strong></p>
+      </div>`,
+    e_wallet: `
+      <div style="font-size:.88rem; color:#555; line-height:1.9;">
+        <p>Setelah klik "Bayar Sekarang", Anda akan diarahkan ke halaman e-wallet pilihan Anda.</p>
+        <p>Pastikan saldo mencukupi: <strong>Rp {{ number_format($booking->total_price, 0, ',', '.') }}</strong></p>
+      </div>`,
+    qris: `
+      <div style="font-size:.88rem; color:#555; text-align:center;">
+        <div style="background:#f0f4f8; border-radius:12px; padding:1rem; display:inline-block; margin-bottom:.5rem;">
+          <i class="bi bi-qr-code" style="font-size:4rem; color:#1a3c5e;"></i>
+        </div>
+        <p class="mb-0">QR Code akan ditampilkan setelah Anda mengklik "Bayar Sekarang".<br>
+        Scan dengan aplikasi apapun yang mendukung QRIS.</p>
+      </div>`,
+    credit_card: `
+      <div style="font-size:.88rem; color:#555; line-height:1.9;">
+        <p>Isi data kartu kredit Anda di halaman berikutnya. Transaksi diproses secara aman via Midtrans / Stripe.</p>
+        <p>Kartu yang diterima: <strong>Visa, Mastercard, JCB, American Express</strong></p>
+      </div>`,
+    debit_card: `
+      <div style="font-size:.88rem; color:#555; line-height:1.9;">
+        <p>Isi data kartu debit Anda di halaman berikutnya. Pastikan kartu Anda sudah diaktifkan untuk transaksi online.</p>
+      </div>`,
+  };
 
-  <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('frontend/js/main.js') }}"></script>
+  document.querySelectorAll('.method-radio').forEach(radio => {
+    radio.addEventListener('change', function () {
+      // Highlight selected card
+      document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('card_' + this.value).classList.add('selected');
 
-  <script>
-    // ---- Method Info Content ----
-    const methodInfoMap = {
-      bank_transfer: {
-        icon: '🏦',
-        name: 'Transfer Bank',
-        detail: `Transfer ke rekening BCA 123-456-7890 a/n PT TravelTime Indonesia.<br>
-                 Konfirmasi transfer via WhatsApp ke <strong>+62 21 1234 5678</strong> dengan bukti transfer Anda.`
-      },
-      credit_card: {
-        icon: '💳',
-        name: 'Kartu Kredit',
-        detail: `Kartu Visa, Mastercard, dan JCB diterima.<br>
-                 Cicilan 0% tersedia untuk kartu BCA, Mandiri, BNI, dan BRI.`
-      },
-      debit_card: {
-        icon: '🪙',
-        name: 'Kartu Debit',
-        detail: `Kartu debit berlogo GPN, Visa, dan Mastercard diterima.<br>
-                 Pastikan saldo mencukupi sebelum melakukan pembayaran.`
-      },
-      e_wallet: {
-        icon: '📱',
-        name: 'E-Wallet',
-        detail: `Didukung: GoPay, OVO, DANA, ShopeePay, dan LinkAja.<br>
-                 QR code akan dikirim ke email Anda setelah mengkonfirmasi pembayaran.`
-      },
-      virtual_account: {
-        icon: '🔐',
-        name: 'Virtual Account',
-        detail: `Nomor Virtual Account akan dikirimkan ke email <strong>{{ $booking->contact_email }}</strong>.<br>
-                 Berlaku selama <strong>24 jam</strong> setelah pembayaran dikonfirmasi.`
-      },
-      qris: {
-        icon: '📷',
-        name: 'QRIS',
-        detail: `Scan QR Code menggunakan aplikasi mobile banking atau dompet digital Anda.<br>
-                 QR Code akan tampil setelah mengkonfirmasi pembayaran.`
-      },
-    };
+      // Show instructions
+      const box = document.getElementById('instructionBox');
+      const content = document.getElementById('instructionContent');
+      box.style.display = 'block';
+      content.innerHTML = instructions[this.value] || '';
 
-    const radios = document.querySelectorAll('input[name="method"]');
-    const methodInfo = document.getElementById('methodInfo');
-    const methodInfoContent = document.getElementById('methodInfoContent');
-    const selectedMethodDisplay = document.getElementById('selectedMethodDisplay');
-    const selectedMethodName = document.getElementById('selectedMethodName');
-    const agreeCheck = document.getElementById('agreeCheck');
-    const payBtn = document.getElementById('payBtn');
-
-    let methodSelected = false;
-    let agreed = false;
-
-    function updatePayBtn() {
-      if (payBtn) payBtn.disabled = !(methodSelected && agreed);
-    }
-
-    radios.forEach(radio => {
-      radio.addEventListener('change', function () {
-        const info = methodInfoMap[this.value];
-        if (info) {
-          methodInfoContent.innerHTML = `<strong>${info.icon} ${info.name}</strong><br><span style="color:#555;margin-top:6px;display:block;">${info.detail}</span>`;
-          methodInfo.style.display = 'block';
-
-          selectedMethodName.textContent = `${info.icon} ${info.name}`;
-          selectedMethodDisplay.style.removeProperty('display');
-          selectedMethodDisplay.style.display = 'block';
-        }
-        methodSelected = true;
-        updatePayBtn();
-      });
+      // Enable pay button
+      document.getElementById('btnPay').disabled = false;
     });
+  });
 
-    if (agreeCheck) {
-      agreeCheck.addEventListener('change', function () {
-        agreed = this.checked;
-        updatePayBtn();
-      });
-    }
-  </script>
-
-</body>
-</html>
+  // Restore on old() if any
+  const oldMethod = '{{ old("method") }}';
+  if (oldMethod) {
+    const el = document.getElementById('method_' + oldMethod);
+    if (el) { el.checked = true; el.dispatchEvent(new Event('change')); }
+  }
+</script>
+@endsection

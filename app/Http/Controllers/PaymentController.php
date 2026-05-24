@@ -2,94 +2,107 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Payment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Halaman form payment.
+     * GET /v1/payment/{bookingId}
      */
-    public function index()
+    public function show(string $bookingId)
     {
-        //
+        $booking = Booking::with([
+                'packages.travelPackage',
+                'hotels.hotel',
+                'hotels.room',
+                'transports.transportation',
+                'payments',
+            ])
+            ->where('id', $bookingId)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        // Jika sudah dibayar, redirect ke detail booking
+        if ($booking->isPaid()) {
+            return redirect()
+                ->route('v1.booking.show', $booking->id)
+                ->with('info', 'Booking this has already been paid.');
+        }
+
+        // Jika dibatalkan, tidak bisa bayar
+        if (in_array($booking->status, ['cancelled', 'refunded'])) {
+            return redirect()
+                ->route('v1.booking.show', $booking->id)
+                ->with('error', 'Canceled bookings cannot be paid.');
+        }
+
+        $paymentMethods = [
+            'bank_transfer'  => ['label' => 'Bank Transfer',   'icon' => 'bi-bank',              'desc' => 'BCA, Mandiri, BNI, BRI'],
+            'virtual_account'=> ['label' => 'Virtual Account', 'icon' => 'bi-credit-card-2-front','desc' => 'Bayar via kode VA Bank'],
+            'e_wallet'       => ['label' => 'E-Wallet',        'icon' => 'bi-phone',             'desc' => 'GoPay, OVO, Dana, ShopeePay'],
+            'qris'           => ['label' => 'QRIS',            'icon' => 'bi-qr-code-scan',      'desc' => 'Scan QR dengan app apapun'],
+            'credit_card'    => ['label' => 'Kartu Kredit',    'icon' => 'bi-credit-card',       'desc' => 'Visa, Mastercard, JCB'],
+            'debit_card'     => ['label' => 'Kartu Debit',     'icon' => 'bi-credit-card-2-back', 'desc' => 'Debit semua bank'],
+        ];
+
+        return view('frontend.v_payment.show', compact('booking', 'paymentMethods'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Proses pembayaran.
+     * POST /v1/payment
      */
     public function store(Request $request)
     {
         $request->validate([
             'booking_id' => 'required|exists:booking,id',
             'method'     => 'required|in:bank_transfer,credit_card,debit_card,e_wallet,virtual_account,qris',
+            'notes'      => 'nullable|string|max:255',
         ]);
 
         $booking = Booking::where('id', $request->booking_id)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
+        // Guard: sudah dibayar
         if ($booking->isPaid()) {
-            return redirect()->back()->with('error', 'Booking ini sudah dibayar.');
+            return redirect()
+                ->route('v1.booking.show', $booking->id)
+                ->with('error', 'Booking this has already been paid.');
         }
 
-        $payment = Payment::create([
-            'booking_id'   => $booking->id,
-            'amount'       => $booking->total_price,
-            'method'       => $request->method,
-            'status'       => 'paid',   // simplified: langsung paid
-            'paid_at'      => now(),
-        ]);
+        // Guard: dibatalkan
+        if (in_array($booking->status, ['cancelled', 'refunded'])) {
+            return redirect()
+                ->route('v1.booking.show', $booking->id)
+                ->with('error', 'Canceled bookings cannot be paid.');
+        }
 
-        $booking->update(['status' => 'confirmed']);
+        DB::transaction(function () use ($request, $booking) {
+            Payment::create([
+                'booking_id'       => $booking->id,
+                'amount'           => $booking->total_price,
+                'method'           => $request->method,
+                'status'           => 'paid',
+                'paid_at'          => now(),
+                'notes'            => $request->notes,
+                'payment_detail'   => [
+                    'method_label' => ucwords(str_replace('_', ' ', $request->method)),
+                    'paid_by'      => auth()->user()->name,
+                    'ip'           => request()->ip(),
+                ],
+            ]);
 
-        return redirect()->route('v1.frontend.booking.show', $booking->id)
-            ->with('success', 'Payment successful!');
-    }
+            $booking->update(['status' => 'confirmed']);
+        });
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $booking = Booking::with('payments')
-        ->where('id', $bookingId)
-        ->where('user_id', auth()->id())
-        ->firstOrFail();
-
-        return view('frontend.v_payment.show', compact('booking'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()
+            ->route('v1.booking.show', $booking->id)
+            ->with('success', '🎉 Payment successful! Your booking has been confirmed.');
     }
 }
