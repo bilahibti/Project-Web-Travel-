@@ -819,7 +819,7 @@
                                         alt="Island Hopping"
                                         class="img-fluid"
                                         loading="lazy"
-                                    />
+                                    >
                                     <div class="card-overlay">
                                         <div class="badge-container">
                                             <span class="featured-badge hot"

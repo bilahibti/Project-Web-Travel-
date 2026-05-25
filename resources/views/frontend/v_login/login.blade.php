@@ -43,7 +43,7 @@
             }
 
             .auth-card-header {
-                background: linear-gradient(135deg, var(--color-primary, #e84393), var(--color-secondary, #f85a16));
+                background: linear-gradient(135deg, #6f42c1, #8b5cf6);
                 padding: 32px 40px 24px;
                 text-align: center;
                 color: #fff;
@@ -80,7 +80,7 @@
             }
 
             .auth-card-body .form-control:focus {
-                border-color: var(--color-primary, #e84393);
+                border-color: var(--color-primary, #8b5cf6;);
                 box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.1);
             }
 
@@ -98,7 +98,7 @@
             }
 
             .btn-auth {
-                background: linear-gradient(135deg, var(--color-primary, #e84393), var(--color-secondary, #f85a16));
+                background: linear-gradient(135deg, #6f42c1, #8b5cf6);
                 color: #fff;
                 border: none;
                 border-radius: 8px;
@@ -156,7 +156,7 @@
             }
 
             .auth-link {
-                color: var(--color-primary, #e84393);
+                color: var(--color-primary,  #8b5cf6;);
                 font-weight: 600;
                 text-decoration: none;
             }
