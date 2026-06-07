@@ -23,19 +23,29 @@
         <link href="{{ asset('frontend/css/main.css')}}" rel="stylesheet" />
 
         <style>
+            :root {
+                --color-primary: #7c3aed;
+                --color-secondary: #a855f7;
+            }
+
             .auth-page {
                 min-height: 100vh;
                 display: flex;
                 align-items: center;
-                background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4)),
-                            url('{{ asset('frontend/img/travel/destination-1.webp') }}') center/cover no-repeat fixed;
+                background: linear-gradient(
+                        135deg,
+                        rgba(76, 29, 149, 0.75),
+                        rgba(124, 58, 237, 0.55)
+                    ),
+                    url('{{ asset('frontend/img/travel/destination-1.webp') }}')
+                    center/cover no-repeat fixed;
                 padding: 80px 0 40px;
             }
 
             .auth-card {
                 background: #fff;
                 border-radius: 16px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+                box-shadow: 0 20px 60px rgba(124, 58, 237, 0.25);
                 overflow: hidden;
                 max-width: 480px;
                 width: 100%;
@@ -43,7 +53,11 @@
             }
 
             .auth-card-header {
-                background: linear-gradient(135deg, var(--color-primary, #e84393), var(--color-secondary, #f85a16));
+                background: linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #a855f7
+                );
                 padding: 32px 40px 24px;
                 text-align: center;
                 color: #fff;
@@ -74,14 +88,14 @@
             .auth-card-body .form-control {
                 border-radius: 8px;
                 padding: 10px 14px;
-                border: 1.5px solid #e0e0e0;
+                border: 1.5px solid #ddd6fe;
                 font-size: 0.95rem;
-                transition: border-color 0.2s;
+                transition: all 0.3s ease;
             }
 
             .auth-card-body .form-control:focus {
-                border-color: var(--color-primary, #e84393);
-                box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.1);
+                border-color: #7c3aed;
+                box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
             }
 
             .auth-card-body .input-group .form-control {
@@ -90,15 +104,19 @@
 
             .auth-card-body .input-group-text {
                 background: #fff;
-                border: 1.5px solid #e0e0e0;
+                border: 1.5px solid #ddd6fe;
                 border-left: 0;
                 border-radius: 0 8px 8px 0;
                 cursor: pointer;
-                color: #888;
+                color: #7c3aed;
             }
 
             .btn-auth {
-                background: linear-gradient(135deg, var(--color-primary, #e84393), var(--color-secondary, #f85a16));
+                background: linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #a855f7
+                );
                 color: #fff;
                 border: none;
                 border-radius: 8px;
@@ -106,19 +124,23 @@
                 font-weight: 600;
                 font-size: 0.95rem;
                 width: 100%;
-                transition: opacity 0.2s, transform 0.1s;
+                transition: all 0.3s ease;
             }
 
             .btn-auth:hover {
-                opacity: 0.9;
-                transform: translateY(-1px);
+                background: linear-gradient(
+                    135deg,
+                    #6d28d9,
+                    #9333ea
+                );
+                transform: translateY(-2px);
                 color: #fff;
             }
 
             .password-strength {
                 height: 4px;
                 border-radius: 4px;
-                background: #e0e0e0;
+                background: #e9d5ff;
                 margin-top: 6px;
                 overflow: hidden;
             }
@@ -131,18 +153,20 @@
             }
 
             .auth-link {
-                color: var(--color-primary, #e84393);
+                color: #7c3aed;
                 font-weight: 600;
                 text-decoration: none;
             }
 
             .auth-link:hover {
+                color: #5b21b6;
                 text-decoration: underline;
             }
 
             .alert-danger {
                 border-radius: 8px;
                 font-size: 0.875rem;
+                border-left: 4px solid #7c3aed;
             }
         </style>
     </head>
