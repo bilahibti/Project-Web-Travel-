@@ -221,18 +221,18 @@
 
                                     <!-- Name -->
                                     <div class="mb-3">
-                                        <label for="nama" class="form-label">Full Name</label>
+                                        <label for="name" class="form-label">Full Name</label>
                                         <input
                                             type="text"
-                                            id="nama"
-                                            name="nama"
-                                            class="form-control @error('nama') is-invalid @enderror"
+                                            id="name"
+                                            name="name"
+                                            class="form-control @error('name') is-invalid @enderror"
                                             placeholder="Your full name"
-                                            value="{{ old('nama') }}"
+                                            value="{{ old('name') }}"
                                             required
                                             autofocus
                                         />
-                                        @error('nama')
+                                        @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
