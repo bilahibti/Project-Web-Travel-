@@ -69,69 +69,9 @@
                         <li><a href="about.html">About</a></li>
                         <li><a href="{{ route('v1.frontend.destination') }}">Destinations</a></li>
                         <li><a href="tours.html">Tours</a></li>
-                        <li><a href="gallery.html">Gallery</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li class="dropdown">
-                            <a href="#"
-                                ><span>More Pages</span>
-                                <i
-                                    class="bi bi-chevron-down toggle-dropdown"
-                                ></i
-                            ></a>
-                            <ul>
-                                <li>
-                                    <a href="destinationdetails.html"
-                                        >Destination Details</a
-                                    >
-                                </li>
-                                <li>
-                                    <a href="tourdetails.html">Tour Details</a>
-                                </li>
-                                <li><a href="booking.html">Booking</a></li>
-                                <li><a href="testimonials.html">Testimonials</a></li>
-                                <li>
-                                    <a href="faq.html"
-                                        >Frequently Asked Questions</a
-                                    >
-                                </li>
-                                <li>
-                                    <a href="blogdetails.html">Blog Details</a>
-                                </li>
-                                <li><a href="terms.html">Terms</a></li>
-                                <li><a href="privacy.html">Privacy</a></li>
-                                <li><a href="404.html">404</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#"
-                                ><span>Dropdown</span>
-                                <i
-                                    class="bi bi-chevron-down toggle-dropdown"
-                                ></i
-                            ></a>
-                            <ul>
-                                <li><a href="#">Dropdown 1</a></li>
-                                <li class="dropdown">
-                                    <a href="#"
-                                        ><span>Deep Dropdown</span>
-                                        <i
-                                            class="bi bi-chevron-down toggle-dropdown"
-                                        ></i
-                                    ></a>
-                                    <ul>
-                                        <li><a href="#">Deep Dropdown 1</a></li>
-                                        <li><a href="#">Deep Dropdown 2</a></li>
-                                        <li><a href="#">Deep Dropdown 3</a></li>
-                                        <li><a href="#">Deep Dropdown 4</a></li>
-                                        <li><a href="#">Deep Dropdown 5</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Dropdown 2</a></li>
-                                <li><a href="#">Dropdown 3</a></li>
-                                <li><a href="#">Dropdown 4</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="contact.html">Contact</a></li>
+          <li><a href="hotel.html">Hotel</a></li>
+          <li><a href="transportation.html">Transportation</a></li>
+          <li><a href="travel-packages.html">Travel Packages</a></li>
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
@@ -149,8 +89,8 @@
                 class="travel-hero section dark-background"
             >
                 <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6">
+                    <div class="row align-items-center justify-content-center text-center">
+                        <div class="col-lg-8">
                             <div class="content">
                                 <h1>Discover the World with Us</h1>
                                 <p class="lead">
@@ -158,7 +98,7 @@
                                     unforgettable memories with our expertly
                                     crafted tours.
                                 </p>
-                                <div class="d-flex flex-wrap gap-3 mt-4">
+                                <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
                                     <a
                                         href="{{ route('v1.frontend.destination') }}"
                                         class="btn btn-primary"
@@ -170,86 +110,6 @@
                                         >View Tours</a
                                     >
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 mt-5 mt-lg-0">
-                            <div class="booking-form">
-                                <form action="" method="post">
-                                    <div class="row gy-3">
-                                        <div class="col-md-12">
-                                            <label for="destination"
-                                                >Destination</label
-                                            >
-                                            <input
-                                                type="text"
-                                                name="destination"
-                                                id="destination"
-                                                class="form-control"
-                                                placeholder="Where do you want to go?"
-                                                required=""
-                                            />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="check-in"
-                                                >Check In</label
-                                            >
-                                            <input
-                                                type="date"
-                                                name="checkin"
-                                                id="check-in"
-                                                class="form-control"
-                                                required=""
-                                            />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="check-out"
-                                                >Check Out</label
-                                            >
-                                            <input
-                                                type="date"
-                                                name="checkout"
-                                                id="check-out"
-                                                class="form-control"
-                                                required=""
-                                            />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="adults">Adults</label>
-                                            <input
-                                                type="number"
-                                                name="adults"
-                                                id="adults"
-                                                class="form-control"
-                                                min="1"
-                                                max="20"
-                                                value="2"
-                                                required=""
-                                            />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="children"
-                                                >Children</label
-                                            >
-                                            <input
-                                                type="number"
-                                                name="children"
-                                                id="children"
-                                                class="form-control"
-                                                min="0"
-                                                max="20"
-                                                value="0"
-                                            />
-                                        </div>
-                                        <div class="col-md-12 text-center">
-                                            <button
-                                                type="submit"
-                                                class="btn btn-accent w-100 mt-3"
-                                            >
-                                                Search Tours
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>
