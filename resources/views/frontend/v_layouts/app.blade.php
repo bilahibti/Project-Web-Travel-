@@ -68,10 +68,10 @@
                         <li><a href="index.html" class="active">Home</a></li>
                         <li><a href="about.html">About</a></li>
                         <li><a href="{{ route('v1.frontend.destination') }}">Destinations</a></li>
-                        <li><a href="tours.html">Tours</a></li>
-          <li><a href="hotel.html">Hotel</a></li>
-          <li><a href="transportation.html">Transportation</a></li>
-          <li><a href="travel-packages.html">Travel Packages</a></li>
+                        <li><a href="{{ route('v1.frontend.tour') }}">Tours</a></li>
+                        <li><a href="{{ route('v1.frontend.hotel') }}">Hotel</a></li>
+                        <li><a href="{{ route('v1.frontend.transportation') }}">Transportation</a></li>
+                        <li><a href="{{ route('v1.frontend.travel-package') }}">Travel Packages</a></li>
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
@@ -105,7 +105,7 @@
                                         >Start Exploring</a
                                     >
                                     <a
-                                        href="tours.html"
+                                        href="{{ route('v1.frontend.tour') }}"
                                         class="btn btn-outline-light"
                                         >View Tours</a
                                     >
